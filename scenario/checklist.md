@@ -122,16 +122,10 @@ Per Tim 2026-05-25: student-fillable templates live in `scenario/templates/`. Th
 - [-] **Business Case template** — ⏳ Empty placeholder file in place (`templates/template-business-case.md`). Referenced from AT1. Content TBD.
 - [-] **Board Presentation Deck template** — ⏳ Placeholder file in place (`templates/template-business-case-pptx.md`). Referenced from AT1. Content TBD.
 - [-] **Feedback Record template** — ⏳ Placeholder file in place (`templates/template-feedback-record.md`). Referenced from AT1 (and reused at the AT3 closure meeting). Content TBD.
-- [-] **Change Request Form template** — ⏳ Placeholder authored 2026-05-25 (`templates/template-change-request-form.md`). Operationalises the 13-step `internal-change-management-procedure.md`. Used heavily in AT3 closure; referenced from AT1 action plan + AT2 cutover. Content TBD.
-  - [ICTICT517 PC 3.1] action plan consistent with organisational procedures
-  - [ICTCLD401 PC 4.3] save documentation per org procedures
-  - [ICTCLD502 PC 5.3] obtain final sign off
-- [-] **HA Design template (student-produced output, AT3)** — ⏳ Placeholder authored 2026-05-25 (`templates/template-ha-design-S1-CL1-AT3.md`). Mirrors the AT2 baseline design's shape but student-authored. Carries the bulk of 502's design-production PCs. Content TBD.
+- [-] **HA Design template (student-produced output, AT3)** — ⏳ Placeholder authored 2026-05-25 (`templates/template-ha-design-S1-CL1-AT3.md`). Mirrors the AT2 baseline design's shape but student-authored. AT3 Part A deliverable. Carries the bulk of 502's design-production PCs. Content TBD.
   - [ICTCLD502 PC 1.1, 2.1–2.5, 3.1–3.5] · [ICTCLD502 PE 1, PE 2]
-- [-] **Closure Pack template (AT3 deliverable)** — ⏳ Placeholder authored 2026-05-25 (`templates/template-closure-pack-S1-CL1-AT3.md`). Single consolidated deliverable for AT3 — consolidates AT1 + AT2 + AT3, submitted via change-management procedure, with stakeholder feedback meeting + final sign-off. Content TBD.
-  - [ICTCLD502 PC 5.1, 5.2, 5.3] · [ICTCLD401 PC 4.3] · [ICTICT517 PC 3.3]
-- [-] **Security Responsibilities Matrix template (AT3 sub-deliverable)** — ⏳ Placeholder authored 2026-05-25 (`templates/template-security-responsibilities-matrix-S1-CL1-AT3.md`). Sub-deliverable inside the closure pack mapping each architecture component to its security-responsibility owner. Covers Group 2 at project-closure scale. Content TBD.
-  - [ICTCLD401 PC 1.2, 1.7] · [ICTCLD401 KE 7] · [ICTCLD502 PC 1.3] (all reinforced beyond AT2)
+- [-] **HA Deployment Report template (AT3 Part B)** — _Not yet authored as a separate file._ Per the simplified AT3 shape (locked in 2026-05-25), AT3 Part B reuses the same template structure as the AT2 Deployment Report (`template-deployment-report-S1-CL1-AT2.md`) — adapted for HA work. May or may not become a separate file at delivery time depending on how much HA-specific scaffolding is needed.
+  - [ICTCLD502 PC 4.1–4.6, 5.1, 5.2, 5.3] · [ICTCLD401 PC 4.3]
 - [x] **Deployment Report template** — ✅ Authored 2026-05-25. Full template covering Cover / §1 Exec Summary / §2 Engagement Context / §3 Scope / §4 Build Narrative (4.1–4.8) / §5 Configuration Decisions (C1–C8 from supplied design) / §6 Testing & Validation / §7 Operational Handover / §8 Knowledge Evidence (Q1–Q6 covering 401 KE 5–10) / Appendix A — Build Evidence (17 named screenshots) / Appendix B — Configuration Exports / Appendix C — Test Evidence / Appendix D — Reflections (2 FS-evidencing prompts). UoC traceability map in authoring header. TBD for live delivery: confirm KE/reflection question wording, transfer to Word for student download. See `templates/template-deployment-report-S1-CL1-AT2.md`.
   - [ICTCLD401 KE 5, 6, 7, 8, 9, 10] (Knowledge Evidence appendix)
   - [ICTCLD401 FS Learning, Planning and organising, Self-management] (Reflections appendix)
@@ -145,8 +139,7 @@ Per Tim 2026-05-25: the YAT intranet hosts a Document Archive of past MTS delive
 
 - [-] **Example previous Business Case** — ⏳ Placeholder file in place (`exemplars/internal-document-exemplar-business-case.md`). Content TBD.
 - [-] **Example previous Board Presentation Deck** — ⏳ Placeholder file in place (`exemplars/internal-presentation-exemplar-business-case.md`). Content TBD.
-- [-] **Example previous Deployment Report** — ⏳ Scaffold authored 2026-05-25 (`exemplars/internal-document-exemplar-deployment-report.md`). Content TBD.
-- [-] **Example previous Closure Pack** — ⏳ Placeholder authored 2026-05-25 (`exemplars/internal-document-exemplar-closure-pack.md`). Referenced from AT3 (when drafted). Content TBD.
+- [-] **Example previous Deployment Report** — ⏳ Scaffold authored 2026-05-25 (`exemplars/internal-document-exemplar-deployment-report.md`). Used as the reference exemplar for both AT2 and AT3 since AT3 reuses the same Deployment Report shape. Content TBD.
 
 ---
 
@@ -162,6 +155,14 @@ Per Tim 2026-05-25: the YAT intranet hosts a Document Archive of past MTS delive
 - [x] **Reference architectures** — ✅ Authored 2026-05-23 (NIST cloud definitions, AWS Well-Architected, AWS CAF, multi-tier web app, multi-AZ RDS, IAM, migration "6 Rs", operational patterns). See `internal-reference-architectures.md`.
   - [ICTCLD401 KE 3] principles and functions of cloud computing solutions and technologies, including IaaS/PaaS/SaaS
   - [ICTCLD401 KE 11] functions, uses and differences of cloud models
+
+---
+
+## Assessor resources (assessor-only — operational delivery artefacts)
+
+Files in `scenario/assessor-resources/` are **not** distributed to students via the YAT intranet. They are operational resources the assessor uses to deliver the cluster — set-up scripts, infrastructure templates, sample data files, etc.
+
+- [-] **AT2 baseline CloudFormation template** — ⏳ Placeholder authored 2026-05-25 (`assessor-resources/at2-baseline-cloudformation.md`, will become `.yaml` when populated). CloudFormation template the assessor distributes to students at the start of the AT3 assessment day. Students deploy it in their AWS Academy lab to instantiate the AT2 baseline as a consistent AT3 starting state (regardless of what they personally built in AT2). Includes VPC + subnets + gateways + security groups + ASG + ALB + RDS single-AZ + S3 + monitoring baseline + user-data placeholder web page. Operational artefact — not direct UoC evidence. Content TBD.
 
 ---
 
