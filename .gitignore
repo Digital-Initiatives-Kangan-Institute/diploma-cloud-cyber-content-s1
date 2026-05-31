@@ -1,6 +1,10 @@
 .DS_Store
 /original_materials/
+/original-materials/
 /templates/
+
+# Per-Topic copies of AWS decks (licensed "do not distribute"; large binaries — kept local, named in teaching.md)
+**/source_slides/
 
 # Python bytecode
 __pycache__/
