@@ -216,6 +216,25 @@ def build(path):
                      "external sources cited with access dates.")
     bc.response(doc)
 
+    h1("9. Review and Approval")
+    bc.guidance(doc, "The completed design is submitted to the accepting authority / superior for review. "
+                     "The reviewer records their feedback below; the author records how each point was "
+                     "addressed; the reviewer then signs off on the design before it is implemented.")
+    h3("9.1 Reviewer feedback and author response")
+    bc.table(doc, ["#", "Reviewer feedback / comment", "Author response", "Resulting change"],
+             [["1", "[ … ]", "[ … ]", "[ … ]"],
+              ["2", "[ … ]", "[ … ]", "[ … ]"],
+              ["3", "[ … ]", "[ … ]", "[ … ]"]],
+             widths=[0.8, 6.0, 5.2, 4.0])
+    h3("9.2 Sign-off")
+    bc.guidance(doc, "The accepting authority records their decision. “Approved with comments” means the "
+                     "design proceeds subject to the changes recorded in §9.1.")
+    bc.table(doc, ["Role", "Name", "Decision", "Date", "Signature"],
+             [["Prepared by (author)", "[ name, role ]", "—", "[ DD/MM/YYYY ]", ""],
+              ["Reviewed and approved by (accepting authority)", "[ name, role ]",
+               "[ Approved / Approved with comments / Rejected ]", "[ DD/MM/YYYY ]", ""]],
+             widths=[4.6, 3.2, 3.6, 2.4, 2.2])
+
     h1("Document control")
     bc.table(doc, ["Field", "Value"],
              [["Document version", "[ v1.0 ]"],
