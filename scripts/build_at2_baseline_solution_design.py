@@ -37,6 +37,30 @@ def na(doc, reason):
     return p
 
 
+def diagram_placeholder(doc, caption, source):
+    """A bordered, shaded drop-zone for a network diagram — replace with the exported image."""
+    from docx.enum.table import WD_ROW_HEIGHT_RULE, WD_ALIGN_VERTICAL
+    from docx.enum.text import WD_ALIGN_PARAGRAPH
+    t = doc.add_table(rows=1, cols=1)
+    cell = t.cell(0, 0)
+    bc.set_cell_borders(cell)
+    bc.shade_cell(cell, bc.CREAM)
+    cell.width = Cm(16.6)
+    t.rows[0].height = Cm(9.5)
+    t.rows[0].height_rule = WD_ROW_HEIGHT_RULE.EXACTLY
+    cell.vertical_alignment = WD_ALIGN_VERTICAL.CENTER
+    p = cell.paragraphs[0]; p.alignment = WD_ALIGN_PARAGRAPH.CENTER
+    r = p.add_run("[ NETWORK TOPOLOGY DIAGRAM — PASTE HERE ]")
+    r.bold = True; r.font.size = Pt(11); r.font.color.rgb = RGBColor.from_string(bc.TERRACOTTA)
+    p2 = cell.add_paragraph(); p2.alignment = WD_ALIGN_PARAGRAPH.CENTER
+    r2 = p2.add_run(source)
+    r2.italic = True; r2.font.size = Pt(9); r2.font.color.rgb = RGBColor.from_string(bc.GREY)
+    cap = doc.add_paragraph(); cap.alignment = WD_ALIGN_PARAGRAPH.CENTER
+    cr = cap.add_run(caption)
+    cr.italic = True; cr.font.size = Pt(9); cr.font.color.rgb = RGBColor.from_string(bc.GREY)
+    return t
+
+
 def build(path):
     doc = Document()
     bc.configure_styles(doc)
@@ -177,6 +201,9 @@ def build(path):
         "Connectivity to campus AD: Site-to-Site VPN (baseline choice); Direct Connect deferred unless latency requires it.",
         "The follow-on HA design adds the corresponding -b subnets in ap-southeast-2b.",
     ])
+    diagram_placeholder(doc,
+                        "Figure 4.4 — LMS baseline network topology (single-AZ).",
+                        "Source diagram: network-at3-start-non-hardened.drawio")
     h3("4.5 Compute (EC2 + Auto Scaling)")
     ex.bullets(doc, [
         "EC2: general-purpose x86 (e.g. m6i.large — final type a C1 implementer decision); Windows Server 2016 AMI; placed in private-app-a (no public IP).",
