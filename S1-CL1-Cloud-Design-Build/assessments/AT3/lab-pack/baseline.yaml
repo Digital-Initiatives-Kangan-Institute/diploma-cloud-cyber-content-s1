@@ -1,0 +1,486 @@
+AWSTemplateFormatVersion: '2010-09-09'
+
+Description: >-
+  YAT LMS - AT3 baseline environment (single-AZ, non-HA). Students deploy this at the START
+  of AT3 to get a consistent, known starting state, then harden it to multi-AZ high
+  availability. Instantiates the AT2 supplied design in ap-southeast-2.
+
+  AWS Academy: creates NO IAM (the lab forbids it) - the EC2 instance profile is optional and
+  defaults to none. The Windows AMI is resolved from an SSM public parameter so it never goes
+  stale. Proven deployed in the Cloud Architecting Sandbox, ap-southeast-2.
+
+  NON-HA BY DESIGN: an internet-facing ALB and an RDS subnet group each require >= 2 AZs, so a
+  second public subnet and a second data subnet are present - but the COMPUTE (the Auto Scaling
+  group) runs in ONE AZ and RDS is Single-AZ. Spreading the ASG across AZs and enabling RDS
+  Multi-AZ is the AT3 hardening work.
+
+Parameters:
+  EnvName:
+    Type: String
+    Default: dev
+    AllowedValues: [dev, prod]
+    Description: Environment suffix used in resource names.
+
+  WindowsAmiId:
+    Type: AWS::SSM::Parameter::Value<AWS::EC2::Image::Id>
+    Default: /aws/service/ami-windows-latest/Windows_Server-2016-English-Full-Base
+    Description: Auto-resolves the latest Windows Server 2016 AMI (no hardcoded AMI to age).
+
+  InstanceType:
+    Type: String
+    Default: t3.medium
+    Description: App tier EC2 instance type (AWS Academy may restrict the allowed types).
+
+  DBInstanceClass:
+    Type: String
+    Default: db.t3.medium
+    Description: RDS instance class (Academy may restrict; the baseline RDS is Single-AZ).
+
+  DBMasterUsername:
+    Type: String
+    Default: yatadmin
+    MinLength: 4
+    Description: RDS master username.
+
+  DBMasterPassword:
+    Type: String
+    NoEcho: true
+    MinLength: 8
+    Description: RDS master password (8+ chars). Supplied at deploy time, not stored.
+
+  InstanceProfileName:
+    Type: String
+    Default: ''
+    Description: >-
+      EC2 instance profile name. LEAVE BLANK (default) to launch with NO instance profile - the
+      baseline instances only serve a placeholder page, so they need no IAM, and this works in any
+      lab. Set it only if your lab provides a usable instance profile and you want the instances to
+      carry a role (e.g. for SSM Session Manager access). Names vary by lab product.
+
+  AdminCidr:
+    Type: String
+    Default: 10.0.0.0/16
+    Description: CIDR allowed RDP to the app instance. Set to your-ip/32 to RDP in from outside.
+
+Conditions:
+  # Only attach an instance profile if a name was supplied (default is none).
+  HasInstanceProfile: !Not [!Equals [!Ref InstanceProfileName, '']]
+
+Resources:
+
+  # ---------- Network ----------
+  Vpc:
+    Type: AWS::EC2::VPC
+    Properties:
+      CidrBlock: 10.0.0.0/16
+      EnableDnsHostnames: true
+      EnableDnsSupport: true
+      Tags:
+        - { Key: Name, Value: !Sub 'yat-lms-${EnvName}' }
+        - { Key: Project, Value: YAT-LMS }
+        - { Key: Environment, Value: !Ref EnvName }
+
+  InternetGateway:
+    Type: AWS::EC2::InternetGateway
+    Properties:
+      Tags:
+        - { Key: Name, Value: !Sub 'yat-lms-igw-${EnvName}' }
+
+  IgwAttachment:
+    Type: AWS::EC2::VPCGatewayAttachment
+    Properties:
+      VpcId: !Ref Vpc
+      InternetGatewayId: !Ref InternetGateway
+
+  PublicWebA:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref Vpc
+      CidrBlock: 10.0.1.0/24
+      AvailabilityZone: !Select [0, !GetAZs '']
+      MapPublicIpOnLaunch: true
+      Tags:
+        - { Key: Name, Value: !Sub 'public-web-a-${EnvName}' }
+
+  PublicWebB:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref Vpc
+      CidrBlock: 10.0.2.0/24
+      AvailabilityZone: !Select [1, !GetAZs '']
+      MapPublicIpOnLaunch: true
+      Tags:
+        - { Key: Name, Value: !Sub 'public-web-b-${EnvName}' }
+
+  PrivateAppA:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref Vpc
+      CidrBlock: 10.0.11.0/24
+      AvailabilityZone: !Select [0, !GetAZs '']
+      Tags:
+        - { Key: Name, Value: !Sub 'private-app-a-${EnvName}' }
+
+  PrivateDataA:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref Vpc
+      CidrBlock: 10.0.21.0/24
+      AvailabilityZone: !Select [0, !GetAZs '']
+      Tags:
+        - { Key: Name, Value: !Sub 'private-data-a-${EnvName}' }
+
+  PrivateDataB:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref Vpc
+      CidrBlock: 10.0.22.0/24
+      AvailabilityZone: !Select [1, !GetAZs '']
+      Tags:
+        - { Key: Name, Value: !Sub 'private-data-b-${EnvName}' }
+
+  NatEip:
+    Type: AWS::EC2::EIP
+    Properties:
+      Domain: vpc
+
+  NatGateway:
+    Type: AWS::EC2::NatGateway
+    Properties:
+      AllocationId: !GetAtt NatEip.AllocationId
+      SubnetId: !Ref PublicWebA
+      Tags:
+        - { Key: Name, Value: !Sub 'yat-lms-nat-${EnvName}' }
+
+  PublicRouteTable:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      VpcId: !Ref Vpc
+      Tags:
+        - { Key: Name, Value: !Sub 'public-rt-${EnvName}' }
+
+  PublicDefaultRoute:
+    Type: AWS::EC2::Route
+    DependsOn: IgwAttachment
+    Properties:
+      RouteTableId: !Ref PublicRouteTable
+      DestinationCidrBlock: 0.0.0.0/0
+      GatewayId: !Ref InternetGateway
+
+  PublicWebAAssoc:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      RouteTableId: !Ref PublicRouteTable
+      SubnetId: !Ref PublicWebA
+
+  PublicWebBAssoc:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      RouteTableId: !Ref PublicRouteTable
+      SubnetId: !Ref PublicWebB
+
+  PrivateRouteTable:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      VpcId: !Ref Vpc
+      Tags:
+        - { Key: Name, Value: !Sub 'private-rt-${EnvName}' }
+
+  PrivateDefaultRoute:
+    Type: AWS::EC2::Route
+    Properties:
+      RouteTableId: !Ref PrivateRouteTable
+      DestinationCidrBlock: 0.0.0.0/0
+      NatGatewayId: !Ref NatGateway
+
+  PrivateAppAAssoc:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      RouteTableId: !Ref PrivateRouteTable
+      SubnetId: !Ref PrivateAppA
+
+  # ---------- Security groups ----------
+  AlbSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: ALB - HTTP from the internet
+      VpcId: !Ref Vpc
+      SecurityGroupIngress:
+        - { IpProtocol: tcp, FromPort: 80, ToPort: 80, CidrIp: 0.0.0.0/0, Description: HTTP from internet }
+      Tags:
+        - { Key: Name, Value: !Sub 'sg-alb-${EnvName}' }
+
+  AppSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: App tier - HTTP from the ALB, RDP from the admin CIDR
+      VpcId: !Ref Vpc
+      SecurityGroupIngress:
+        - { IpProtocol: tcp, FromPort: 80, ToPort: 80, SourceSecurityGroupId: !Ref AlbSecurityGroup, Description: HTTP from ALB }
+        - { IpProtocol: tcp, FromPort: 3389, ToPort: 3389, CidrIp: !Ref AdminCidr, Description: RDP from admin }
+      Tags:
+        - { Key: Name, Value: !Sub 'sg-app-${EnvName}' }
+
+  DbSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Database - MySQL from the app tier only
+      VpcId: !Ref Vpc
+      SecurityGroupIngress:
+        - { IpProtocol: tcp, FromPort: 3306, ToPort: 3306, SourceSecurityGroupId: !Ref AppSecurityGroup, Description: MySQL from app }
+      Tags:
+        - { Key: Name, Value: !Sub 'sg-db-${EnvName}' }
+
+  # ---------- Compute (single-AZ - the non-HA state) ----------
+  AppLaunchTemplate:
+    Type: AWS::EC2::LaunchTemplate
+    Properties:
+      LaunchTemplateName: !Sub 'yat-lms-app-${EnvName}'
+      LaunchTemplateData:
+        ImageId: !Ref WindowsAmiId
+        InstanceType: !Ref InstanceType
+        IamInstanceProfile: !If
+          - HasInstanceProfile
+          - Name: !Ref InstanceProfileName
+          - !Ref AWS::NoValue
+        SecurityGroupIds:
+          - !Ref AppSecurityGroup
+        UserData:
+          Fn::Base64: |
+            <powershell>
+            Install-WindowsFeature -Name Web-Server -IncludeManagementTools
+            Set-Content -Path "C:\inetpub\wwwroot\index.html" -Value "Infrastructure ready - awaiting application deployment"
+            </powershell>
+        TagSpecifications:
+          - ResourceType: instance
+            Tags:
+              - { Key: Name, Value: !Sub 'yat-lms-app-${EnvName}' }
+              - { Key: Project, Value: YAT-LMS }
+
+  AppAutoScalingGroup:
+    Type: AWS::AutoScaling::AutoScalingGroup
+    Properties:
+      AutoScalingGroupName: !Sub 'yat-lms-app-${EnvName}'
+      MinSize: '1'
+      MaxSize: '2'
+      DesiredCapacity: '1'
+      VPCZoneIdentifier:
+        - !Ref PrivateAppA            # single AZ on purpose - AT3 spreads this across AZs
+      LaunchTemplate:
+        LaunchTemplateId: !Ref AppLaunchTemplate
+        Version: !GetAtt AppLaunchTemplate.LatestVersionNumber
+      TargetGroupARNs:
+        - !Ref AppTargetGroup
+      HealthCheckType: ELB
+      HealthCheckGracePeriod: 300
+      Tags:
+        - { Key: Name, Value: !Sub 'yat-lms-app-${EnvName}', PropagateAtLaunch: true }
+
+  AppScalingPolicy:
+    Type: AWS::AutoScaling::ScalingPolicy
+    Properties:
+      AutoScalingGroupName: !Ref AppAutoScalingGroup
+      PolicyType: TargetTrackingScaling
+      TargetTrackingConfiguration:
+        PredefinedMetricSpecification:
+          PredefinedMetricType: ASGAverageCPUUtilization
+        TargetValue: 60
+
+  # ---------- Load balancer (2-AZ by requirement; targets are single-AZ) ----------
+  AppLoadBalancer:
+    Type: AWS::ElasticLoadBalancingV2::LoadBalancer
+    Properties:
+      Name: !Sub 'yat-lms-${EnvName}'
+      Scheme: internet-facing
+      Type: application
+      Subnets:
+        - !Ref PublicWebA
+        - !Ref PublicWebB
+      SecurityGroups:
+        - !Ref AlbSecurityGroup
+
+  AppTargetGroup:
+    Type: AWS::ElasticLoadBalancingV2::TargetGroup
+    Properties:
+      Name: !Sub 'yat-lms-${EnvName}'
+      VpcId: !Ref Vpc
+      Port: 80
+      Protocol: HTTP
+      TargetType: instance
+      HealthCheckPath: /
+      HealthCheckProtocol: HTTP
+      Matcher:
+        HttpCode: '200'
+
+  AppListener:
+    Type: AWS::ElasticLoadBalancingV2::Listener
+    Properties:
+      LoadBalancerArn: !Ref AppLoadBalancer
+      Port: 80
+      Protocol: HTTP
+      DefaultActions:
+        - Type: forward
+          TargetGroupArn: !Ref AppTargetGroup
+
+  # ---------- Database (Single-AZ - the non-HA state) ----------
+  DbSubnetGroup:
+    Type: AWS::RDS::DBSubnetGroup
+    Properties:
+      DBSubnetGroupDescription: YAT LMS data subnets (spans 2 AZs - required even for Single-AZ)
+      SubnetIds:
+        - !Ref PrivateDataA
+        - !Ref PrivateDataB
+
+  Database:
+    Type: AWS::RDS::DBInstance
+    DeletionPolicy: Delete
+    UpdateReplacePolicy: Delete
+    Properties:
+      DBInstanceIdentifier: !Sub 'yat-lms-${EnvName}'
+      Engine: mysql
+      DBInstanceClass: !Ref DBInstanceClass
+      AllocatedStorage: '20'
+      MultiAZ: false                  # AT3 hardening enables this
+      StorageEncrypted: true
+      MasterUsername: !Ref DBMasterUsername
+      MasterUserPassword: !Ref DBMasterPassword
+      DBSubnetGroupName: !Ref DbSubnetGroup
+      VPCSecurityGroups:
+        - !Ref DbSecurityGroup
+      BackupRetentionPeriod: 7
+      PubliclyAccessible: false
+      Tags:
+        - { Key: Name, Value: !Sub 'yat-lms-${EnvName}' }
+        - { Key: Project, Value: YAT-LMS }
+
+  # ---------- Storage ----------
+  AttachmentsBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: !Sub 'yat-lms-attachments-${EnvName}-${AWS::Region}-${AWS::AccountId}'
+      VersioningConfiguration:
+        Status: Enabled
+      BucketEncryption:
+        ServerSideEncryptionConfiguration:
+          - ServerSideEncryptionByDefault:
+              SSEAlgorithm: AES256
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: true
+        BlockPublicPolicy: true
+        IgnorePublicAcls: true
+        RestrictPublicBuckets: true
+
+  BackupsBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: !Sub 'yat-lms-backups-${EnvName}-${AWS::Region}-${AWS::AccountId}'
+      VersioningConfiguration:
+        Status: Enabled
+      BucketEncryption:
+        ServerSideEncryptionConfiguration:
+          - ServerSideEncryptionByDefault:
+              SSEAlgorithm: AES256
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: true
+        BlockPublicPolicy: true
+        IgnorePublicAcls: true
+        RestrictPublicBuckets: true
+
+  # ---------- Monitoring (baseline alarms) ----------
+  AlarmAppCpuHigh:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmName: !Sub 'yat-lms-app-cpu-high-${EnvName}'
+      Namespace: AWS/EC2
+      MetricName: CPUUtilization
+      Dimensions:
+        - Name: AutoScalingGroupName
+          Value: !Ref AppAutoScalingGroup
+      Statistic: Average
+      Period: 300
+      EvaluationPeriods: 2
+      Threshold: 80
+      ComparisonOperator: GreaterThanThreshold
+      TreatMissingData: notBreaching
+
+  AlarmRdsCpuHigh:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmName: !Sub 'yat-lms-rds-cpu-high-${EnvName}'
+      Namespace: AWS/RDS
+      MetricName: CPUUtilization
+      Dimensions:
+        - Name: DBInstanceIdentifier
+          Value: !Ref Database
+      Statistic: Average
+      Period: 300
+      EvaluationPeriods: 2
+      Threshold: 80
+      ComparisonOperator: GreaterThanThreshold
+      TreatMissingData: notBreaching
+
+  AlarmRdsStorageLow:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmName: !Sub 'yat-lms-rds-storage-low-${EnvName}'
+      Namespace: AWS/RDS
+      MetricName: FreeStorageSpace
+      Dimensions:
+        - Name: DBInstanceIdentifier
+          Value: !Ref Database
+      Statistic: Average
+      Period: 300
+      EvaluationPeriods: 1
+      Threshold: 2000000000          # ~2 GB free
+      ComparisonOperator: LessThanThreshold
+      TreatMissingData: notBreaching
+
+  AlarmAlb5xx:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmName: !Sub 'yat-lms-alb-5xx-${EnvName}'
+      Namespace: AWS/ApplicationELB
+      MetricName: HTTPCode_Target_5XX_Count
+      Dimensions:
+        - Name: LoadBalancer
+          Value: !GetAtt AppLoadBalancer.LoadBalancerFullName
+      Statistic: Sum
+      Period: 300
+      EvaluationPeriods: 1
+      Threshold: 5
+      ComparisonOperator: GreaterThanThreshold
+      TreatMissingData: notBreaching
+
+  AlarmRdsConnectionsHigh:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmName: !Sub 'yat-lms-rds-connections-high-${EnvName}'
+      Namespace: AWS/RDS
+      MetricName: DatabaseConnections
+      Dimensions:
+        - Name: DBInstanceIdentifier
+          Value: !Ref Database
+      Statistic: Average
+      Period: 300
+      EvaluationPeriods: 2
+      Threshold: 100
+      ComparisonOperator: GreaterThanThreshold
+      TreatMissingData: notBreaching
+
+Outputs:
+  AlbDnsName:
+    Description: Public DNS of the load balancer - curl this to confirm the placeholder page.
+    Value: !GetAtt AppLoadBalancer.DNSName
+
+  RdsEndpoint:
+    Description: RDS endpoint address.
+    Value: !GetAtt Database.Endpoint.Address
+
+  AttachmentsBucketName:
+    Value: !Ref AttachmentsBucket
+
+  BackupsBucketName:
+    Value: !Ref BackupsBucket
+
+  VpcId:
+    Value: !Ref Vpc

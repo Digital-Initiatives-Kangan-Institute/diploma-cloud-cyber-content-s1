@@ -2,8 +2,13 @@
 
 **Artefact type:** Assessor-supplied operational resource (AT3 setup)
 **Audience:** Assessor only — distributed to students at the start of the AT3 assessment day for them to deploy
-**Status:** **PLACEHOLDER — content to be authored later**
-**Final filename when authored:** `at2-baseline-cloudformation.yaml` (or `.json`)
+**Status:** ✅ **AUTHORED — superseded by the lab pack.** The runnable template now lives at
+`S1-CL1-Cloud-Design-Build/assessments/AT3/lab-pack/baseline.yaml` (lint-clean, structural tests
+pass, README with deploy/verify/teardown + a local validation harness). It is the reference
+implementation of the course-wide lab-pack standard. ⚠️ Live-lab deploy still to be proven once.
+This spec is retained below as the authoring source; the deviations made to get it deploying
+(ALB/RDS each need ≥2 AZs; HTTP not HTTPS; flow logs deferred; AMI via SSM; instance classes
+parameterised) are documented in the lab pack's README.
 
 ---
 
