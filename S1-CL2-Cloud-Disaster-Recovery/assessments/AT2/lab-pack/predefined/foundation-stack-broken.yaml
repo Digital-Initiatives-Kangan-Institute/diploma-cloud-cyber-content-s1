@@ -1,0 +1,72 @@
+AWSTemplateFormatVersion: '2010-09-09'
+
+Description: >-
+  YAT audit-log — foundation data layer (TROUBLESHOOTING COPY). This template contains
+  ONE deliberate error for the troubleshooting exercise (ICTCLD505 PC 2.6 / PC 3.7).
+  Run `cfn-lint foundation-stack-broken.yaml`, read the error, fix it, and confirm it
+  then deploys. The intended fault and fix are recorded in ../assessor-model/notes.md.
+
+Parameters:
+  EnvName:
+    Type: String
+    Default: dev
+    AllowedValues: [dev, prod]
+    Description: Environment suffix used in resource names.
+
+  AlarmBacklogThreshold:
+    Type: Number
+    Default: 100
+    MinValue: 1
+    Description: Queue-depth backlog that trips the alarm.
+
+Resources:
+  AuditTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: !Sub 'yat-audit-${EnvName}'
+      BillingMode: PAY_PER_REQUEST
+      AttributeDefinitions:
+        - AttributeName: event_id
+          AttributeType: S
+      KeySchema:
+        - AttributeName: event_id
+          KeyType: HASH
+      Tags:
+        - { Key: Project, Value: YAT-LMS }
+        - { Key: Environment, Value: !Ref EnvName }
+        - { Key: DataClassification, Value: audit-log }
+
+  EventQueue:
+    Type: AWS::SQS::Queue
+    Properties:
+      QueueName: !Sub 'yat-audit-${EnvName}'
+      MessageRetentionPeriod: 86400
+      VisibilityTimeout: 60
+
+  BacklogAlarm:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmName: !Sub 'yat-audit-backlog-${EnvName}'
+      AlarmDescription: Audit queue backlog is high — the writer may be falling behind.
+      Namespace: AWS/SQS
+      MetricName: ApproximateNumberOfMessagesVisible
+      Dimensions:
+        - Name: QueueName
+          Value: !GetAtt EventQueue.QueueName
+      Statistic: Maximum
+      Period: 60
+      EvaluationPeriods: 3
+      # DELIBERATE ERROR: this references a parameter that does not exist.
+      # The parameter is named "AlarmBacklogThreshold", not "BacklogThreshold".
+      Threshold: !Ref BacklogThreshold
+      ComparisonOperator: GreaterThanThreshold
+      TreatMissingData: notBreaching
+
+Outputs:
+  AuditTableName:
+    Description: The DynamoDB audit table name.
+    Value: !Ref AuditTable
+
+  EventQueueUrl:
+    Description: The SQS queue URL (where events are sent).
+    Value: !Ref EventQueue

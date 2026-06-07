@@ -1,0 +1,166 @@
+AWSTemplateFormatVersion: '2010-09-09'
+
+Description: >-
+  YAT audit-log microservice — MODEL ANSWER (assessor reference). HTTP API -> SQS ->
+  Lambda -> DynamoDB, with a queue-backlog alarm. This is the template a strong student
+  authors for ICTCLD505 element 3: a related set of resources, parameterised for reuse.
+  Deploy to the India-region stand-in (us-west-2). In AWS Academy you cannot create IAM
+  roles, so pass the pre-provisioned LabRole ARN as a parameter.
+
+Parameters:
+  EnvName:
+    Type: String
+    Default: dev
+    AllowedValues: [dev, prod]
+    Description: Environment suffix used in resource names (demonstrates reuse).
+
+  LabRoleArn:
+    Type: String
+    Description: >-
+      Execution/integration role ARN. In AWS Academy use the pre-provisioned LabRole
+      (you cannot create IAM roles in the Learner Lab), e.g.
+      arn:aws:iam::123456789012:role/LabRole
+
+Resources:
+  AuditTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: !Sub 'yat-audit-${EnvName}'
+      BillingMode: PAY_PER_REQUEST
+      AttributeDefinitions:
+        - AttributeName: event_id
+          AttributeType: S
+      KeySchema:
+        - AttributeName: event_id
+          KeyType: HASH
+      Tags:
+        - { Key: Project, Value: YAT-LMS }
+        - { Key: Environment, Value: !Ref EnvName }
+        - { Key: DataClassification, Value: audit-log }
+
+  EventQueue:
+    Type: AWS::SQS::Queue
+    Properties:
+      QueueName: !Sub 'yat-audit-${EnvName}'
+      VisibilityTimeout: 60
+
+  WriterFunction:
+    Type: AWS::Lambda::Function
+    Properties:
+      FunctionName: !Sub 'yat-audit-writer-${EnvName}'
+      Runtime: python3.12
+      Handler: index.handler
+      Role: !Ref LabRoleArn
+      Timeout: 15
+      Environment:
+        Variables:
+          AUDIT_TABLE: !Ref AuditTable
+      # Inline copy of ../microservice/handler.py (keep in sync). Inlined so the stack is
+      # self-contained — no S3 packaging needed in the lab.
+      Code:
+        ZipFile: |
+          import json, os
+          import boto3
+          from botocore.exceptions import ClientError
+
+          VALID_COHORTS = {"AU", "IN"}
+          VALID_EVENT_TYPES = {"login", "course_access", "assessment_view"}
+          REQUIRED = ("event_id", "occurred_at", "user_ref", "cohort", "event_type", "source_ip")
+
+          def _validate(rec):
+              for f in REQUIRED:
+                  if not rec.get(f):
+                      return False, f"missing required field: {f}"
+              if rec["cohort"] not in VALID_COHORTS:
+                  return False, "invalid cohort"
+              if rec["event_type"] not in VALID_EVENT_TYPES:
+                  return False, "invalid event_type"
+              return True, ""
+
+          def handler(event, context=None):
+              table = boto3.resource("dynamodb").Table(os.environ.get("AUDIT_TABLE", "yat-audit-log"))
+              processed = skipped = rejected = 0
+              for msg in event.get("Records", []):
+                  try:
+                      body = json.loads(msg["body"])
+                  except (KeyError, json.JSONDecodeError):
+                      rejected += 1; continue
+                  ok, _ = _validate(body)
+                  if not ok:
+                      rejected += 1; continue
+                  item = {f: body[f] for f in REQUIRED}
+                  try:
+                      table.put_item(Item=item, ConditionExpression="attribute_not_exists(event_id)")
+                      processed += 1
+                  except ClientError as e:
+                      if e.response["Error"]["Code"] == "ConditionalCheckFailedException":
+                          skipped += 1
+                      else:
+                          raise
+              print(json.dumps({"processed": processed, "skipped": skipped, "rejected": rejected}))
+              return {"processed": processed, "skipped": skipped, "rejected": rejected}
+
+  QueueToWriter:
+    Type: AWS::Lambda::EventSourceMapping
+    Properties:
+      EventSourceArn: !GetAtt EventQueue.Arn
+      FunctionName: !Ref WriterFunction
+      BatchSize: 10
+
+  HttpApi:
+    Type: AWS::ApiGatewayV2::Api
+    Properties:
+      Name: !Sub 'yat-audit-${EnvName}'
+      ProtocolType: HTTP
+
+  SqsIntegration:
+    Type: AWS::ApiGatewayV2::Integration
+    Properties:
+      ApiId: !Ref HttpApi
+      IntegrationType: AWS_PROXY
+      IntegrationSubtype: SQS-SendMessage
+      PayloadFormatVersion: '1.0'
+      CredentialsArn: !Ref LabRoleArn
+      RequestParameters:
+        QueueUrl: !Ref EventQueue
+        MessageBody: $request.body
+
+  EventsRoute:
+    Type: AWS::ApiGatewayV2::Route
+    Properties:
+      ApiId: !Ref HttpApi
+      RouteKey: 'POST /events'
+      Target: !Sub 'integrations/${SqsIntegration}'
+
+  DefaultStage:
+    Type: AWS::ApiGatewayV2::Stage
+    Properties:
+      ApiId: !Ref HttpApi
+      StageName: $default
+      AutoDeploy: true
+
+  BacklogAlarm:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmName: !Sub 'yat-audit-backlog-${EnvName}'
+      AlarmDescription: Audit queue backlog is high — the writer may be falling behind.
+      Namespace: AWS/SQS
+      MetricName: ApproximateNumberOfMessagesVisible
+      Dimensions:
+        - Name: QueueName
+          Value: !GetAtt EventQueue.QueueName
+      Statistic: Maximum
+      Period: 60
+      EvaluationPeriods: 3
+      Threshold: 100
+      ComparisonOperator: GreaterThanThreshold
+      TreatMissingData: notBreaching
+
+Outputs:
+  ApiEndpoint:
+    Description: POST sample access events here (the route is POST /events).
+    Value: !Sub 'https://${HttpApi}.execute-api.${AWS::Region}.amazonaws.com/events'
+
+  AuditTableName:
+    Description: The DynamoDB audit table name.
+    Value: !Ref AuditTable

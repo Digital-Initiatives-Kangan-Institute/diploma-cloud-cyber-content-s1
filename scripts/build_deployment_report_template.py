@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Build the YAT / MTS Deployment Report template (.docx) from the brand pack.
+"""Build the YAT / MTS Deployment Report template(s) (.docx) from the brand pack.
 
 ONE generic, in-world Deployment Report template — the superset that serves any
 deployment, from a greenfield foundation build to a full HA hardening. Built from the
@@ -7,11 +7,18 @@ HA report outline (the larger of the two), with AT2's foundation-only sections f
 back in, and assessment-only scaffolding (KE Q&A, reflections, student ID, UoC tags)
 stripped — the same generic-template principle applied to the Business Case.
 
+Two scoped variants from ONE definition, selected by the `serverless` flag:
+  * serverless=False — the base template (EC2/RDS infrastructure build/HA hardening). This
+    output is byte-for-byte the long-standing template; CL1 AT2/AT3 rely on its shape.
+  * serverless=True  — a serverless + infrastructure-as-code build (§4/§5/§6 swapped for
+    operating predefined IaC templates, authoring your own, a microservice deploy and
+    monitoring). Used by S1-CL2 AT2. Top-level sections (§1-§7 + appendices) are identical
+    between the two — only §4/§5/§6 content differs.
+
 Sections a simpler deployment doesn't need carry an explicit "Not applicable — reason"
 convention rather than being deleted, so the report always proves completeness.
 
-Usage:  python scripts/build_deployment_report_template.py [output.docx]
-Default: ../diploma-cloud-cyber-website/public/templates/YAT-Deployment-Report-template.docx
+Usage:  python scripts/build_deployment_report_template.py   (builds BOTH variants)
 """
 import sys
 from pathlib import Path
@@ -56,7 +63,7 @@ def callout(doc, lines):
     doc.add_paragraph()
 
 
-def build(path):
+def build(path, serverless=False):
     doc = Document()
     bc.configure_styles(doc)
 
@@ -103,14 +110,20 @@ def build(path):
     # ---- CONTENTS + convention ----
     doc.add_section(WD_SECTION.NEW_PAGE); bc.build_header_footer(doc.sections[-1])
     doc.add_paragraph("How to use this template", style="Heading 1")
+    intro = ("This is the standard YAT deployment report — it covers everything from a greenfield foundation "
+             "build to a full high-availability hardening.")
+    applic_eg = ("the maintenance-window context for a non-production build" if serverless
+                 else "the HA failure/resize simulations")
+    if serverless:
+        intro = ("This is the standard YAT deployment report, set up for a serverless + infrastructure-as-code "
+                 "deployment (operating predefined templates, authoring your own, and a microservice build).")
     callout(doc, [
-        ("One report for any deployment.", "This is the standard YAT deployment report — it covers "
-         "everything from a greenfield foundation build to a full high-availability hardening."),
+        ("One report for any deployment.", intro),
         ("Complete every section.", "Where a section does not apply to your deployment, mark it "
          "“Not applicable — [reason]” rather than deleting it, so the report proves "
          "nothing was overlooked."),
         ("Sections flagged with an applicability note", "(in terracotta) are the ones a simpler "
-         "deployment will often mark Not applicable — e.g. the HA failure/resize simulations."),
+         "deployment will often mark Not applicable — e.g. " + applic_eg + "."),
         ("Cross-reference your evidence.", "The build narrative and testing sections reference the "
          "screenshots and configuration exports captured in the appendices."),
     ])
@@ -149,6 +162,107 @@ def build(path):
                      "or cleanly rolled back. For a greenfield build, mark Not applicable.")
     bc.response(doc)
 
+    # ===================== §4 / §5 / §6 — variant-specific =====================
+    if serverless:
+        _serverless_body(doc, h1, h3, bc, applic)
+    else:
+        _infra_body(doc, h1, h3, bc, applic)
+
+    # ---- §7 Operational Handover (shared) ----
+    h1("7. Operational Handover")
+    bc.guidance(doc, "Hand-over information for the team taking over the infrastructure.")
+    h3("7.1 Access")
+    bc.guidance(doc, "Who has what access post-handover, MFA enforcement, any IAM group changes.")
+    bc.response(doc)
+    h3("7.2 Runbook references")
+    bc.guidance(doc, "Pointers to the design document, naming/tagging conventions, backup arrangements, and "
+                     "the alarms list + notification destinations.")
+    bc.response(doc)
+    h3("7.3 Known limitations and what's next")
+    bc.guidance(doc, "Be explicit about what is not covered today and what a later phase would add.")
+    bc.response(doc)
+    h3("7.4 Documentation filing")
+    bc.table(doc, ["Item", "Filed in", "Reference"],
+             [["This Deployment Report", "[ YAT ICT shared documentation ]", "[ ref ]"],
+              ["Configuration exports (Appendix B)", "[ … ]", "[ ref ]"],
+              ["Test / simulation evidence (Appendix C)", "[ … ]", "[ ref ]"]],
+             widths=[6.5, 5.0, 4.0])
+    h3("7.5 Feedback record")
+    applic(doc, "deployments where stakeholder feedback is captured")
+    bc.table(doc, ["Feedback received", "From", "Your response", "Resulting action"],
+             [["[ … ]", "[ … ]", "[ … ]", "[ … ]"]],
+             widths=[5.0, 3.0, 4.0, 4.0])
+    h3("7.6 Sign-off")
+    bc.table(doc, ["Role", "Name", "Date", "Signature"],
+             [["Prepared by", "[ … ]", "", ""],
+              ["Reviewed by", "[ … ]", "", ""],
+              ["Approved by (acceptance authority)", "[ … ]", "", ""]],
+             widths=[5.5, 4.5, 2.5, 3.0])
+
+    # ---- APPENDICES ----
+    doc.add_section(WD_SECTION.NEW_PAGE); bc.build_header_footer(doc.sections[-1])
+    if serverless:
+        h1("Appendix A — Build evidence (screenshots)")
+        bc.guidance(doc, "Capture a console screenshot evidencing each part you built, with the region "
+                         "indicator visible. List each below and cross-reference it from §4 / §6. Examples:")
+        bc.table(doc, ["#", "Screenshot", "What must be visible"],
+                 [["A1", "Lab session + execution role", "[ the session; the least-privilege role policy ]"],
+                  ["A2", "CloudFormation stack", "[ a stack at CREATE_COMPLETE with its resources ]"],
+                  ["A3", "The datastore", "[ an item written by the function ]"],
+                  ["A4", "The API / microservice test", "[ the request + a 200 response ]"],
+                  ["A5", "CloudWatch alarms", "[ the configured alarms and their state ]"],
+                  ["…", "[ add as your build requires ]", "[ … ]"]],
+                 widths=[1.0, 5.5, 9.0])
+        h1("Appendix B — Infrastructure-as-code templates and user documentation")
+        bc.guidance(doc, "Attach the template you authored and the predefined templates you operated, plus the "
+                         "IaC user documentation (how to deploy/update/delete the stack with parameters).")
+        bc.response(doc, "[ Templates + user documentation ]")
+        h1("Appendix C — Test and troubleshooting evidence")
+        bc.guidance(doc, "Attach the evidence supporting §6 — the deploy/update/delete captures, the "
+                         "microservice test request/response and datastore item, the alarm test, and the "
+                         "troubleshooting log.")
+        bc.response(doc, "[ Test and troubleshooting evidence ]")
+    else:
+        h1("Appendix A — Build evidence (screenshots)")
+        bc.guidance(doc, "Capture a console screenshot evidencing each component you built or changed, with the "
+                         "region indicator visible. List each below and cross-reference it from §4 / §6. Examples:")
+        bc.table(doc, ["#", "Screenshot", "What must be visible"],
+                 [["A1", "IAM groups / MFA", "[ created groups; MFA enabled ]"],
+                  ["A2", "VPC subnets", "[ subnets + AZs ]"],
+                  ["A3", "EC2 instances + ASG", "[ running instances across AZs; ASG min/desired/max ]"],
+                  ["A4", "ALB target group health", "[ healthy targets ]"],
+                  ["A5", "RDS database", "[ available; Multi-AZ status; encryption ]"],
+                  ["A6", "CloudWatch alarms / dashboard", "[ the alarms / service-level dashboard ]"],
+                  ["…", "[ add as your deployment requires ]", "[ … ]"]],
+                 widths=[1.0, 5.5, 9.0])
+        h1("Appendix B — Configuration exports")
+        bc.guidance(doc, "Export each configuration (AWS CLI or console) and attach as a code block or file. "
+                         "Examples: IAM policies; security-group rules; VPC/subnet/route tables; launch template "
+                         "+ ASG; ALB + target groups; RDS instance; S3 bucket policy/encryption; CloudWatch alarms.")
+        bc.response(doc, "[ Configuration exports ]")
+        h1("Appendix C — Test and simulation evidence")
+        bc.guidance(doc, "Attach the evidence supporting the results in §6 — screenshots, terminal/log excerpts, "
+                         "metric graphs, and (for HA work) failure/resize simulation captures and the computed "
+                         "availability over the window.")
+        bc.response(doc, "[ Test and simulation evidence ]")
+
+    h1("Document control")
+    bc.table(doc, ["Field", "Value"],
+             [["Document version", "[ v1.0 ]"],
+              ["Author", "[ Name, role ]"],
+              ["Engagement", "[ Engagement name ]"],
+              ["Date submitted", "[ DD/MM/YYYY ]"],
+              ["Distribution", "[ … ]"],
+              ["Related documents", "[ the design implemented; predecessor/successor reports ]"]],
+             widths=[5.0, 10.5])
+
+    Path(path).parent.mkdir(parents=True, exist_ok=True)
+    doc.save(path)
+    print(f"Wrote {path}")
+
+
+def _infra_body(doc, h1, h3, bc, applic):
+    """§4/§5/§6 for an EC2/RDS infrastructure build or HA hardening (the base template)."""
     h1("4. Build / Change Narrative")
     bc.guidance(doc, "A layer-by-layer account of what was built or changed. For each layer, write a short "
                      "narrative — for a fresh build, what you stood up; for a change to an existing build, "
@@ -240,77 +354,87 @@ def build(path):
                      "simulations revealed — or an explicit statement that none were needed, with reasoning.")
     bc.response(doc)
 
-    h1("7. Operational Handover")
-    bc.guidance(doc, "Hand-over information for the team taking over the infrastructure.")
-    h3("7.1 Access")
-    bc.guidance(doc, "Who has what access post-handover, MFA enforcement, any IAM group changes.")
-    bc.response(doc)
-    h3("7.2 Runbook references")
-    bc.guidance(doc, "Pointers to the design document, naming/tagging conventions, backup arrangements, and "
-                     "the alarms list + notification destinations.")
-    bc.response(doc)
-    h3("7.3 Known limitations and what's next")
-    bc.guidance(doc, "Be explicit about what is not covered today and what a later phase would add.")
-    bc.response(doc)
-    h3("7.4 Documentation filing")
-    bc.table(doc, ["Item", "Filed in", "Reference"],
-             [["This Deployment Report", "[ YAT ICT shared documentation ]", "[ ref ]"],
-              ["Configuration exports (Appendix B)", "[ … ]", "[ ref ]"],
-              ["Test / simulation evidence (Appendix C)", "[ … ]", "[ ref ]"]],
-             widths=[6.5, 5.0, 4.0])
-    h3("7.5 Feedback record")
-    applic(doc, "deployments where stakeholder feedback is captured")
-    bc.table(doc, ["Feedback received", "From", "Your response", "Resulting action"],
-             [["[ … ]", "[ … ]", "[ … ]", "[ … ]"]],
-             widths=[5.0, 3.0, 4.0, 4.0])
-    h3("7.6 Sign-off")
-    bc.table(doc, ["Role", "Name", "Date", "Signature"],
-             [["Prepared by", "[ … ]", "", ""],
-              ["Reviewed by", "[ … ]", "", ""],
-              ["Approved by (acceptance authority)", "[ … ]", "", ""]],
-             widths=[5.5, 4.5, 2.5, 3.0])
 
-    # ---- APPENDICES ----
-    doc.add_section(WD_SECTION.NEW_PAGE); bc.build_header_footer(doc.sections[-1])
-    h1("Appendix A — Build evidence (screenshots)")
-    bc.guidance(doc, "Capture a console screenshot evidencing each component you built or changed, with the "
-                     "region indicator visible. List each below and cross-reference it from §4 / §6. Examples:")
-    bc.table(doc, ["#", "Screenshot", "What must be visible"],
-             [["A1", "IAM groups / MFA", "[ created groups; MFA enabled ]"],
-              ["A2", "VPC subnets", "[ subnets + AZs ]"],
-              ["A3", "EC2 instances + ASG", "[ running instances across AZs; ASG min/desired/max ]"],
-              ["A4", "ALB target group health", "[ healthy targets ]"],
-              ["A5", "RDS database", "[ available; Multi-AZ status; encryption ]"],
-              ["A6", "CloudWatch alarms / dashboard", "[ the alarms / service-level dashboard ]"],
-              ["…", "[ add as your deployment requires ]", "[ … ]"]],
-             widths=[1.0, 5.5, 9.0])
-    h1("Appendix B — Configuration exports")
-    bc.guidance(doc, "Export each configuration (AWS CLI or console) and attach as a code block or file. "
-                     "Examples: IAM policies; security-group rules; VPC/subnet/route tables; launch template "
-                     "+ ASG; ALB + target groups; RDS instance; S3 bucket policy/encryption; CloudWatch alarms.")
-    bc.response(doc, "[ Configuration exports ]")
-    h1("Appendix C — Test and simulation evidence")
-    bc.guidance(doc, "Attach the evidence supporting the results in §6 — screenshots, terminal/log excerpts, "
-                     "metric graphs, and (for HA work) failure/resize simulation captures and the computed "
-                     "availability over the window.")
-    bc.response(doc, "[ Test and simulation evidence ]")
+def _serverless_body(doc, h1, h3, bc, applic):
+    """§4/§5/§6 for a serverless + infrastructure-as-code build (CL2 AT2)."""
+    h1("4. Build / Change Narrative")
+    bc.guidance(doc, "An account of what you built, stream by stream — operating the predefined templates, "
+                     "authoring your own, the microservice, and monitoring. Cross-reference the Appendix A "
+                     "screenshots and the Appendix B templates/exports.")
+    h3("4.1 Lab environment and access")
+    bc.guidance(doc, "The cloud platform and region used; the least-privilege execution role for the function "
+                     "(what it can do, and nothing more); and how access was obtained. Note any region "
+                     "simulation (e.g. a lab region standing in for the production region).")
+    bc.response(doc)
+    h3("4.2 Operating the predefined infrastructure-as-code templates")
+    bc.guidance(doc, "The IaC service you chose and why; reading the supplied templates to determine the "
+                     "resources they create and their dependencies; and deploying, confirming, updating and "
+                     "deleting resources with them. Record troubleshooting in §6.")
+    bc.table(doc, ["Action", "Command / method", "Result"],
+             [["Deploy", "[ e.g. aws cloudformation deploy … ]", "[ CREATE_COMPLETE ]"],
+              ["Update", "[ change a parameter; reviewed change set ]", "[ UPDATE_COMPLETE ]"],
+              ["Delete", "[ delete-stack ]", "[ DELETE_COMPLETE ]"]],
+             widths=[2.6, 8.4, 5.0])
+    h3("4.3 Authoring the infrastructure-as-code template")
+    bc.guidance(doc, "The template you wrote to provision a related set of resources: the resources, how you "
+                     "parameterised it for configuration and code reuse, how you updated/redeployed it, and how "
+                     "you removed it cleanly. Attach the template in Appendix B.")
+    bc.response(doc)
+    h3("4.4 The microservice")
+    bc.guidance(doc, "Reviewing the design and supplied code; deploying and configuring the serverless services; "
+                     "the interface/integration contract (endpoint + payload); and confirming the application "
+                     "functions. Record troubleshooting in §6.")
+    bc.response(doc)
+    h3("4.5 Monitoring and alarms")
+    bc.guidance(doc, "The metrics and alarms you configured (e.g. queue depth, function errors/throttles, "
+                     "datastore throttles), their thresholds, and where they notify.")
+    bc.response(doc)
 
-    h1("Document control")
-    bc.table(doc, ["Field", "Value"],
-             [["Document version", "[ v1.0 ]"],
-              ["Author", "[ Name, role ]"],
-              ["Engagement", "[ Engagement name ]"],
-              ["Date submitted", "[ DD/MM/YYYY ]"],
-              ["Distribution", "[ … ]"],
-              ["Related documents", "[ the design implemented; predecessor/successor reports ]"]],
-             widths=[5.0, 10.5])
+    h1("5. Configuration Decisions")
+    bc.guidance(doc, "The approved design leaves specific decisions to the implementer. For each decision you "
+                     "made, state your choice and justify it against the workload and requirements. Add rows "
+                     "as needed.")
+    bc.table(doc, ["#", "Decision point", "Your decision", "Rationale"],
+             [["C1", "Infrastructure-as-code service", "[ … ]", "[ native / tooling / supported ]"],
+              ["C2", "Datastore (and capacity mode)", "[ … ]", "[ workload shape ]"],
+              ["C3", "Decoupling (queue / messaging)", "[ … ]", "[ durability under load ]"],
+              ["C4", "Compute (function runtime / memory)", "[ … ]", "[ … ]"],
+              ["C5", "Region parameterisation", "[ … ]", "[ lab stand-in vs production region ]"],
+              ["…", "[ add further decisions ]", "[ … ]", "[ … ]"]],
+             widths=[1.0, 6.0, 4.0, 4.5])
 
-    Path(path).parent.mkdir(parents=True, exist_ok=True)
-    doc.save(path)
-    print(f"Wrote {path}")
+    h1("6. Testing, Simulation and Validation")
+    bc.guidance(doc, "Document the tests run to verify the build. For each test, state the test, the result, "
+                     "and reference the supporting evidence in Appendix C.")
+    h3("6.1 IaC deploy / update / delete verification")
+    bc.guidance(doc, "Confirm each template deploys, updates (via a reviewed change set) and deletes cleanly, "
+                     "with the console / describe-stacks as evidence.")
+    bc.response(doc)
+    h3("6.2 Own-template parameterise and redeploy")
+    bc.guidance(doc, "Deploy your authored template, then redeploy it with a different parameter set to confirm "
+                     "configuration reuse without editing the template body.")
+    bc.response(doc)
+    h3("6.3 Microservice functional test")
+    bc.guidance(doc, "Exercise the microservice end to end (e.g. post a sample event) and confirm the expected "
+                     "result is produced and persisted, including a negative test.")
+    bc.response(doc)
+    h3("6.4 Durability test")
+    applic(doc, "builds with a queue / decoupling component")
+    bc.guidance(doc, "Force a downstream stall and confirm events queue and then drain without loss. Otherwise "
+                     "mark Not applicable.")
+    bc.response(doc)
+    h3("6.5 Monitoring / alarm test")
+    bc.guidance(doc, "Drive a metric past its threshold and confirm the alarm transitions and notifies, then "
+                     "returns to OK.")
+    bc.response(doc)
+    h3("6.6 Troubleshooting log")
+    bc.table(doc, ["Symptom", "Cause", "Fix"],
+             [["[ … ]", "[ … ]", "[ … ]"],
+              ["[ … ]", "[ … ]", "[ … ]"]],
+             widths=[5.2, 5.4, 5.4])
 
 
 if __name__ == "__main__":
-    default = "../diploma-cloud-cyber-website/public/templates/YAT-Deployment-Report-Template.docx"
-    out = sys.argv[1] if len(sys.argv) > 1 else default
-    build(out)
+    base_dir = Path("../diploma-cloud-cyber-website/public/templates")
+    build(base_dir / "YAT-Deployment-Report-Template.docx", serverless=False)
+    build(base_dir / "YAT-Deployment-Report-Template-Serverless.docx", serverless=True)

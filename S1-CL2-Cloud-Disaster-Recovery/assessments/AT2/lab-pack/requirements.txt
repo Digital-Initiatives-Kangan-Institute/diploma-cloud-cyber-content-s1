@@ -1,0 +1,15 @@
+# Local validation harness for the YAT audit-log microservice lab pack.
+#
+# These dependencies are ONLY for validating the artefacts locally (linting the
+# CloudFormation templates and running the handler test without an AWS account).
+# They are NOT needed to deploy in the AWS Academy lab — the lab provides boto3 in the
+# Lambda runtime and the AWS CLI in CloudShell.
+#
+# Install into a venv created inside this folder (see README.md):
+#     python -m venv .venv
+#     .venv/Scripts/python -m pip install -r requirements.txt      # Windows
+#     .venv/bin/python    -m pip install -r requirements.txt       # macOS/Linux
+
+cfn-lint>=1.0,<2     # lints the CloudFormation templates
+boto3>=1.34          # the SDK the handler imports (DynamoDB resource, ClientError)
+pytest>=8.0          # runs the handler test (with a small in-test DynamoDB fake)
