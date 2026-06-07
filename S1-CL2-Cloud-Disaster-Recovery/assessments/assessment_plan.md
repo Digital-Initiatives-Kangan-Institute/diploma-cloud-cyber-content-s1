@@ -11,7 +11,7 @@
 > **What is TBD** (my proposals, not yet approved — Rule 1/2): every group-level *assessment idea*; the 503 global-serving practice vehicle; project slugs; `501 KE 6` placement; and the two `[VERIFY]`s. All carry explicit TBD marks below.
 >
 > **Companion documents:**
-> - `consolidated_uoc.md` (cluster root) — every PC/FS/PE/KE/AC verbatim, in 13 groups under the 4 topics. *(Its AT1 description still reads "Part A DR plan + appendices / Part B presentation" — superseded by the three-part shape here; to be realigned.)*
+> - `consolidated_uoc.md` (cluster root) — every PC/FS/PE/KE/AC verbatim, in 13 groups under the 4 topics.
 > - `scenario/cluster-2-scenario.md` — the scenario design (offshore-India spine, residency drivers, microservice, AWS Academy simulation, decision log).
 > - `S1-CL1-Cloud-Design-Build/assessments/assessment_plan.md` — the pilot-cluster plan this one parallels in shape.
 
@@ -69,7 +69,7 @@
 | Component | Working title | Format | Unit focus | Topics |
 |---|---|---|---|---|
 | **AT1** | Cloud Expansion: Design & DR Plan | **Project Assessment**, three parts (below) | **ICTCLD503** *design* + **ICTCLD501** | 1 + Documenting (design) |
-| **AT2** | DR Implementation | Single written **Deployment Report** (+ appendices) | **ICTCLD503** *build* + **ICTCLD505** + monitoring | 2, 3 + Documenting (build) |
+| **AT2** | Cloud Microservice & IaC Implementation | Single written **Deployment Report** (+ provided artefacts as appendices) | **ICTCLD503** *build* + **ICTCLD505** + monitoring | 2, 3 + Documenting (build) |
 
 **AT1 — three parts:**
 
@@ -79,7 +79,7 @@
 | **B** | **DR Plan** — recovery for the system designed in Part A. Risk/impact, RTO/RPO, backup-restore, recovery steps. Pure DR. | ICTCLD501 elements 1–4 (G1, G2) | DR Plan `.docx` |
 | **C** | **Presentation** — walkthrough of Part A + Part B, seeking/responding to feedback, lodgement, obtaining sign-off. The design-approval gate. | ICTCLD501 element 5 (`PC 5.1–5.4`) + FS Oral communication (501) | presentation `.pptx` + observation record |
 
-**AT2 — single Deployment Report:** the microservice build (503 element 3), the IaC (505 — operate predefined templates + author own), the monitoring (Topic 3), the IaC user documentation (`505 PC 4.1`, `PE 4`), and the build sign-off (`503 PC 4.2/4.3`, `505 PC 4.2`).
+**AT2 — single Deployment Report:** the student operates a provided data-store template (505 elements 1–2), authors their own template for the microservice and deploys it from the provided code (505 element 3 + 503 element 3), configures the monitoring (Topic 3), produces the IaC user documentation (`505 PC 4.1`, `PE 4`), and obtains the build sign-off (`503 PC 4.2/4.3`, `505 PC 4.2`). The provided artefacts (the data-store template, the microservice code, the webhook contract) are supplied as appendices to the assessment document — there is no separate lab pack.
 
 **Why two ATs (not three):** the cluster splits cleanly into a *design/plan* phase and a *build* phase with a single natural approval gate between them. Folding the DR plan into AT1 as Part B (rather than a third AT) keeps one approval moment, balances the workload (two comparable phases instead of two paper ATs + one overloaded build AT), and stays lean — while preserving the design→plan→build order inside AT1.
 
@@ -122,7 +122,7 @@ Every group in `consolidated_uoc.md` mapped to where it is covered, and how. Thi
 | **G5** — IaC: deploy & manage with templates | 2 | **AT2** | Deploy/configure/update/remove resources from predefined IaC templates + troubleshoot. `505 PC 1.1–1.4, 2.1–2.6`, `505 PE 1/3`, `505 KE 3/4/5/6/7/10/11`. |
 | **G6** — IaC: author & parameterise own templates | 2 | **AT2** | Student-authored template provisioning related resources; update/redeploy; parameterise for reuse. `505 PC 3.1–3.7`, `505 PE 2`, `505 KE 8/9`. |
 | **G7** — Shared cloud foundations (standards, hw/sw/storage) | 2 | **AT2** | KE appendix / contextual questions co-evidencing the near-identical `503 KE 1/2` + `505 KE 1/2` once. |
-| **G8** — Metrics, monitoring, alerts & scaling alarms | 3 | **AT2** | Configure metrics + scaling alarms (CloudWatch) during the build. `503 PC 4.1`, `501 KE 6`. **TBD:** `501 KE 6` could alternatively sit in the AT1 Part B DR plan (it's a DR-monitoring concept) — placed with the AT2 monitoring practical for now. |
+| **G8** — Metrics, monitoring, alerts & scaling alarms | 3 | **AT2** | Configure a metric + a scaling-relevant alarm (CloudWatch, e.g. queue depth) on the microservice during the build. `503 PC 4.1`, `501 KE 6`. |
 | **G9** — Documentation & technical writing | 4 | **split** | `503 PC 1.7, 2.4` + `503 FS Writing` → **AT1 Part A** (architecture documented & justified — i.e. the Solution Design itself). `505 PC 4.1`, `505 PE 4` + `505 FS Writing` → **AT2** (IaC user documentation). |
 | **G10** — Finalisation: feedback, sign-off & lodgement | 4 | **split** | `501 PC 5.1–5.4` + `501 FS Oral communication` → **AT1 Part C** (presentation: walkthrough, feedback, lodgement, sign-off of A+B). `503 PC 4.2/4.3`, `505 PC 4.2` + `505 FS Oral communication` → **AT2** (build feedback + final sign-off). |
 | **G11** — FS: reading, self-management, problem solving | — | **both (implicit)** | Co-evidenced across both ATs' technical deliverables and troubleshooting; marking guides note where each is naturally evidenced rather than assessing it separately. |
@@ -149,10 +149,10 @@ Everything here is **new authoring** unless marked *built* (no reuse provenance 
 5. **AT1 Student task** (`AT1-…-Student.docx`) — task instructions, scenario brief, the Part A/B/C deliverable specs, the contextual KE question set, submission/conditions.
 6. **AT1 Assessor guide** (`AT1-…-Assessor.docx`) — marking guide with **bidirectional UoC traceability**, the Part C observation checklist, KE Q&A model answers, sign-off records.
 
-### AT2 — DR Implementation
+### AT2 — Cloud Microservice & IaC Implementation
 7. **AT2 exemplar** (NEW) — model Deployment Report (mirrors CL1 AT2's shape, retargeted to the microservice + IaC + monitoring build).
 8. **AT2 Student task** + **Assessor guide** — deployment-report deliverable spec (microservice build evidence, IaC deploy + own-template authoring, monitoring config, IaC user docs, test evidence, KE/reflection), build sign-off step, contextual KE set, bidirectional traceability.
-9. **Assessor operational artefacts** — the predefined IaC templates students operate in G5 (CloudFormation), the pre-prepared microservice code elements (`503 AC 4`), and the webhook payload contract — likely in `scenario/assessor-resources/`. **TBD** shape.
+9. **Provided artefacts (Appendices A & B of the AT2 documents)** — the predefined data-store template students operate in G5 (CloudFormation), the pre-prepared microservice code (`503 AC 4`), and the webhook payload contract. Embedded as appendices in the assessor and student instruments — not a separate lab pack.
 
 ### Cluster-level
 10. **`assessment_plan.md`** — this document.
@@ -166,11 +166,10 @@ Everything here is **new authoring** unless marked *built* (no reuse provenance 
 ## 7. Open questions / TBDs
 
 1. **503 global-serving practice vehicle** — Ledgerline (bookkeeping) can't carry web-scale; a small separate practice web app is needed behind Part A's web-scale design + AT2's build. Shape TBD.
-2. **`501 KE 6` placement** — AT2 monitoring practical (current) vs AT1 Part B DR plan. TBD.
-3. **Source-assessment reuse** — if the 501/503 standalone assessments surface, re-audit AT1/AT2 for reusable practical tasks before finalising (§4).
-4. **AT1 working title + website label** — working title "Cloud Expansion: Design & DR Plan"; the website `s1-cl2-at1` state label currently reads "Disaster Recovery Plan" and may want broadening to reflect the design+plan scope. TBD.
-5. **The two `[VERIFY]`s** — Kangan's exact AWS Academy lab product; legal/residency wording before student-facing docs.
-6. **Pre-validation** — run the institutional Pre-Validation Tool over each AT before submission (as CL1 §7).
+2. **Source-assessment reuse** — if the 501/503 standalone assessments surface, re-audit AT1/AT2 for reusable practical tasks before finalising (§4).
+3. **AT1 working title + website label** — working title "Cloud Expansion: Design & DR Plan"; the website `s1-cl2-at1` state label currently reads "Disaster Recovery Plan" and may want broadening to reflect the design+plan scope. TBD.
+4. **The two `[VERIFY]`s** — Kangan's exact AWS Academy lab product; legal/residency wording before student-facing docs.
+5. **Pre-validation** — run the institutional Pre-Validation Tool over each AT before submission (as CL1 §7).
 
 *Resolved 2026-06-06: (a) DR ≠ regulatory ≠ design — DR Plan is pure 501, the microservice sits in the Solution Design, residency is an input constraint; (b) AT1 is three parts (A Solution Design / B DR Plan / C presentation), AT2 is the Deployment Report; (c) KE — written appendices in each document + verbal contextual Q&A at AT1 Part C; (d) the light India-residency slice. See §1/§3.*
 
@@ -194,3 +193,4 @@ Not committed — natural sequencing only.
 
 - **2026-06-06:** Initial draft (v1). Built on the settled four-topic / two-AT structure and the offshore-India scenario spine. Coverage map across AT1 (501 + 503-design) and AT2 (503-build + 505 + monitoring). CL2 noted as author-fresh (505 greenfield; 501/503 source assessments not located → Step-3 reuse audit blocked). KE evidencing settled (written appendices + verbal contextual Q&A at AT1 presentation).
 - **2026-06-06 (restructure, v2):** Resolved DR ≠ regulatory ≠ design. **AT1 restructured to three parts** — Part A **Solution Design** (ICTCLD503 design, incl. the microservice), Part B **DR Plan** (ICTCLD501, pure), Part C **presentation** covering both (501 element 5, the approval gate). The microservice and its regulatory purpose move out of the DR plan into the Solution Design; **data residency is an input constraint, not a deliverable** (no compliance-plan artefact — no UoC requires one); the light India-residency slice confirmed. §1/§3/§5/§6/§8 rewritten; coverage map re-mapped to Part A/B/C + AT2 (all 23 KE, 12 PE re-checked). DR Plan exemplar flagged for de-weave; Solution Design (Part A) + presentation (Part C) exemplars added to the worklist. `consolidated_uoc.md`'s AT1 description noted for realignment.
+- **2026-06-07 (v3):** AT2 recast to **Cloud Microservice & IaC Implementation** — the student operates a provided data-store template and authors the microservice from provided code; the provided artefacts are supplied as assessment appendices (no separate lab pack); the lab environment is chosen per activity (TBA pending the lab-product `[VERIFY]`). `501 KE 6` confirmed in AT2 monitoring.
