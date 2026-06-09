@@ -8,7 +8,7 @@ implements the audit-log microservice approved at AT1: the student OPERATES a pr
 data-store template, AUTHORS their own infrastructure-as-code template for the microservice
 (using the supplied code), deploys and monitors it, and documents it for sign-off.
 
-The worked model lives in the YAT-branded exemplar (build_at2_dr_implementation_exemplar);
+The worked model lives in the YAT-branded exemplar (build_at2_microservice_iac_exemplar);
 this document carries the task instructions, the marking guide with bidirectional UoC
 traceability + assessor notes, and the provided artefacts as Appendices A and B. Shared
 cell/table helpers are reused from build_at1_assessor.
@@ -38,7 +38,7 @@ DETAILS = {
 }
 
 OVERVIEW = (
-    "Students are assessed on implementing the audit-log microservice from the YAT LMS Global Expansion design "
+    "Students are assessed on implementing the audit-log microservice from the YAT Website Global Expansion design "
     "approved at AT1. Working as an MP Tech Solutions (MTS) consultant in the AWS Academy lab, the student "
     "OPERATES a provided infrastructure-as-code template for the audit-log data store, AUTHORS and deploys their "
     "own infrastructure-as-code template for the microservice (using the supplied code) that writes to that "
@@ -51,7 +51,7 @@ TASKS = [
     "In this project the student implements, in the AWS Academy lab, the audit-log microservice designed and "
     "approved in AT1, and documents it in a single Deployment Report. The build has four streams:",
     "• Operate the provided data-store template - deploy, confirm, update and delete the supplied "
-    "DynamoDB audit-store template, and troubleshoot the deliberately broken copy (Appendix A).",
+    "DynamoDB audit-store template, and troubleshoot it if it does not deploy as supplied (Appendix A).",
     "• Author your own infrastructure-as-code template - write, parameterise, update and redeploy a "
     "template that provisions the microservice (API, queue and function), wired to the provided data store.",
     "• Build the microservice - deploy and configure the serverless microservice from the supplied code "
@@ -62,13 +62,13 @@ TASKS = [
 
 RESOURCES = [
     "Teacher/assessor supplied resources / Access to:",
-    "• The YAT scenario site / intranet - the LMS Global Expansion project, and the AT1 Solution Design "
+    "• The YAT scenario site / intranet - the Website Global Expansion project, and the AT1 Solution Design "
     "and Disaster Recovery Plan (the approved design this build implements).",
     "• The YAT Deployment Report template (intranet Templates section).",
-    "• The AWS Academy lab environment for the build (the specific lab product, and therefore the "
-    "deployment region, is confirmed and advised before the assessment runs - see Conditions).",
+    "• The AWS Academy Learner Lab for the build (the deployment region is confirmed and advised before the "
+    "assessment runs - see Conditions).",
     "• The provided assessment artefacts (Appendices A and B): the data-store infrastructure-as-code "
-    "template (and a broken copy), the microservice code, and the webhook payload contract.",
+    "template, the microservice code, and the webhook payload contract.",
 ]
 
 CRITERIA_STATEMENT = (
@@ -80,15 +80,14 @@ CRITERIA_STATEMENT = (
 CONDITIONS = [
     "C1 - The YAT scenario site / intranet (including the AT1 Solution Design and DR Plan) is accessible to "
     "the student throughout the assessment.",
-    "C2 - AWS Academy lab access is available for the student to build, deploy and test. The specific lab "
-    "environment (and therefore the deployment region) is TBA - confirmed and advised to students before the "
-    "assessment runs.",
-    "C3 - The assessor supplies the provided artefacts in Appendices A and B: the data-store template (and its "
-    "broken copy), the microservice code, and the webhook payload contract.",
+    "C2 - AWS Academy Learner Lab access is available for the student to build, deploy and test. The "
+    "deployment region is confirmed and advised to students before the assessment runs.",
+    "C3 - The assessor supplies the provided artefacts in Appendices A and B: the data-store template, the "
+    "microservice code, and the webhook payload contract.",
     "C4 - Design context: the AT1 design places the audit store in the India region (ap-south-1) for data "
-    "residency. The deployment region in the lab is the lab environment's (TBA); region is exposed as a "
-    "template parameter so the same template targets the production region. The mechanics are assessed, not "
-    "the geography.",
+    "residency. The deployment region in the lab is the lab's (advised before the build); the region is the "
+    "deploy target (the --region flag on the deploy command), not a template parameter, so the same template "
+    "targets the lab region or production. The mechanics are assessed, not the geography.",
     "C5 - The assessor role-plays YAT ICT management (Sam Walker, ICT Manager) for the build sign-off.",
 ]
 
@@ -102,21 +101,21 @@ CRITERIA = [
     "(API, queue, function) wired to the provided store, then updates/redeploys and removes it.",
     "D4 - Microservice build: deploys and configures the serverless microservice from the provided code "
     "(Appendix B), and confirms it writes a record to the data store.",
-    "D5 - Troubleshooting: diagnoses and fixes the broken provided template and any microservice errors, with "
-    "a troubleshooting log.",
+    "D5 - Troubleshooting: diagnoses and fixes the fault in the provided data-store template (if it does not "
+    "deploy as supplied) and any microservice errors, with a troubleshooting log.",
     "D6 - Monitoring: configures a metric and alarm (e.g. queue depth, function errors, or a scaling alarm) "
     "with threshold and notification.",
     "D7 - Tooling: uses the cloud console, CLI and/or SDK for the build.",
     "D8 - Configuration decisions: states and justifies the implementation decisions (IaC service, datastore, "
-    "decoupling, compute, region parameterisation).",
+    "decoupling, compute, environment parameterisation).",
     "D9 - Testing and validation: documents the tests run - operate-template (deploy/update/delete), own-"
     "template parameterise/redeploy, microservice functional, and the alarm test.",
     "D10 - IaC user documentation: produces user documentation for operating the stack (deploy/update/delete "
     "with parameters).",
     "D11 - Feedback and sign-off: confirms/seeks/responds to feedback and obtains final sign-off from the "
     "required personnel.",
-    "D12 - Knowledge Evidence: written contextual responses linking the build to the underlying IaC and "
-    "microservice concepts (and the shared cloud foundations).",
+    "D12 - Knowledge Evidence appendix: written contextual responses, in a Knowledge Evidence appendix, "
+    "linking the build to the underlying IaC and microservice concepts and the shared cloud foundations.",
     "D13 - Document quality: the Deployment Report uses the YAT template, plain professional English, and is "
     "complete with cross-referenced evidence appendices.",
 ]
@@ -128,28 +127,29 @@ BENCHMARK = [
                "Assessor note: scope should name the microservice + its IaC as the build, and exclude the "
                "web-tier scaling and DR (those are AT1 design/plan, not built here)."),
         ("D2", "[ICTCLD505 PC 1.1-1.4] benefits/automation/issues/service selection; [PC 2.1-2.6] template "
-               "syntax, review, deploy/update/delete, confirm, remove, troubleshoot; [PE 1]; [KE 3, 4, 5, 6, "
-               "10]. Assessor note: must show the FULL lifecycle on the PROVIDED template, not just a deploy - "
-               "a review of its resources/dependencies, an update + redeploy, a delete, and the fixed broken "
-               "copy."),
+               "syntax, review, deploy/update/delete, confirm, remove, troubleshoot; [PE 1]. Assessor note: "
+               "must show the FULL lifecycle on the PROVIDED template, not just a deploy - "
+               "a review of its resources/dependencies, an update + redeploy, a delete, and - if the supplied "
+               "template does not deploy - the fix as well."),
         ("D3", "[ICTCLD505 PC 3.1-3.7] author/deploy/update/parameterise/remove/troubleshoot own template; "
-               "[PE 2] create, run and update at least one own template; [KE 8, 9]. Assessor note: the "
-               "student's OWN template is the microservice (API + queue + function), parameterised (e.g. "
-               "region/environment), and references the provided table (CloudFormation import or a parameter)."),
+               "[PE 2] create, run and update at least one own template. Assessor note: the "
+               "student's OWN template is the microservice (API + queue + function), parameterised (e.g. EnvName; "
+               "the region is the deploy target, not a parameter), and references the provided table "
+               "(CloudFormation import or a parameter)."),
         ("D4", "[ICTCLD503 PC 3.1-3.3] review design/code, deploy and configure, test and confirm functioning; "
                "[PE 3] deploy a microservice using serverless technologies. Assessor note: the deployed service "
                "must ACTUALLY write a record to the Appendix-A table from a test event - not just stand up."),
         ("D5", "[ICTCLD503 PC 3.4] troubleshoot and fix errors; [ICTCLD505 PC 2.6, 3.7] test/troubleshoot "
-               "template errors; [ICTCLD505 KE 7] / [ICTCLD503 KE 5]. Assessor note: the broken provided "
-               "template (Appendix A) is diagnosed from the error and fixed; the log shows symptom -> cause -> "
-               "fix."),
-        ("D6", "[ICTCLD503 PC 4.1] set up metrics and trigger scaling alarms; [ICTCLD501 KE 6] techniques and "
-               "methods to monitor and create alerts. Assessor note: at least one real alarm wired to a "
+               "template errors. Assessor note: the provided template "
+               "(Appendix A) does not deploy as supplied; the fault is diagnosed from the error and fixed; the "
+               "log shows symptom -> cause -> fix."),
+        ("D6", "[ICTCLD503 PC 4.1] set up metrics and trigger scaling alarms. Assessor note: at least one real alarm wired to a "
                "notification; a scaling-relevant metric (queue depth, concurrency, or provisioned-capacity "
                "utilisation) is the strongest evidence."),
         ("D7", "[ICTCLD503 PE 4] / [ICTCLD505 PE 3] use cloud management consoles, SDKs or command line tools."),
-        ("D8", "[ICTCLD505 KE 10, 11] methods/metrics to provision and manage templates; configuration choices "
-               "justified."),
+        ("D8", "Configuration decisions documented and justified in the report (§5); the underlying "
+               "methods/metrics knowledge ([ICTCLD505 KE 10, 11]) is evidenced in the Knowledge Evidence "
+               "appendix - see D12."),
         ("D9", "[ICTCLD503 PC 3.3] test and confirm the application functions; [ICTCLD505 PC 2.6, 3.7] test and "
                "troubleshoot. Assessor note: tests cover BOTH templates (operate + own) plus the microservice "
                "function and the alarm."),
@@ -157,8 +157,9 @@ BENCHMARK = [
                 "documentation; [ICTCLD505 FS Writing]."),
         ("D11", "[ICTCLD503 PC 4.2] confirm, seek and respond to feedback; [PC 4.3] obtain final sign-off; "
                 "[ICTCLD505 PC 4.2] obtain final sign-off; [ICTCLD505 FS Oral communication]."),
-        ("D12", "[ICTCLD505 KE 3-9] IaC concepts; [ICTCLD503 KE 5] testing/debugging; [ICTCLD503 KE 1, 2] / "
-                "[ICTCLD505 KE 1, 2] industry standards and standard hardware/software/storage."),
+        ("D12", "Written contextual responses in the Knowledge Evidence appendix, each tied to the student's "
+                "own build: [ICTCLD505 KE 1-11] (IaC concepts, methods/metrics, testing/debugging) + "
+                "[ICTCLD503 KE 1, 2, 5] (industry standards, standard products, testing/debugging)."),
         ("D13", "[ICTCLD505 FS Writing] prepares user documentation in a logical manner using required syntax "
                 "and language; [ICTCLD503 FS Writing]."),
     ]),
@@ -166,7 +167,7 @@ BENCHMARK = [
 
 STUDENT_INTRO = [
     ("The engagement and your role", "Heading 2"),
-    ("This is the implementation phase of the YAT LMS Global Expansion engagement. The design and disaster "
+    ("This is the implementation phase of the YAT Website Global Expansion engagement. The design and disaster "
      "recovery plan were produced and approved in AT1; in AT2 you build the audit-log microservice from that "
      "design - operating a provided data-store template and authoring your own template for the service - in "
      "the AWS Academy lab, and document it in a Deployment Report.", "Assessor text"),
@@ -178,23 +179,35 @@ STUDENT_TASK = [
     ("The Deployment Report", "Heading 2"),
     ("Using the YAT Deployment Report template (download from the intranet's Templates section), document the "
      "build you perform in the lab. Your report must cover four streams:", "Assessor text"),
-    ("• Operate the provided data-store template (Appendix A) - review it, deploy it, update a setting "
-     "and redeploy, delete it, and fix the deliberately broken copy.", "Assessor text"),
+    ("• Operate the provided data-store template (Appendix A) - review it and deploy it (diagnosing and "
+     "fixing it first if it does not deploy as supplied), update a setting and redeploy, then delete it.", "Assessor text"),
     ("• Author your own infrastructure-as-code template for the microservice - provision the API, queue "
-     "and function, parameterise it (region/environment), wire it to the data-store table, then update/"
+     "and function, parameterise it (e.g. EnvName), wire it to the data-store table, then update/"
      "redeploy and remove it.", "Assessor text"),
     ("• Build the microservice (Appendix B) - deploy the supplied code behind the API and queue, and "
      "confirm a test event is written to the data-store table.", "Assessor text"),
     ("• Monitor, test, document and hand over - configure a metric and alarm, run and record your tests, "
      "produce the infrastructure-as-code user documentation, and obtain sign-off.", "Assessor text"),
-    ("Lab environment: the specific AWS Academy lab (and the deployment region) will be advised before you "
-     "start. The AT1 design places the store in India (ap-south-1) for residency; expose region as a template "
-     "parameter so the same template targets the lab and the production region.", "Assessor text"),
-    ("Complete the Knowledge Evidence responses (contextual short answers about your own build) and attach "
-     "your evidence - screenshots, the templates, and the test/troubleshooting evidence - in the appendices.",
-     "Assessor text"),
-    ("AT2 is submitted to the LMS as the populated Deployment Report (.docx) with the templates and evidence "
-     "appendices completed.", "Assessor text"),
+    ("Lab environment: the AWS Academy Learner Lab (and the deployment region) will be advised before you "
+     "start. The AT1 design places the store in India (ap-south-1) for residency; the deployment region is the "
+     "deploy target (the --region flag), so the same template deploys to the lab region or production - "
+     "parameterise environment-specific values (e.g. EnvName), not the region.", "Assessor text"),
+    ("Knowledge Evidence (required). In a Knowledge Evidence appendix of your Deployment Report, answer "
+     "the following questions in your own words, about your own build:", "Assessor text"),
+    ("• Why did you use infrastructure as code rather than provisioning by hand?", "Assessor text"),
+    ("• Which infrastructure-as-code service did you use, what are the main sections of one of your templates, "
+     "and what tooling deploys it?", "Assessor text"),
+    ("• How did you parameterise your template so it can be reused across environments, and how does it "
+     "connect to the provided data store?", "Assessor text"),
+    ("• How did you test and debug your work - both the templates and the microservice?", "Assessor text"),
+    ("• Which industry infrastructure-as-code practices did you apply, and what signals or metrics are used to "
+     "manage templates?", "Assessor text"),
+    ("• Which industry standards and standard cloud products does your build rely on, and why is your "
+     "data-store choice appropriate for an append-only audit log?", "Assessor text"),
+    ("Attach your evidence - screenshots, the templates, and the test/troubleshooting evidence - in the "
+     "appendices.", "Assessor text"),
+    ("AT2 is submitted as the populated Deployment Report (.docx) with the templates and evidence appendices "
+     "completed.", "Assessor text"),
 ]
 
 TIPS = [
@@ -202,9 +215,10 @@ TIPS = [
     ("Build what AT1 approved. Your report implements the microservice from the AT1 Solution Design - keep it "
      "consistent with that design.", "Assessor text"),
     ("Operate the provided template fully. The data-store template (Appendix A) is one you operate, not author "
-     "- show the whole lifecycle: review, deploy, update, delete, and the fix of the broken copy.", "Assessor text"),
+     "- show the whole lifecycle: review, deploy, update, delete - and, if it does not deploy as supplied, the "
+     "fix too.", "Assessor text"),
     ("Author your own template for the service. The microservice template is yours - parameterise it "
-     "(region/environment) and reference the provided table, so it is clearly your own reusable work.", "Assessor text"),
+     "(e.g. EnvName) and reference the provided table, so it is clearly your own reusable work.", "Assessor text"),
     ("Capture evidence as you go. Screenshot each stack state, the data-store item written by a test event, "
      "the test request/response and the alarm - rather than reconstructing them afterwards.", "Assessor text"),
     ("Sign-off is part of the assessment. You cannot achieve Satisfactory without obtaining the manager's "
@@ -217,8 +231,8 @@ DATASTORE_YAML = r"""AWSTemplateFormatVersion: '2010-09-09'
 Description: >-
   YAT audit-log data store (PROVIDED - you operate this, you do not author it).
   A single DynamoDB table that holds the append-only access-log records your
-  microservice writes. Operate it: review, deploy, update a parameter, delete,
-  and fix the broken copy.
+  microservice writes. Operate it: review, deploy, update a parameter, and delete.
+  It may not deploy as supplied - if so, diagnose the error, fix it, and redeploy.
 
 Parameters:
   EnvName:
@@ -234,11 +248,11 @@ Resources:
       TableName: !Sub 'yat-audit-${EnvName}'
       BillingMode: PAY_PER_REQUEST
       AttributeDefinitions:
-        - { AttributeName: event_id, AttributeType: S }
+        - { AttributeName: id, AttributeType: S }
       KeySchema:
         - { AttributeName: event_id, KeyType: HASH }
       Tags:
-        - { Key: Project, Value: YAT-LMS }
+        - { Key: Project, Value: YAT-Website }
         - { Key: Environment, Value: !Ref EnvName }
         - { Key: DataClassification, Value: audit-log }
 
@@ -252,13 +266,14 @@ Outputs:
 APPENDIX_A = [
     ("Appendix A - Provided data-store template", "Heading 1"),
     ("This infrastructure-as-code template is PROVIDED to you. You OPERATE it - you do not author it: review "
-     "it to see what it creates and its dependencies, deploy it, update a parameter and redeploy, delete it, "
-     "and fix the broken copy. It creates the DynamoDB table your microservice writes to.", "Assessor text"),
+     "it to see what it creates and its dependencies, deploy it, update a parameter and redeploy, and delete "
+     "it. It creates the DynamoDB table your microservice writes to.", "Assessor text"),
+    ("Note: this template may contain a fault and fail to deploy as supplied. If it does, read the error, "
+     "diagnose and fix the problem, then redeploy - and record the symptom, cause and fix in your "
+     "troubleshooting log.", "Assessor text"),
     ("datastore.yaml", "Heading 2"),
 ]
 APPENDIX_A_AFTER = [
-    ("A broken copy (datastore-broken.yaml) is also provided. It contains one deliberate error - deploy or "
-     "lint it, read the error message, fix it, and redeploy. Record this in your troubleshooting log.", "Assessor text"),
     ("How to operate it (the region will be advised - substitute it for <REGION>):", "Heading 2"),
 ]
 DATASTORE_OPS = [
@@ -286,7 +301,7 @@ APPENDIX_B_INTRO = [
 ]
 APPENDIX_B_MID = [
     ("B.2  Webhook contract", "Heading 2"),
-    ("The single integration point. The LMS (the event producer) calls this; your microservice receives it. "
+    ("The single integration point. The website (the event producer) calls this; your microservice receives it. "
      "All six fields are required; a re-sent event with the same event_id is not duplicated.", "Assessor text"),
 ]
 CONTRACT_LINES = r"""POST  {ApiEndpoint}              # {ApiEndpoint} is an Output of your deployed stack

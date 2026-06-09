@@ -399,7 +399,7 @@ def _serverless_body(doc, h1, h3, bc, applic):
               ["C2", "Datastore (and capacity mode)", "[ … ]", "[ workload shape ]"],
               ["C3", "Decoupling (queue / messaging)", "[ … ]", "[ durability under load ]"],
               ["C4", "Compute (function runtime / memory)", "[ … ]", "[ … ]"],
-              ["C5", "Region parameterisation", "[ … ]", "[ lab stand-in vs production region ]"],
+              ["C5", "Environment parameterisation", "[ … ]", "[ env values parameterised; the region is the deploy target, not a template parameter ]"],
               ["…", "[ add further decisions ]", "[ … ]", "[ … ]"]],
              widths=[1.0, 6.0, 4.0, 4.5])
 
