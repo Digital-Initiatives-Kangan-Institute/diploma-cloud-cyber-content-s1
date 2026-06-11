@@ -14,3 +14,5 @@ __pycache__/
 
 # Office open-file locks (created while a .docx/.xlsx is open in Word/Excel)
 ~$*
+
+.venv/
