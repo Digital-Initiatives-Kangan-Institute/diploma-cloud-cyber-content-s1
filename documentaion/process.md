@@ -18,27 +18,32 @@
 
 ---
 
-## Skills — Steps 1–2 are now skill-driven
+## Skills — the deterministic spine of this process is now skill-driven
 
-The transcription, fidelity-validation and consolidation work described by Steps 1–2 is now packaged
-as portable Claude Code skills under `.claude/skills/` (they travel with the repo and lift into
-future courses unchanged). **Prefer the skill**; the step text below documents what each skill does
-and the conventions it follows, and remains the reference if you need to run the underlying script
-by hand.
+The faithful, unforgiving parts of this process — transcription, consolidation, and the various
+completeness/traceability checks — are packaged as portable Claude Code skills under
+`.claude/skills/` (they travel with the repo and lift into future courses unchanged). **Prefer the
+skill**; the step text below documents what each does and the conventions it follows, and remains
+the reference if you need to run the underlying script by hand.
 
-| Need | Skill | Bundled script | Model |
-|---|---|---|---|
-| Transcribe a unit `.docx` → verbatim `.md` | `transcribe-uoc` | `transcribe_uoc.py` | Haiku |
-| Check a transcription is verbatim against its `.docx` | `validate-uoc-transcription` | `validate_uoc.py` | Haiku |
-| Build a cluster's `consolidated_uoc.md` | `consolidate-uocs` | `inventory_uoc.py` | Opus |
-| Check a consolidation is complete | `validate-uoc-consolidation` | `validate_consolidated.py` | Haiku |
+| Step | Need | Skill | Bundled script | Model |
+|---|---|---|---|---|
+| 1 (prereq) | Transcribe a unit `.docx` → verbatim `.md` | `transcribe-uoc` | `transcribe_uoc.py` | Haiku |
+| 1 | Check a transcription is verbatim against its `.docx` | `validate-uoc-transcription` | `validate_uoc.py` | Haiku |
+| 2 | Build a cluster's `consolidated_uoc.md` | `consolidate-uocs` | `inventory_uoc.py` | Opus |
+| 2.5 | Check a consolidation is complete | `validate-uoc-consolidation` | `validate_consolidated.py` | Haiku |
+| 6 | Check one AT's UoC traceability (every criterion tagged, every reference real) | `validate-at-traceability` | `validate_at_traceability.py` | Haiku |
+| 6–7 | Check the cluster's ATs together evidence every consolidated item | `validate-cluster-coverage` | `validate_cluster_coverage.py` | Haiku |
+| delivery 3 | Gate a teaching deck's size before committing | `inspect-deck` | `inspect_deck.py` | Haiku |
 
-The skills call deterministic, **stdlib-only** scripts in `.claude/skills/scripts/`, so the
-transcription/validation work is faithful by construction and runs anywhere with `python3` (no
-virtualenv). Composition is by shared script, not skill-to-skill chaining: `transcribe-uoc` runs the
-`validate_uoc.py` gate itself, and `consolidate-uocs` runs the `validate_consolidated.py` gate
-itself, so every produced artefact is auto-validated deterministically. The standalone `validate-*`
-skills re-check an existing artefact without rebuilding it. Steps 3–7 remain manual authoring steps.
+The skills call deterministic, **stdlib-only** scripts in `.claude/skills/scripts/`, so the work is
+faithful by construction and runs anywhere with `python3` (no virtualenv). Composition is by shared
+script, not skill-to-skill chaining: `transcribe-uoc` runs the `validate_uoc.py` gate itself, and
+`consolidate-uocs` runs the `validate_consolidated.py` gate itself, so every produced artefact is
+auto-validated deterministically; the standalone `validate-*` skills re-check an existing artefact
+without rebuilding it. Steps 3–7 remain **authoring** steps (judgement-led), but their key
+correctness checks — marking-guide traceability (Step 6) and cluster coverage (Steps 6–7) — are now
+skill-gated; only the authoring itself is manual.
 
 ---
 
@@ -343,6 +348,7 @@ The validator:
 
 **Exit criteria:**
 - The Marking Guide's reverse-map table closes the loop (no UoC item claimed by the AT is left without a criterion; no criterion exists without UoC traceability).
+- **Confirmed mechanically with the `validate-at-traceability` skill** — no free-floating criteria, no phantom/mistyped references; and, passing the AT's allocation from the Step 4 group coverage map via `--expect`, every item the AT is meant to evidence is present.
 - All scenario-authoring dependencies surfaced during AT drafting are added to the scenario checklist's backlog.
 - The .docx is populated with the markdown content (post-paste).
 
@@ -382,9 +388,10 @@ As of 2026-05-26, S1-CL1 has reached the end of Step 7 for all three ATs. Remain
 
 1. **Per-UoC mapping documents** — uses workspace `templates/Assessment Mapping Tool.docx`. One per UoC in the cluster (three for S1-CL1). Tim has started edits to the three mapping docx files; not yet locked in. Maps each PC/PE/KE/FS/AC of each UoC to where in the cluster's ATs it is evidenced.
 2. **Operational delivery artefacts** — see memory `s1cl1_in_flight.md` § Pending — operational / pre-delivery for the running list (CloudFormation YAML, Records Management Policy content, AT1 templates, exemplars batch).
-3. **Pre-validation pass** — run the institutional Pre-Validation Tool over each AT.
-4. **Stakeholder review** of the full cluster.
-5. **Apply the same Steps 1–7 pattern to remaining clusters** (S1-CL2, S1-CL3, S2-CL1 through S2-CL4).
+3. **Cluster coverage check** — once a cluster's ATs are authored, run the **`validate-cluster-coverage`** skill to confirm the ATs together evidence every required (PC/FS/PE/KE) item in `consolidated_uoc.md`; close any gaps it reports. (AC items are environment-satisfied and not required in criteria.) This is the capstone to the per-AT `validate-at-traceability` checks from Step 6.
+4. **Pre-validation pass** — run the institutional Pre-Validation Tool over each AT.
+5. **Stakeholder review** of the full cluster.
+6. **Apply the same Steps 1–7 pattern to remaining clusters** (S1-CL2, S1-CL3, S2-CL1 through S2-CL4).
 
 If you are picking this up on a new cluster, follow Steps 1–7 in order against that cluster's UoCs. Read `s1cl1_in_flight.md` as the worked example of the end state.
 
