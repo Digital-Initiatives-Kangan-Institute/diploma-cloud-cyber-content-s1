@@ -18,6 +18,30 @@
 
 ---
 
+## Skills — Steps 1–2 are now skill-driven
+
+The transcription, fidelity-validation and consolidation work described by Steps 1–2 is now packaged
+as portable Claude Code skills under `.claude/skills/` (they travel with the repo and lift into
+future courses unchanged). **Prefer the skill**; the step text below documents what each skill does
+and the conventions it follows, and remains the reference if you need to run the underlying script
+by hand.
+
+| Need | Skill | Bundled script | Model |
+|---|---|---|---|
+| Transcribe a unit `.docx` → verbatim `.md` | `transcribe-uoc` | `transcribe_uoc.py` | Haiku |
+| Check a transcription is verbatim against its `.docx` | `validate-uoc-transcription` | `validate_uoc.py` | Haiku |
+| Build a cluster's `consolidated_uoc.md` | `consolidate-uocs` | `inventory_uoc.py` | Opus |
+| Check a consolidation is complete | `validate-uoc-consolidation` | `validate_consolidated.py` | Haiku |
+
+The skills call deterministic, **stdlib-only** scripts in `.claude/skills/scripts/`, so the
+transcription/validation work is faithful by construction and runs anywhere with `python3` (no
+virtualenv). Composition is by shared script, not skill-to-skill chaining: `transcribe-uoc` runs the
+`validate_uoc.py` gate itself, and `consolidate-uocs` runs the `validate_consolidated.py` gate
+itself, so every produced artefact is auto-validated deterministically. The standalone `validate-*`
+skills re-check an existing artefact without rebuilding it. Steps 3–7 remain manual authoring steps.
+
+---
+
 ## Cluster folder layout (input state)
 
 The target cluster directory is `SX-CLY-<Cluster-Name>/`. Every cluster folder has one consistent shape — `units_of_competency/` and `mappings/` are **top-level siblings** of `assessments/`. Before you start, it must contain:
@@ -43,7 +67,7 @@ SX-CLY-<Cluster-Name>/
 
 The validators' `UOC_DIR` and Step 1's `cd` target are `<cluster>/units_of_competency/`.
 
-If any `.md` is missing while its `.docx` exists, transcription is a prerequisite step not covered by this document — stop and surface to Tim.
+If any `.md` is missing while its `.docx` exists, transcribe it with the **`transcribe-uoc`** skill (it lifts the unit content verbatim from the Word XML — never retyped — reconstructs the structure from the document styles, and auto-validates the result). Transcription used to be an out-of-band prerequisite; it is now a skill.
 
 ---
 
@@ -53,12 +77,13 @@ If any `.md` is missing while its `.docx` exists, transcription is a prerequisit
 
 **Inputs:** every `.docx`/`.md` pair under `assessments/units_of_competency/` (paired by filename).
 
-**Method:**
-1. Use the validator at `<repo_root>/scripts/validate_uoc.py`. If missing, reproduce verbatim from Appendix A.
-2. Run it on all pairs in the cluster:
+**Method:** Invoke the **`validate-uoc-transcription`** skill on the cluster's `<docx> <md>` pairs.
+It runs the bundled validator (`.claude/skills/scripts/validate_uoc.py`) and interprets the result
+per the exit criteria below. The same validator also lives at `<repo_root>/scripts/validate_uoc.py`
+(Appendix A reproduces its source); to run it by hand:
    ```bash
    cd <cluster_dir>/units_of_competency
-   python3 <repo_root>/scripts/validate_uoc.py \
+   python3 .claude/skills/scripts/validate_uoc.py \
      original/<UNIT_A>_Complete_R1.docx <UNIT_A>_Complete_R1.md \
      original/<UNIT_B>_Complete_R1.docx <UNIT_B>_Complete_R1.md \
      ...
@@ -85,6 +110,13 @@ If any `.md` is missing while its `.docx` exists, transcription is a prerequisit
 **Purpose:** produce a single `consolidated_uoc.md` at the cluster root, containing every PC / FS / PE / KE / AC across all units in the cluster, verbatim, source-tagged, organised into groups where assessment overlap is plausible.
 
 **Output:** `SX-CLY-<Cluster-Name>/consolidated_uoc.md`.
+
+**Now skill-driven:** the **`consolidate-uocs`** skill performs this step — it extracts every item
+verbatim and pre-tagged (`inventory_uoc.py`), groups them into topics (the editorial judgement,
+always marked **DRAFT / TBD** per Rule 1), then validates completeness (the `validate-uoc-consolidation`
+skill / `validate_consolidated.py`). The grouping is the only judgement layer; the extract and
+validate layers are deterministic. The sub-steps below document the conventions the skill follows —
+they are also in the skill's own `references/consolidation-guide.md`.
 
 **Sections excluded from consolidation** (per Tim 2026-05-22): Application, Unit Sector, Modification History, Unit Mapping Information, Links. The consolidation covers only the **five assessable element types**: PC, FS, PE, KE, AC.
 
@@ -138,14 +170,19 @@ Format: `[<UNIT_CODE> <SECTION> <numbering>]`. Examples:
 
 ### 2.5 Validate the consolidated document
 
-Use `<repo_root>/scripts/validate_consolidated_uoc.py`. If missing, reproduce verbatim from Appendix B. **You will need to edit two constants at the top of the script for the target cluster:**
+Invoke the **`validate-uoc-consolidation`** skill. It runs the bundled, general arg-driven validator
+(`.claude/skills/scripts/validate_consolidated.py`) — no per-cluster code edits, the cluster and its
+units are arguments:
 
-```python
-CLUSTER_DIR = Path(".../SX-CLY-<Cluster-Name>")
-UOC_DIR     = CLUSTER_DIR / "units_of_competency"
-CONSOLIDATED = CLUSTER_DIR / "consolidated_uoc.md"
-UNITS = ["<UNIT_A>", "<UNIT_B>", "<UNIT_C>", ...]
+```bash
+python3 .claude/skills/scripts/validate_consolidated.py --cluster <cluster> \
+  --unit <CODE>=units_of_competency/<CODE>_Complete_R<N>.md \
+  --unit <CODE>=units_of_competency/<CODE>_Complete_R<N>.md \
+  [--assessor-ac]
 ```
+
+(`--assessor-ac` counts the trailing "Assessors of this unit must satisfy…" paragraph as one extra
+AC item — on for CL1–CL3. Appendix B reproduces an older S1-CL2-hardcoded version for reference.)
 
 The validator:
 - Parses each source `.md` to build the expected reference inventory (PCs from the Elements table, FSs from the Foundation Skills table, PE/KE/AC by counting top-level bullets with the parent-bullet special case for ICTICT517-PE-style structures).
@@ -375,7 +412,9 @@ If you are picking this up on a new cluster, follow Steps 1–7 in order against
 
 ## Appendix A — `validate_uoc.py` (Step 1 tool)
 
-Lives at `<repo_root>/scripts/validate_uoc.py`. Reproduce verbatim if missing. Invocation: `python3 <repo_root>/scripts/validate_uoc.py <docx1> <md1> [<docx2> <md2> ...]`. Exit code 0 on all-pass, 1 on any substantive diff.
+Canonically bundled with the skills at `.claude/skills/scripts/validate_uoc.py` (used by the
+`validate-uoc-transcription` and `transcribe-uoc` skills); also at `<repo_root>/scripts/validate_uoc.py`.
+Reproduce verbatim if missing. Invocation: `python3 <repo_root>/scripts/validate_uoc.py <docx1> <md1> [<docx2> <md2> ...]`. Exit code 0 on all-pass, 1 on any substantive diff.
 
 ```python
 #!/usr/bin/env python3
@@ -620,7 +659,10 @@ if __name__ == "__main__":
 
 ## Appendix B — `validate_consolidated_uoc.py` (Step 2 tool)
 
-Lives at `<repo_root>/scripts/validate_consolidated_uoc.py`. Reproduce verbatim if missing. Invocation: `python3 <repo_root>/scripts/validate_consolidated_uoc.py`. Exit code 0 on PASS, 1 on FAIL.
+**Superseded.** The current Step 2.5 validator is the general, arg-driven `validate_consolidated.py`,
+bundled with the skills at `.claude/skills/scripts/validate_consolidated.py` and invoked via the
+`validate-uoc-consolidation` skill (no per-cluster code edits). This appendix retains the original
+S1-CL2-hardcoded version for reference. Lives at `<repo_root>/scripts/validate_consolidated_uoc.py`. Invocation: `python3 <repo_root>/scripts/validate_consolidated_uoc.py`. Exit code 0 on PASS, 1 on FAIL.
 
 **Before running, edit the constants near the top for the target cluster:**
 ```python
