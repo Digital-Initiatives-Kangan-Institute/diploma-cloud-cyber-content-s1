@@ -80,7 +80,10 @@ def expand_numbering(num: str):
         if a.isdigit() and b.isdigit():
             return [str(i) for i in range(int(a), int(b) + 1)]
         return [a, b]
-    return [num]
+    # numeric item with a trailing qualifier (e.g. '4.3 — partial') -> just the number;
+    # a Foundation-skill name (no leading digit) passes through unchanged
+    mnum = re.match(r"^(\d+(?:\.\d+)?)\b", num)
+    return [mnum.group(1)] if mnum else [num]
 
 
 def resolve_tags(line: str):
@@ -90,24 +93,29 @@ def resolve_tags(line: str):
     current_unit = None
     for m in ANY_BRACKET.finditer(line):
         inside = m.group(1).strip()
-        mf = FULL.match(inside)
-        if mf:
-            unit, sec, num = mf.group(1), mf.group(2), mf.group(3).strip()
-            current_unit = unit
-            form = "compressed" if is_compressed(num) else "full"
-            for member in expand_numbering(num):
-                yield (f"{unit} {sec} {member}", form)
-            continue
-        ma = ABBR.match(inside)
-        if ma:
-            sec, num = ma.group(1), ma.group(2).strip()
-            if not current_unit:
-                yield (f"?? {sec} {num}", "unresolved")
+        # compound multi-item tags join several references with a middle dot,
+        # e.g. [ICTCLD401 KE 1 · ICTCLD502 KE 1]; resolve each part on its own
+        for part in re.split(r"\s*·\s*", inside):
+            part = part.strip()
+            compound = part != inside
+            mf = FULL.match(part)
+            if mf:
+                unit, sec, num = mf.group(1), mf.group(2), mf.group(3).strip()
+                current_unit = unit
+                form = "compressed" if (is_compressed(num) or compound) else "full"
+                for member in expand_numbering(num):
+                    yield (f"{unit} {sec} {member}", form)
                 continue
-            form = "compressed" if is_compressed(num) else "abbrev"
-            for member in expand_numbering(num):
-                yield (f"{current_unit} {sec} {member}", form)
-        # other brackets (placeholders, prose) are ignored
+            ma = ABBR.match(part)
+            if ma:
+                sec, num = ma.group(1), ma.group(2).strip()
+                if not current_unit:
+                    yield (f"?? {sec} {num}", "unresolved")
+                    continue
+                form = "compressed" if (is_compressed(num) or compound) else "abbrev"
+                for member in expand_numbering(num):
+                    yield (f"{current_unit} {sec} {member}", form)
+            # other parts (placeholders, prose) are ignored
 
 
 def split_benchmark(text: str):
