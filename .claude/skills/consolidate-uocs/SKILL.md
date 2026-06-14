@@ -1,5 +1,7 @@
 ---
 name: consolidate-uocs
+version: 1.0.0
+updated: 2026-06-14
 model: claude-opus-4-8
 description: >-
   This skill should be used when a cluster's units of competency need to be consolidated into a

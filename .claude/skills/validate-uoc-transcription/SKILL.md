@@ -1,5 +1,7 @@
 ---
 name: validate-uoc-transcription
+version: 1.0.0
+updated: 2026-06-14
 model: claude-haiku-4-5-20251001
 description: >-
   This skill should be used whenever a unit-of-competency (UoC) transcription needs to be

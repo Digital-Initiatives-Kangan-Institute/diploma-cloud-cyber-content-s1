@@ -1,5 +1,7 @@
 ---
 name: validate-cluster-coverage
+version: 1.0.0
+updated: 2026-06-14
 model: claude-haiku-4-5-20251001
 description: >-
   This skill should be used to check whether a cluster's assessment tasks, taken together, evidence

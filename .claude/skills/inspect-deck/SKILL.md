@@ -1,5 +1,7 @@
 ---
 name: inspect-deck
+version: 1.0.0
+updated: 2026-06-14
 model: claude-haiku-4-5-20251001
 description: >-
   This skill should be used to check a slide deck's size and find what's driving it before
