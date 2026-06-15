@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Build the YAT / MTS Team Plan template (.docx) — the in-world student-facing template.
 
-Derived from the AT1 Team Plan exemplar (build_cl3_team_plan_exemplar) by stripping the worked
+Derived from the AT1 Team Plan exemplar (build_s1_cl3_at1_team_plan_exemplar) by stripping the worked
 content and the UoC `Evidences:` tags and replacing them with section guidance and blank
 response areas / tables. Branding follows scenario/branding/brand-pack.md via build_bc_template.
 

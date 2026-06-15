@@ -17,6 +17,8 @@ import sys
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
+sys.path.insert(0, str(next(d for d in Path(__file__).resolve().parents if (d / "helpers" / "__init__.py").exists())))  # noqa: E402
+from helpers.docx_body_text import add_bullet_list  # noqa: E402
 import build_bc_template as bc            # noqa: E402
 import build_bc_exemplar as ex            # noqa: E402
 import build_at2_deployment_exemplar as a2  # noqa: E402  (na, ev helpers)
@@ -226,14 +228,14 @@ def build(path):
     ex.para(doc, "Unchanged from the AT2 handover: YAT-ICT-Admins full administration, MTS-Consultants "
                  "within the permission boundary, MFA enforced, instance access via SSM Session Manager.")
     h3("7.2 Runbook references")
-    ex.bullets(doc, [
+    add_bullet_list(doc, [
         "The HA Design document (Part A) — the operational reference for the resilient architecture.",
         "The HA-tuned monitoring and alarms (§4.8) and the SNS notification destinations.",
         "The simulation outcomes (§6) — the expected behaviour for future HA testing.",
         "The cross-Region backup schedule and the restore procedure (ap-southeast-4).",
     ])
     h3("7.3 Known limitations and what's next")
-    ex.bullets(doc, [
+    add_bullet_list(doc, [
         "Cross-Region active-active / hot-standby DR — not in scope; a future engagement.",
         "Application-layer HA (DOODLE clustering, session affinity) — YAT IT scope.",
         "Cost impact: Multi-AZ roughly doubles the database cost line — documented for YAT planning.",

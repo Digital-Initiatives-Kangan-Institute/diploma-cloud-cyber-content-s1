@@ -15,8 +15,10 @@ import sys
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
+sys.path.insert(0, str(next(d for d in Path(__file__).resolve().parents if (d / "helpers" / "__init__.py").exists())))  # noqa: E402
+from helpers.docx_body_text import add_bullet_list  # noqa: E402
 import build_bc_template as bc   # noqa: E402
-import build_bc_exemplar as ex   # noqa: E402
+import build_s1_cl1_at1_bc_exemplar as ex   # noqa: E402
 
 from docx import Document  # noqa: E402
 from docx.enum.section import WD_SECTION  # noqa: E402
@@ -90,14 +92,14 @@ def build(path):
                  "design covering the infrastructure, the DOODLE installation approach, the migration of "
                  "student records from GrayBoard, and the cutover.")
     h3("In scope of this design")
-    ex.bullets(doc, [
+    add_bullet_list(doc, [
         "On-premises infrastructure for DOODLE at the Cremorne campus (server, storage, network placement, backup).",
         "DOODLE installation and base configuration; integration with Active Directory, Office 365 and AVETMISS reporting.",
         "Migration of all student records from the legacy GrayBoard LMS, with reconciliation.",
         "The cutover plan, scheduled into the December–January teaching break.",
     ])
     h3("Out of scope of this design")
-    ex.bullets(doc, [
+    add_bullet_list(doc, [
         "Cloud hosting — noted as a future consideration, not part of this engagement.",
         "Application-layer high availability / clustering.",
         "Ongoing operational support after acceptance (separately contracted).",
@@ -105,7 +107,7 @@ def build(path):
 
     h1("2. Design Inputs and Requirements")
     h3("2.1 Inputs")
-    ex.bullets(doc, [
+    add_bullet_list(doc, [
         "LMS Replacement Requirements — the functional and non-functional targets.",
         "Engagement Role Brief — scope, phases, on-premises deployment direction.",
         "ICT Environment Overview — the current campus environment the LMS sits within.",
@@ -143,19 +145,19 @@ def build(path):
                  "It sits in the staff network zone, with student-zone access to the LMS application "
                  "governed by Active Directory permissions.")
     h3("4.3 Identity and access")
-    ex.bullets(doc, [
+    add_bullet_list(doc, [
         "DOODLE authenticates against Active Directory via LDAP bind — single sign-on for staff and students.",
         "Existing LDAP user-group structures are preserved (per the User Access Policy in force).",
         "MFA for staff with grading or course-management roles, per the User Access Policy.",
     ])
     h3("4.4 Network")
-    ex.bullets(doc, [
+    add_bullet_list(doc, [
         "The server uses the redundant campus network (dual NICs) with no single point of failure at the network layer.",
         "Students reach the LMS across the zone boundary under AD permissions; staff reach it from the staff zone.",
         "Office 365 SMTP relay for LMS notifications; outbound access for vendor updates via the campus firewall.",
     ])
     h3("4.5 Compute (server)")
-    ex.bullets(doc, [
+    add_bullet_list(doc, [
         "A new mid-range enterprise server (dual PSU, RAID-protected disks), running Windows Server 2016, hosts DOODLE and its MySQL database.",
         "Sized to match or exceed GrayBoard's performance, including the ~3× concurrent load during end-of-term assessment windows.",
     ])
@@ -163,17 +165,17 @@ def build(path):
     na(doc, "single-server on-premises deployment — no load balancer in scope (this is not a "
             "horizontally-scaled or highly-available design).")
     h3("4.7 Database")
-    ex.bullets(doc, [
+    add_bullet_list(doc, [
         "MySQL on the application server (DOODLE's supported database); engine version confirmed against DOODLE's compatibility matrix.",
         "Populated by migrating the student records from the legacy GrayBoard LMS (see §5), with post-migration reconciliation.",
     ])
     h3("4.8 Storage")
-    ex.bullets(doc, [
+    add_bullet_list(doc, [
         "RAID-protected local disk for the OS, the DOODLE application, and the MySQL database.",
         "The campus NAS (RAID-5) holds course attachments, student submissions, and backup copies.",
     ])
     h3("4.9 Security")
-    ex.bullets(doc, [
+    add_bullet_list(doc, [
         "Active Directory permissions and the two-zone separation control access; antivirus/EDR on the server.",
         "HTTPS for LMS application traffic; TLS for the MySQL connection.",
         "WCAG 2.1 Level AA conformance at the application layer (a DOODLE selection criterion).",
@@ -185,7 +187,7 @@ def build(path):
     ex.para(doc, "The server and related assets are recorded in the YAT ICT asset register under the "
                  "standard naming and ownership conventions.")
     h3("4.12 Backup")
-    ex.bullets(doc, [
+    add_bullet_list(doc, [
         "Nightly backup of the DOODLE database and application data to the system-management server, with offsite tape rotation — aligned to the existing Backup and Retention Policy.",
         "GrayBoard is retained (read-only) until acceptance, as the migration rollback position (see §5).",
     ])
@@ -227,14 +229,14 @@ def build(path):
             "documented in the Deployment Report's testing section.")
 
     h1("7. Out of Scope")
-    ex.bullets(doc, [
+    add_bullet_list(doc, [
         "Cloud hosting — a future consideration, not this engagement.",
         "Application-layer high availability / clustering.",
         "Ongoing operational support after acceptance of the Closure Pack (separately contracted).",
     ])
 
     h1("8. References")
-    ex.bullets(doc, [
+    add_bullet_list(doc, [
         "LMS Replacement Requirements; Engagement Role Brief; ICT Environment Overview.",
         "Privacy / Data Handling Policy; User Access Policy; Backup and Retention Policy.",
         "Standards for RTOs 2015 (record retention); Disability Discrimination Act 1992 (WCAG 2.1 AA).",

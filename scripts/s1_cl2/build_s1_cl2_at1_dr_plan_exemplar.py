@@ -18,7 +18,7 @@ Scope discipline:
 Figures are indicative and internally consistent (RTO <= 4 h / RPO <= 1 h; primary
 ap-southeast-2 Sydney, recovery ap-southeast-4 Melbourne).
 
-Reuses the docx brand helpers (build_bc_template) + the exemplar helpers (build_bc_exemplar).
+Reuses the docx brand helpers (build_bc_template) + the exemplar helpers (build_s1_cl1_at1_bc_exemplar).
 
 Usage:  python scripts/build_at1_dr_plan_exemplar.py [output.docx]
 Default: S1-CL2-Cloud-Disaster-Recovery/assessments/AT1/AT1-exemplar-dr-plan.docx
@@ -28,7 +28,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import build_bc_template as bc  # noqa: E402  (shared branding helpers + palette)
-import build_bc_exemplar as ex  # noqa: E402  (uoc, para, bullets, etable)
+import build_s1_cl1_at1_bc_exemplar as ex  # noqa: E402  (uoc, para, bullets, etable)
 
 from docx import Document  # noqa: E402
 from docx.enum.section import WD_SECTION  # noqa: E402

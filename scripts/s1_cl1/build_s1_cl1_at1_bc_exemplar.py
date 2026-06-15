@@ -14,6 +14,8 @@ import sys
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
+sys.path.insert(0, str(next(d for d in Path(__file__).resolve().parents if (d / "helpers" / "__init__.py").exists())))  # noqa: E402
+from helpers.docx_body_text import add_bullet_list  # noqa: E402
 import build_bc_template as bc  # noqa: E402  (shared branding helpers + palette)
 
 from docx import Document  # noqa: E402
@@ -39,12 +41,6 @@ def para(doc, text):
     r = p.add_run(text)
     r.font.size = Pt(10.5)
     return p
-
-
-def bullets(doc, items):
-    for it in items:
-        p = doc.add_paragraph(style="List Bullet")
-        p.add_run(it).font.size = Pt(10.5)
 
 
 def etable(doc, headers, rows, widths=None):
@@ -238,7 +234,7 @@ def build(path):
               "Accounting and ASQA integrations, hold all data in Australia, and meet 99.9% availability, "
               "RTO ≤ 4h and RPO ≤ 1h.")
     h2("6.2 Options considered")
-    bullets(doc, [
+    add_bullet_list(doc, [
         "Option A — In-house renewal: replace the end-of-life server and ancillary hardware; retain the "
         "single-site on-premises operating model.",
         "Option B — Cloud migration to AWS: redeploy the LMS onto a highly available AWS architecture "

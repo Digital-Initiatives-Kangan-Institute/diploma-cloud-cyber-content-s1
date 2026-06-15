@@ -9,7 +9,7 @@ evidence each item.
 Two data sources, both already in the repo (no hand-typed UoC text):
   * item text + order  — parsed from units_of_competency/<UNIT>_Complete_R1.md
   * item -> AT/criterion — inverted from the AT1 + AT2 assessor benchmarks
-    (build_at1_assessor.BENCHMARK, build_at2_assessor.BENCHMARK), with FS/AC
+    (build_s1_cl2_at1_assessor.BENCHMARK, build_s1_cl2_at2_assessor.BENCHMARK), with FS/AC
     handled with judgement (the benchmarks don't tag AC, and FS coverage is partial).
 
 Staged: `--dump <unit>` prints the parsed items + the inverted mapping for review;
@@ -25,8 +25,8 @@ import sys
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-import build_at1_assessor as a1   # noqa: E402
-import build_at2_assessor as a2   # noqa: E402
+import build_s1_cl2_at1_assessor as a1   # noqa: E402
+import build_s1_cl2_at2_assessor as a2   # noqa: E402
 
 from docx import Document  # noqa: E402
 

@@ -11,7 +11,7 @@ data-store template, AUTHORS their own infrastructure-as-code template for the m
 The worked model lives in the YAT-branded exemplar (build_at2_microservice_iac_exemplar);
 this document carries the task instructions, the marking guide with bidirectional UoC
 traceability + assessor notes, and the provided artefacts as Appendices A and B. Shared
-cell/table helpers are reused from build_at1_assessor.
+cell/table helpers are reused from build_s1_cl2_at1_assessor.
 
 Usage:  python scripts/build_at2_assessor.py [output.docx]
 Default: S1-CL2-Cloud-Disaster-Recovery/assessments/AT2/AT2-Microservice-IaC-Implementation-Assessor.docx
@@ -20,7 +20,7 @@ import sys
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-import build_at1_assessor as a1  # noqa: E402  (shared helpers: set_cell, instr_row, etc.)
+import build_s1_cl2_at1_assessor as a1  # noqa: E402  (shared helpers: set_cell, instr_row, etc.)
 
 from docx import Document  # noqa: E402
 from docx.shared import Pt  # noqa: E402

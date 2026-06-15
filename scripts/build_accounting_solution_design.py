@@ -17,8 +17,10 @@ import sys
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
+sys.path.insert(0, str(next(d for d in Path(__file__).resolve().parents if (d / "helpers" / "__init__.py").exists())))  # noqa: E402
+from helpers.docx_body_text import add_bullet_list  # noqa: E402
 import build_bc_template as bc   # noqa: E402
-import build_bc_exemplar as ex   # noqa: E402  (etable, para, bullets)
+import build_s1_cl1_at1_bc_exemplar as ex   # noqa: E402  (etable, para, bullets)
 
 from docx import Document  # noqa: E402
 from docx.enum.section import WD_SECTION  # noqa: E402
@@ -117,19 +119,19 @@ def build(path):
                  "Microsoft SQL Server engine, and the load balancer with placeholder health checks — no "
                  "application binaries or financial data are placed by the MTS build.")
     h3("In scope of this design")
-    ex.bullets(doc, [
+    add_bullet_list(doc, [
         "The production cloud foundation for the Ledgerline accounting application.",
         "All compute, networking, identity, storage, database, autoscaling and baseline monitoring needed to run Ledgerline as a staff-facing, business-hours workload in AWS.",
         "Single-region, single-Availability-Zone deployment in ap-southeast-2 (Sydney).",
     ])
     h3("Out of scope — deferred to the follow-on HA design phase")
-    ex.bullets(doc, [
+    add_bullet_list(doc, [
         "High-availability hardening (Multi-AZ SQL Server, cross-AZ compute resilience, failure-simulation testing).",
         "Disaster recovery to a second AWS region; DR runbook and tabletop testing.",
         "Application re-platforming (Ledgerline remains Windows Server 2016 + Microsoft SQL Server).",
     ])
     h3("Out of MTS scope entirely — YAT ICT responsibility")
-    ex.bullets(doc, [
+    add_bullet_list(doc, [
         "Ledgerline application installation onto the EC2 instance(s) after handover.",
         "Database migration (extract from on-prem SQL Server, load into RDS for SQL Server).",
         "Cutover — DNS switch, parallel running, decommissioning, user redirection (avoiding month-end and EOFY).",
@@ -138,7 +140,7 @@ def build(path):
 
     h1("2. Design Inputs and Requirements")
     h3("2.1 Inputs")
-    ex.bullets(doc, [
+    add_bullet_list(doc, [
         "Accounting System Application Specification — functions, user load, data, integrations, SLAs, data residency.",
         "Accounting System Migration Requirements — platform preservation, availability, recovery, licensing, retention.",
         "Accounting System Server Specifications — current server, measured availability, utilisation, growth.",
@@ -186,7 +188,7 @@ def build(path):
                ["Application-Service", "EC2 instance role for Ledgerline", "RDS read/write; S3 read/write (attachments); CloudWatch logs"],
                ["Finance-Auditors", "Finance / external auditors", "Read-only on logs, metrics, configs (financial-audit support)"]],
               widths=[3.5, 5.0, 7.5])
-    ex.bullets(doc, [
+    add_bullet_list(doc, [
         "MFA required for all YAT-ICT-Admins and MTS-Consultants users (Essential Eight; User Access Policy).",
         "No long-lived access keys for humans; programmatic access via IAM roles only; EC2 access via instance profile.",
         "Configuration decision left to the implementer: the MTS-Consultants permission boundary during build vs after handover.",
@@ -200,7 +202,7 @@ def build(path):
                ["private-app-a", "10.0.11.0/24", "Application / Ledgerline EC2 + internal ALB", "No"],
                ["private-data-a", "10.0.21.0/24", "Database (RDS for SQL Server)", "No"]],
               widths=[4.0, 3.5, 6.0, 2.5])
-    ex.bullets(doc, [
+    add_bullet_list(doc, [
         "Internet Gateway used only for NAT egress (Windows Update, vendor patches); no inbound internet path to the app.",
         "Route tables: public-egress → IGW; private-app → NAT; private-data → no internet route.",
         "Staff reach the service over the campus Site-to-Site VPN; AD authentication runs over the same private link.",
@@ -210,20 +212,20 @@ def build(path):
                         "Figure 4.4 — Ledgerline baseline network topology (single-AZ, internal / staff-only over the campus VPN).",
                         "Source diagram: network-accounting-baseline-singleaz.drawio")
     h3("4.5 Compute (EC2 + Auto Scaling)")
-    ex.bullets(doc, [
+    add_bullet_list(doc, [
         "EC2: general-purpose x86 (e.g. m6i.large — final type a C1 implementer decision); Windows Server 2016 AMI; placed in private-app-a (no public IP).",
         "EBS: gp3 root 80 GB + a gp3 data volume sized by the implementer (footprint + 12-month growth + headroom).",
         "Auto Scaling Group: min 1 / desired 1 / max 2 (baseline); target-tracking on CPU at 70%; ELB+EC2 health checks; 300 s cooldown.",
         "The workload is business-hours and idle overnight; the follow-on HA design adds cross-AZ capacity for resilience (not for load).",
     ])
     h3("4.6 Load balancing (ALB)")
-    ex.bullets(doc, [
+    add_bullet_list(doc, [
         "Internal (private) ALB in private-app-a; HTTPS:443 listener forwarding to the Ledgerline target group — reachable by staff over the campus VPN, not from the internet.",
         "Target group = the ASG instances; HTTP health check on the application health endpoint (30 s; 2 unhealthy → out of service).",
         "TLS via an ACM-issued certificate for the internal Ledgerline DNS name (DNS strategy a C8 implementer decision).",
     ])
     h3("4.7 Database (RDS for SQL Server)")
-    ex.bullets(doc, [
+    add_bullet_list(doc, [
         "Amazon RDS for SQL Server, Standard edition (preserves the existing SQL Server engine and data); version confirmed against Ledgerline at build time.",
         "General-purpose instance class (e.g. db.m6i.large — a C2 implementer decision); gp3 storage sized to ~22 GB + ~5 GB/year growth.",
         "SQL Server licensing model — licence-included vs bring-your-own-licence — is a C3 implementer decision with a material cost impact.",
@@ -238,14 +240,14 @@ def build(path):
                ["Documents bucket", "S3", "Scanned invoices / purchase orders / supporting documents; lifecycle to Glacier for 7-year financial retention"],
                ["Backups bucket", "S3", "Off-instance SQL backup exports, file snapshots"]],
               widths=[4.0, 4.5, 7.5])
-    ex.bullets(doc, ["Both buckets: block all public access; SSE-S3 (or SSE-KMS) encryption; versioning enabled; access logging to a log bucket; Object Lock considered for the 7-year financial-records hold."])
+    add_bullet_list(doc, ["Both buckets: block all public access; SSE-S3 (or SSE-KMS) encryption; versioning enabled; access logging to a log bucket; Object Lock considered for the 7-year financial-records hold."])
     h3("4.9 Security")
     ex.etable(doc, ["Security group", "Inbound", "Outbound"],
               [["sg-alb", "HTTPS:443 from the campus VPN / staff CIDR only", "HTTPS to sg-app"],
                ["sg-app", "from sg-alb; RDP:3389 from MTS bastion (design left to implementer)", "SQL:1433 to sg-db; HTTPS via NAT; LDAPS to campus AD; SMTP to O365; SFTP to payroll bureau; banking endpoints"],
                ["sg-db", "SQL Server:1433 from sg-app only", "none"]],
               widths=[3.0, 7.0, 6.0])
-    ex.bullets(doc, [
+    add_bullet_list(doc, [
         "Encryption in transit: HTTPS staff→ALB→EC2; TLS EC2→RDS; AWS calls over TLS via VPC endpoints where available; LDAPS and SFTP for external links.",
         "Encryption at rest: EBS, RDS, and S3 all enabled (KMS where customer-managed keys are warranted for financial data).",
         "Operates under the AWS Shared Responsibility Model — AWS secures the cloud; YAT/MTS secure the OS, application, IAM, data and access in the cloud.",
@@ -260,7 +262,7 @@ def build(path):
                ["ALB target 5XX / unhealthy host", "> 5 / min or any unhealthy host"],
                ["RDS connections high", "> 80% of max connections"]],
               widths=[8.0, 8.0])
-    ex.bullets(doc, ["Logging: VPC flow logs and RDS logs → CloudWatch Logs; ALB access logs → S3; EC2 OS logs via the CloudWatch Agent. Financial-audit-relevant logs retained to meet the 7-year obligation."])
+    add_bullet_list(doc, ["Logging: VPC flow logs and RDS logs → CloudWatch Logs; ALB access logs → S3; EC2 OS logs via the CloudWatch Agent. Financial-audit-relevant logs retained to meet the 7-year obligation."])
     h3("4.11 Naming and tagging conventions")
     ex.para(doc, "Naming pattern yat-acct-<resource-type>-<env>-<az-or-purpose> (e.g. yat-acct-alb-prod). Mandatory tags:")
     ex.etable(doc, ["Tag", "Value"],
@@ -274,7 +276,7 @@ def build(path):
                ["EC2 EBS volumes", "Daily AMI snapshot (Data Lifecycle Manager)", "14 days"],
                ["Documents (S3)", "Versioning + lifecycle to Glacier", "≥ 7 years (financial-records obligation)"]],
               widths=[4.0, 7.0, 5.0])
-    ex.bullets(doc, ["Cross-Region backup copies are out of scope for the baseline — addressed in the follow-on HA design."])
+    add_bullet_list(doc, ["Cross-Region backup copies are out of scope for the baseline — addressed in the follow-on HA design."])
     h3("4.13 Recovery objectives — baseline state")
     ex.para(doc, "The baseline meets RPO ≤ 1 hour through RDS automated + transaction-log backups (point-in-"
                  "time recovery), and supports RTO ≤ 1 business day via a single-AZ restore. The single AZ and "
@@ -314,7 +316,7 @@ def build(path):
     h1("7. Out of Scope")
     ex.para(doc, "Stated explicitly so the implementer knows what not to build (these are the deliberate "
                  "inputs to the follow-on HA design):")
-    ex.bullets(doc, [
+    add_bullet_list(doc, [
         "Multi-AZ SQL Server; cross-AZ subnets (private-app-b, private-data-b); ASG capacity ≥ 2 across AZs.",
         "HA-tuned monitoring (cross-AZ latency, replica lag); cross-Region backup copies and DR runbook.",
         "Failure-simulation testing; automated availability reporting against the recovery objectives.",
@@ -322,7 +324,7 @@ def build(path):
     ])
 
     h1("8. References")
-    ex.bullets(doc, [
+    add_bullet_list(doc, [
         "Accounting System Application Specification; Migration Requirements; Server Specifications; Operational Costing.",
         "Engagement Role Brief; Consultation Notes; ICT Environment Overview.",
         "Privacy Policy; User Access Policy; Security and Incident Response; Industry Standards Reference (AWS Well-Architected, ACSC Essential Eight).",

@@ -8,7 +8,7 @@ AT3 hardening phase. Evidence is described, not captured: "[SCREENSHOT — shoul
 
 Assessor-facing: retains UoC `Evidences:` tags, §8 Knowledge Evidence responses, and
 reflections (the assessment layers a real org template omits). Reuses the docx brand
-helpers (build_bc_template) and the prose/table helpers (build_bc_exemplar).
+helpers (build_bc_template) and the prose/table helpers (build_s1_cl1_at1_bc_exemplar).
 
 Usage:  python scripts/build_at2_deployment_exemplar.py [output.docx]
 Default: S1-CL1-Cloud-Design-Build/assessments/AT2/AT2-exemplar-deployment-report.docx
@@ -17,8 +17,10 @@ import sys
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
+sys.path.insert(0, str(next(d for d in Path(__file__).resolve().parents if (d / "helpers" / "__init__.py").exists())))  # noqa: E402
+from helpers.docx_body_text import add_bullet_list  # noqa: E402
 import build_bc_template as bc   # noqa: E402
-import build_bc_exemplar as ex   # noqa: E402
+import build_s1_cl1_at1_bc_exemplar as ex   # noqa: E402
 
 from docx import Document  # noqa: E402
 from docx.enum.section import WD_SECTION  # noqa: E402
@@ -258,7 +260,7 @@ def build(path):
     ex.para(doc, "YAT-ICT-Admins retain full administration; MTS-Consultants remain within the permission "
                  "boundary; MFA stays enforced; instance access is via SSM Session Manager only.")
     h3("7.2 Runbook references")
-    ex.bullets(doc, [
+    add_bullet_list(doc, [
         "The supplied Baseline Design document (operational reference).",
         "The naming and tagging conventions, so YAT ICT can identify resources.",
         "Backup arrangements: RDS automated backups (7-day retention) and the EBS snapshot policy.",

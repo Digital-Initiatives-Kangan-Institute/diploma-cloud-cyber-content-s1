@@ -1,6 +1,6 @@
 # Topic 14 — Closure & documentation · Slide plan
 
-Build sheet for `scripts/build_kangan_topic14_deck.py` → `Topic_14_Slides.pptx`. Satisfies `coverage.md`. **Disposable scaffold** — delete once built.
+Build sheet for `scripts/build_s1_cl1_topic14_deck.py` → `Topic_14_Slides.pptx`. Satisfies `coverage.md`. **Disposable scaffold** — delete once built.
 
 **Markers.** `[BESPOKE]` author from brief · `[502 ref]` from the pinned slide · `[EX]` activity. **All bespoke, teach → practice** (no AWS slides, no demos). Accents A1/A2/A3; topic-level GOLD. Reference: the AT3 HA Deployment Report template (§1–§8 + Appendices A–D).
 

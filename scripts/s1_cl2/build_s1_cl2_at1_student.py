@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Build the S1-CL2 AT1 STUDENT instrument (.docx) by populating the Kangan template.
 
-The student-facing version of AT1, derived from the assessor instrument (build_at1_assessor)
+The student-facing version of AT1, derived from the assessor instrument (build_s1_cl2_at1_assessor)
 so the shared content is single-sourced and cannot drift. It loads the official Kangan
 'Project Assessment - Student.docx' template and fills it in, keeping the Kangan structure
 and styles. Student-facing content only: Details, Student instructions, the assessment
@@ -16,7 +16,7 @@ import sys
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-import build_at1_assessor as a  # noqa: E402  (shared helpers + content — single source of truth)
+import build_s1_cl2_at1_assessor as a  # noqa: E402  (shared helpers + content — single source of truth)
 
 from docx import Document  # noqa: E402
 

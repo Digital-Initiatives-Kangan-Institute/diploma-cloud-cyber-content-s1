@@ -19,7 +19,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import build_bc_template as bc  # noqa: E402  (brand helpers + palette)
-import build_bc_exemplar as ex  # noqa: E402  (para, etable — filled content)
+import build_s1_cl1_at1_bc_exemplar as ex  # noqa: E402  (para, etable — filled content)
 
 from docx import Document  # noqa: E402
 from docx.enum.section import WD_SECTION  # noqa: E402

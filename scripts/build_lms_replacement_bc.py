@@ -7,7 +7,7 @@ as an example of what a finished business case looks and feels like.
 
 Student-facing → in-world only: NO UoC tags, NO assessment/course language, sign-off filled
 as an approved past deliverable. Reuses the YAT brand template helpers (build_bc_template)
-and the filled-table/prose helpers (build_bc_exemplar) so it matches the house style exactly.
+and the filled-table/prose helpers (build_s1_cl1_at1_bc_exemplar) so it matches the house style exactly.
 
 Usage:  python scripts/build_lms_replacement_bc.py [output.docx]
 Default: ../diploma-cloud-cyber-website/public/documents/YAT-LMS-Replacement-Business-Case.docx
@@ -16,8 +16,10 @@ import sys
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
+sys.path.insert(0, str(next(d for d in Path(__file__).resolve().parents if (d / "helpers" / "__init__.py").exists())))  # noqa: E402
+from helpers.docx_body_text import add_bullet_list  # noqa: E402
 import build_bc_template as bc       # noqa: E402  branding helpers + palette
-import build_bc_exemplar as ex       # noqa: E402  etable / para / bullets
+import build_s1_cl1_at1_bc_exemplar as ex       # noqa: E402  etable / para / bullets
 
 from docx import Document            # noqa: E402
 from docx.enum.section import WD_SECTION  # noqa: E402
@@ -166,7 +168,7 @@ def build(path):
                  "Office 365 and AVETMISS reporting; and carry vendor support with severity-1 response "
                  "within 4 hours during teaching hours.")
     h2("6.2 Options considered")
-    ex.bullets(doc, [
+    add_bullet_list(doc, [
         "Option A — Remediate and retain GrayBoard: invest in an accessibility retrofit and a hardware "
         "refresh, and continue in-house maintenance of the legacy platform.",
         "Option B — Replace with a contemporary on-prem LMS (DOODLE): select an established product via "

@@ -15,7 +15,7 @@ UoC `Evidences:` tags and the Knowledge Evidence appendix responses (assessor la
 omits). The lab environment / deployment region is TBA (advised before the build); region is the
 deploy target, not a template parameter.
 
-Reuses the docx brand helpers (build_bc_template) and prose/table helpers (build_bc_exemplar).
+Reuses the docx brand helpers (build_bc_template) and prose/table helpers (build_s1_cl1_at1_bc_exemplar).
 
 Usage:  python scripts/build_at2_microservice_iac_exemplar.py [output.docx]
 Default: S1-CL2-Cloud-Disaster-Recovery/assessments/AT2/AT2-exemplar-deployment-report.docx
@@ -24,8 +24,10 @@ import sys
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
+sys.path.insert(0, str(next(d for d in Path(__file__).resolve().parents if (d / "helpers" / "__init__.py").exists())))  # noqa: E402
+from helpers.docx_body_text import add_bullet_list  # noqa: E402
 import build_bc_template as bc   # noqa: E402
-import build_bc_exemplar as ex   # noqa: E402
+import build_s1_cl1_at1_bc_exemplar as ex   # noqa: E402
 
 from docx import Document  # noqa: E402
 from docx.enum.section import WD_SECTION  # noqa: E402
@@ -306,7 +308,7 @@ def build(path):
     ex.para(doc, "Access is via the YAT AWS account roles; the operational runbook references the alarms (S4.5) "
                  "and the redeploy procedure (S7.1).")
     h3("7.3 Known limitations and what's next")
-    ex.bullets(doc, [
+    add_bullet_list(doc, [
         "Built in the AWS Academy lab; the deployment region is the lab's (advised for the assessment) and "
         "ap-south-1 in production, set by the deploy target.",
         "The website web-tier scaling (CloudFront / caching / WAF) is designed at AT1 but not built here - "

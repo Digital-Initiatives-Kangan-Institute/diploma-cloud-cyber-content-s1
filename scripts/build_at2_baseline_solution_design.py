@@ -19,8 +19,10 @@ import sys
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
+sys.path.insert(0, str(next(d for d in Path(__file__).resolve().parents if (d / "helpers" / "__init__.py").exists())))  # noqa: E402
+from helpers.docx_body_text import add_bullet_list  # noqa: E402
 import build_bc_template as bc   # noqa: E402
-import build_bc_exemplar as ex   # noqa: E402  (etable, para, bullets)
+import build_s1_cl1_at1_bc_exemplar as ex   # noqa: E402  (etable, para, bullets)
 
 from docx import Document  # noqa: E402
 from docx.enum.section import WD_SECTION  # noqa: E402
@@ -118,19 +120,19 @@ def build(path):
                  "with the OS, the RDS instance with an empty MySQL schema, and the ALB with placeholder "
                  "health checks — no application binaries or production data are placed by the MTS build.")
     h3("In scope of this design")
-    ex.bullets(doc, [
+    add_bullet_list(doc, [
         "The production cloud foundation for the DOODLE LMS application.",
         "All compute, networking, identity, storage, database, autoscaling and monitoring needed to run the LMS as a multi-tier web workload in AWS.",
         "Single-region, single-Availability-Zone deployment in ap-southeast-2 (Sydney).",
     ])
     h3("Out of scope — deferred to the follow-on HA design phase")
-    ex.bullets(doc, [
+    add_bullet_list(doc, [
         "High-availability hardening (Multi-AZ database, cross-AZ compute resilience, failure-simulation testing).",
         "Disaster recovery to a second AWS region; DR runbook and tabletop testing.",
         "Application re-platforming (the LMS remains Windows Server 2016 + DOODLE + MySQL).",
     ])
     h3("Out of MTS scope entirely — YAT ICT responsibility")
-    ex.bullets(doc, [
+    add_bullet_list(doc, [
         "LMS application installation onto the EC2 instance(s) after handover.",
         "Database migration (extract from on-prem MySQL, load into RDS).",
         "Cutover — DNS switch, parallel running, decommissioning, user redirection.",
@@ -139,7 +141,7 @@ def build(path):
 
     h1("2. Design Inputs and Requirements")
     h3("2.1 Inputs")
-    ex.bullets(doc, [
+    add_bullet_list(doc, [
         "LMS Application Specification — workload, SLAs, data footprint, integration points.",
         "LMS Cloud Migration Requirements — SLA, RPO/RTO targets.",
         "Engagement Role Brief — engagement scope, OS and application preservation.",
@@ -182,7 +184,7 @@ def build(path):
                ["Application-Service", "EC2 instance role for the LMS", "RDS read/write; S3 read/write (attachments); CloudWatch logs"],
                ["Read-Only-Auditors", "Compliance / external auditors", "Read-only on logs, metrics, configs"]],
               widths=[3.5, 5.0, 7.5])
-    ex.bullets(doc, [
+    add_bullet_list(doc, [
         "MFA required for all YAT-ICT-Admins and MTS-Consultants users (Essential Eight; User Access Policy).",
         "No long-lived access keys for humans; programmatic access via IAM roles only; EC2 access via instance profile.",
         "Configuration decision left to the implementer: the MTS-Consultants permission boundary during build vs after handover.",
@@ -195,7 +197,7 @@ def build(path):
                ["private-app-a", "10.0.11.0/24", "Application / LMS EC2", "No"],
                ["private-data-a", "10.0.21.0/24", "Database (RDS)", "No"]],
               widths=[4.0, 3.5, 5.5, 3.0])
-    ex.bullets(doc, [
+    add_bullet_list(doc, [
         "Internet Gateway for public-subnet traffic; NAT Gateway in public-web-a for private-app outbound (Windows Update etc.).",
         "Route tables: public → IGW; private-app → NAT; private-data → no internet route.",
         "Connectivity to campus AD: Site-to-Site VPN (baseline choice); Direct Connect deferred unless latency requires it.",
@@ -205,20 +207,20 @@ def build(path):
                         "Figure 4.4 — LMS baseline network topology (single-AZ).",
                         "Source diagram: network-at3-start-non-hardened.drawio")
     h3("4.5 Compute (EC2 + Auto Scaling)")
-    ex.bullets(doc, [
+    add_bullet_list(doc, [
         "EC2: general-purpose x86 (e.g. m6i.large — final type a C1 implementer decision); Windows Server 2016 AMI; placed in private-app-a (no public IP).",
         "EBS: gp3 root 100 GB + a gp3 data volume sized by the implementer (footprint + 12-month growth + 50% headroom).",
         "Auto Scaling Group: min 1 / desired 1 / max 2 (baseline); target-tracking on CPU at 70%; ELB+EC2 health checks; 300 s cooldown.",
         "The follow-on HA design expands the ASG (min 2, multi-AZ) and tunes scaling for assessment-window peaks.",
     ])
     h3("4.6 Load balancing (ALB)")
-    ex.bullets(doc, [
+    add_bullet_list(doc, [
         "Internet-facing ALB in public-web-a; HTTPS:443 listener forwarding to the LMS target group.",
         "Target group = the ASG instances; HTTP health check on the LMS health endpoint (30 s; 2 unhealthy → out of service).",
         "TLS via an ACM-issued certificate for the LMS DNS name (DNS strategy a C8 implementer decision).",
     ])
     h3("4.7 Database (RDS)")
-    ex.bullets(doc, [
+    add_bullet_list(doc, [
         "Amazon RDS for MySQL (preserves the existing data/schema); engine version confirmed against DOODLE at build time.",
         "General-purpose instance class (e.g. db.m6i.large — a C2 implementer decision); gp3 storage sized to footprint + growth.",
         "Multi-AZ DISABLED for the baseline (enabled in the HA design); storage encryption enabled (KMS).",
@@ -232,14 +234,14 @@ def build(path):
                ["Attachments bucket", "S3", "Course attachments + submissions; lifecycle to Glacier Deep Archive after 24 months"],
                ["Backups bucket", "S3", "Off-instance mysqldump exports, file snapshots"]],
               widths=[4.0, 4.5, 7.5])
-    ex.bullets(doc, ["Both buckets: block all public access; SSE-S3 encryption; versioning enabled; access logging to a log bucket."])
+    add_bullet_list(doc, ["Both buckets: block all public access; SSE-S3 encryption; versioning enabled; access logging to a log bucket."])
     h3("4.9 Security")
     ex.etable(doc, ["Security group", "Inbound", "Outbound"],
               [["sg-alb", "HTTPS:443 from 0.0.0.0/0", "HTTP/HTTPS to sg-app"],
                ["sg-app", "from sg-alb; RDP:3389 from MTS bastion (design left to implementer)", "MySQL:3306 to sg-db; HTTPS via NAT; LDAP/LDAPS to campus AD"],
                ["sg-db", "MySQL:3306 from sg-app only", "none"]],
               widths=[3.0, 7.5, 5.5])
-    ex.bullets(doc, [
+    add_bullet_list(doc, [
         "Encryption in transit: HTTPS ALB→EC2; TLS EC2→RDS; AWS calls over TLS via VPC endpoints where available.",
         "Encryption at rest: EBS, RDS, and S3 (SSE-S3) all enabled.",
         "Operates under the AWS Shared Responsibility Model — AWS secures the cloud; YAT/MTS secure the OS, application, IAM, data and access in the cloud.",
@@ -254,7 +256,7 @@ def build(path):
                ["ALB 5XX", "> 10 / min"],
                ["RDS connections high", "> 80% of max_connections"]],
               widths=[8.0, 8.0])
-    ex.bullets(doc, ["Logging: VPC flow logs and RDS logs → CloudWatch Logs (90-day retention); ALB access logs → S3; EC2 OS logs via the CloudWatch Agent."])
+    add_bullet_list(doc, ["Logging: VPC flow logs and RDS logs → CloudWatch Logs (90-day retention); ALB access logs → S3; EC2 OS logs via the CloudWatch Agent."])
     h3("4.11 Naming and tagging conventions")
     ex.para(doc, "Naming pattern yat-lms-<resource-type>-<env>-<az-or-purpose> (e.g. yat-lms-alb-prod). Mandatory tags:")
     ex.etable(doc, ["Tag", "Value"],
@@ -268,7 +270,7 @@ def build(path):
                ["EC2 EBS volumes", "Daily AMI snapshot (Data Lifecycle Manager)", "14 days"],
                ["LMS attachments (S3)", "Versioning + lifecycle to Glacier Deep Archive", "Versioned; archive after 24 months"]],
               widths=[4.5, 7.5, 4.0])
-    ex.bullets(doc, ["Cross-Region backup copies are out of scope for the baseline — addressed in the follow-on HA design."])
+    add_bullet_list(doc, ["Cross-Region backup copies are out of scope for the baseline — addressed in the follow-on HA design."])
     h3("4.13 Recovery objectives — baseline state")
     ex.para(doc, "The baseline's recovery posture is backup-based: RPO is up to the last automated backup "
                  "(daily) and RTO is restore-based (single-AZ restore). The HA targets (99.9% availability, "
@@ -306,7 +308,7 @@ def build(path):
     h1("7. Out of Scope")
     ex.para(doc, "Stated explicitly so the implementer knows what not to build (these are the deliberate "
                  "inputs to the follow-on HA design):")
-    ex.bullets(doc, [
+    add_bullet_list(doc, [
         "Multi-AZ database; cross-AZ subnets (private-app-b, private-data-b); ASG capacity ≥ 2 across AZs.",
         "HA-tuned monitoring (cross-AZ latency, RDS replica lag); cross-Region backup copies and DR runbook.",
         "Failure-simulation testing; automated availability reporting against the 99.9% target.",
@@ -314,7 +316,7 @@ def build(path):
     ])
 
     h1("8. References")
-    ex.bullets(doc, [
+    add_bullet_list(doc, [
         "LMS Application Specification; LMS Cloud Migration Requirements; Engagement Role Brief.",
         "ICT Environment Overview; On-Premises Network Diagram.",
         "Privacy Policy; User Access Policy; Security and Incident Response; Industry Standards Reference (AWS Well-Architected, ACSC Essential Eight).",

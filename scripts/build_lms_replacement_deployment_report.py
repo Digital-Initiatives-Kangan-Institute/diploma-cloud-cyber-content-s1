@@ -16,8 +16,10 @@ import sys
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
+sys.path.insert(0, str(next(d for d in Path(__file__).resolve().parents if (d / "helpers" / "__init__.py").exists())))  # noqa: E402
+from helpers.docx_body_text import add_bullet_list  # noqa: E402
 import build_bc_template as bc   # noqa: E402
-import build_bc_exemplar as ex   # noqa: E402
+import build_s1_cl1_at1_bc_exemplar as ex   # noqa: E402
 
 from docx import Document  # noqa: E402
 from docx.enum.section import WD_SECTION  # noqa: E402
@@ -195,13 +197,13 @@ def build(path):
     ex.para(doc, "Administrative access was handed to YAT ICT; AD-based access for staff and students "
                  "continued unchanged, with MFA retained for grading roles.")
     h3("7.2 Runbook references")
-    ex.bullets(doc, [
+    add_bullet_list(doc, [
         "The LMS Replacement Solution Design — the operational reference for the deployed architecture.",
         "The as-built documentation set and operational runbooks produced at closure.",
         "The Backup and Retention Policy and the monitoring on the system-management server.",
     ])
     h3("7.3 Known limitations and what's next")
-    ex.bullets(doc, [
+    add_bullet_list(doc, [
         "Single-server on-premises platform — not highly available; cloud hosting noted as a future consideration.",
         "Ongoing operational support after acceptance is separately contracted.",
     ])

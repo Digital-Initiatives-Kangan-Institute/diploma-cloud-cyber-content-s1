@@ -25,8 +25,10 @@ import sys
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
+sys.path.insert(0, str(next(d for d in Path(__file__).resolve().parents if (d / "helpers" / "__init__.py").exists())))  # noqa: E402
+from helpers.docx_body_text import add_bullet_list  # noqa: E402
 import build_bc_template as bc   # noqa: E402
-import build_bc_exemplar as ex   # noqa: E402  (etable, para, bullets)
+import build_s1_cl1_at1_bc_exemplar as ex   # noqa: E402  (etable, para, bullets)
 
 from docx import Document  # noqa: E402
 from docx.enum.section import WD_SECTION  # noqa: E402
@@ -124,27 +126,27 @@ def build(path):
                  "the single-AZ database becomes a Multi-AZ deployment with an automatic-failover standby; and "
                  "uploaded media moves off the instance's local disk into shared object storage.")
     h3("In scope of this design")
-    ex.bullets(doc, [
+    add_bullet_list(doc, [
         "Removal of the single-instance, single-Availability-Zone, and single-database points of failure on the website's serving path.",
         "An Application Load Balancer, a cross-AZ Auto Scaling Group, a Multi-AZ managed database, and media offloaded to object storage.",
         "Single-region, two-Availability-Zone deployment in ap-southeast-2 (Sydney).",
     ])
     h3("Out of scope — the subsequent Website Global Expansion engagement")
-    ex.bullets(doc, [
+    add_bullet_list(doc, [
         "Global serving and edge content delivery (CDN) for an international audience.",
         "Cross-region disaster recovery (a second region, recovery objectives, DR runbook).",
         "The audit/access-log microservice and the in-India log store.",
         "Infrastructure-as-code templating of the footprint.",
     ])
     h3("Out of MTS scope entirely — YAT responsibility")
-    ex.bullets(doc, [
+    add_bullet_list(doc, [
         "Website content authoring and CMS configuration (YAT Marketing).",
         "Ongoing operation and support of the website after handover (YAT ICT).",
     ])
 
     h1("2. Design Inputs and Requirements")
     h3("2.1 Inputs")
-    ex.bullets(doc, [
+    add_bullet_list(doc, [
         "Website Cloud Architecture — Baseline Design — the single-AZ pilot being hardened.",
         "Website Specification — workload, traffic, and data profile of the public website.",
         "Website Infrastructure Specifications — the as-deployed single-AZ resources.",
@@ -186,7 +188,7 @@ def build(path):
                ["MTS-Consultants", "MTS during the hardening + support", "Admin during build; reduced at handover"],
                ["Website-Instance role", "EC2 instance profile for the web tier", "S3 read/write (media + backups); CloudWatch logs/metrics"]],
               widths=[3.5, 5.0, 7.5])
-    ex.bullets(doc, [
+    add_bullet_list(doc, [
         "MFA required for all human users (User Access Policy; ACSC Essential Eight).",
         "EC2 access to AWS via the instance profile; no long-lived human access keys.",
     ])
@@ -197,7 +199,7 @@ def build(path):
                ["private-app-a / -b", "10.0.11.0/24, 10.0.12.0/24", "Website EC2 (ASG, one per AZ)", "No"],
                ["private-data-a / -b", "10.0.21.0/24, 10.0.22.0/24", "Database (RDS primary / standby)", "No"]],
               widths=[4.0, 4.0, 5.0, 3.0])
-    ex.bullets(doc, [
+    add_bullet_list(doc, [
         "Internet Gateway for the public subnets; a NAT Gateway in each AZ for the private subnets' outbound traffic.",
         "The web instances move OUT of the public subnet (where the single pilot instance sat) into private app subnets behind the load balancer.",
     ])
@@ -205,13 +207,13 @@ def build(path):
                         "Figure 4.4 — Website HA-hardened network topology (Multi-AZ).",
                         "Source diagram: website-ha-hardened.drawio")
     h3("4.5 Compute (ALB + cross-AZ Auto Scaling)")
-    ex.bullets(doc, [
+    add_bullet_list(doc, [
         "Application Load Balancer, internet-facing, across public-web-a/b; HTTPS:443 listener; ACM-issued certificate (TLS now terminates at the load balancer, not on the instance).",
         "Auto Scaling Group of website instances (LAMP / CMS) across private-app-a/b: min 2 (one per AZ), scaling on CPU / request count; target group health-checked by the ALB.",
         "This removes the single-instance SPOF: an instance or AZ failure leaves healthy capacity serving in the other AZ.",
     ])
     h3("4.6 Database (RDS — Multi-AZ)")
-    ex.bullets(doc, [
+    add_bullet_list(doc, [
         "Amazon RDS for MySQL converted to a Multi-AZ deployment: a primary in private-data-a with a synchronously-replicated standby in private-data-b.",
         "Automatic failover to the standby on primary failure or AZ loss (typically under two minutes), with no application reconfiguration.",
         "Storage encryption (KMS); not publicly accessible; automated daily backups retained.",
@@ -221,14 +223,14 @@ def build(path):
               [["Media bucket", "S3", "Uploaded media (images, brochures, course PDFs) — moved off instance EBS so every instance serves the same media and no single disk is a SPOF"],
                ["Backups bucket", "S3", "Nightly database and media backups"]],
               widths=[4.0, 3.0, 9.0])
-    ex.bullets(doc, ["Both buckets: block all public access; SSE-S3 encryption; versioning enabled. Edge delivery (CDN) of media is deferred to the global-expansion engagement."])
+    add_bullet_list(doc, ["Both buckets: block all public access; SSE-S3 encryption; versioning enabled. Edge delivery (CDN) of media is deferred to the global-expansion engagement."])
     h3("4.8 Security")
     ex.etable(doc, ["Security group", "Inbound", "Outbound"],
               [["sg-alb", "HTTPS:443 from 0.0.0.0/0", "HTTP to sg-app"],
                ["sg-app", "from sg-alb; SSH from an admin source (implementer decision)", "MySQL:3306 to sg-db; HTTPS via NAT to AWS APIs / updates"],
                ["sg-db", "MySQL:3306 from sg-app only", "none"]],
               widths=[3.0, 7.5, 5.5])
-    ex.bullets(doc, [
+    add_bullet_list(doc, [
         "Encryption in transit (HTTPS to the ALB; TLS app→RDS) and at rest (EBS, RDS, S3).",
         "Operates under the AWS Shared Responsibility Model.",
     ])
@@ -249,7 +251,7 @@ def build(path):
               [["RDS database", "Automated daily backups + transaction logs (Multi-AZ)", "7 days"],
                ["Media (S3)", "Versioning + nightly snapshot to the backups bucket", "Versioned"]],
               widths=[4.5, 7.5, 4.0])
-    ex.bullets(doc, ["Cross-Region backup copies remain out of scope here — they are part of the disaster-recovery work in the subsequent expansion engagement."])
+    add_bullet_list(doc, ["Cross-Region backup copies remain out of scope here — they are part of the disaster-recovery work in the subsequent expansion engagement."])
     h3("4.12 Recovery objectives — HA state")
     ex.para(doc, "Within the region, the website now tolerates instance and AZ failure automatically: serving "
                  "continues from the surviving AZ and the database fails over to its standby. Recovery from the "
@@ -275,7 +277,7 @@ def build(path):
     h1("5. Implementation Sequencing")
     ex.para(doc, "Because this hardens a live website, the work is sequenced to avoid an outage and to steer "
                  "clear of the enrolment-enquiry peak:")
-    ex.bullets(doc, [
+    add_bullet_list(doc, [
         "Add the second Availability Zone's subnets, a NAT Gateway per AZ, and the security groups.",
         "Convert the RDS instance to a Multi-AZ deployment (a managed change, taken in a maintenance window).",
         "Offload uploaded media from the instance EBS volume to the S3 media bucket and repoint the CMS.",
@@ -292,7 +294,7 @@ def build(path):
     h1("7. Out of Scope")
     ex.para(doc, "Stated explicitly — these are deliberately left for the subsequent Website Global Expansion "
                  "engagement, which works from this HA-hardened state:")
-    ex.bullets(doc, [
+    add_bullet_list(doc, [
         "Global serving and edge content delivery (CDN) for an international / India audience.",
         "Cross-region disaster recovery: a second region, recovery objectives (RTO/RPO), and a DR runbook.",
         "The audit/access-log microservice and the in-India log store.",
@@ -301,7 +303,7 @@ def build(path):
     ])
 
     h1("8. References")
-    ex.bullets(doc, [
+    add_bullet_list(doc, [
         "Website Cloud Architecture — Baseline Design (single-AZ) — the predecessor state.",
         "Website Specification; Website Infrastructure Specifications.",
         "Privacy Policy; User Access Policy; Industry Standards Reference (AWS Well-Architected, ACSC Essential Eight).",

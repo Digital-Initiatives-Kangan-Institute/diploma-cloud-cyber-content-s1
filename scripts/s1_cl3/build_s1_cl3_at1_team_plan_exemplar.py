@@ -22,6 +22,8 @@ import sys
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
+sys.path.insert(0, str(next(d for d in Path(__file__).resolve().parents if (d / "helpers" / "__init__.py").exists())))  # noqa: E402
+from helpers.docx_body_text import add_bullet_list  # noqa: E402
 import build_bc_template as bc   # noqa: E402  (branding palette + styles + header/footer)
 import build_bc_exemplar as ex   # noqa: E402  (uoc / para / bullets / etable helpers)
 
@@ -149,7 +151,7 @@ def build(path):
     h1("4. Accountability strategies")
     ex.uoc(doc, "[BSBXTW401 PC 1.3]")
     ex.para(doc, "Members are held accountable for their roles and responsibilities through:")
-    ex.bullets(doc, [
+    add_bullet_list(doc, [
         "Owned-dimension deliverables — each member is named against their dimension's analysis "
         "contribution, design and as-built record, so the work is individually attributable.",
         "The two sign-off gates — the AT2 deploy sign-off and the AT3 final sign-off are the formal "

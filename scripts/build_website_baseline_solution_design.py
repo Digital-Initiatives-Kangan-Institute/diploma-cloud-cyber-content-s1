@@ -22,8 +22,10 @@ import sys
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
+sys.path.insert(0, str(next(d for d in Path(__file__).resolve().parents if (d / "helpers" / "__init__.py").exists())))  # noqa: E402
+from helpers.docx_body_text import add_bullet_list  # noqa: E402
 import build_bc_template as bc   # noqa: E402
-import build_bc_exemplar as ex   # noqa: E402  (etable, para, bullets)
+import build_s1_cl1_at1_bc_exemplar as ex   # noqa: E402  (etable, para, bullets)
 
 from docx import Document  # noqa: E402
 from docx.enum.section import WD_SECTION  # noqa: E402
@@ -121,21 +123,21 @@ def build(path):
                  "was a deliberately low-risk pilot: the goal was a working, supportable cloud deployment at "
                  "minimum cost and complexity — not a highly available one.")
     h3("In scope of this design")
-    ex.bullets(doc, [
+    add_bullet_list(doc, [
         "The cloud hosting foundation for the YAT public website and its CMS.",
         "Compute, networking, identity, storage, database and a basic monitoring baseline sufficient to run the website as a single-instance LAMP workload in AWS.",
         "Single-region, single-Availability-Zone deployment in ap-southeast-2 (Sydney).",
         "Migration of the existing website content, CMS database, and uploaded media; production cutover after the enrolment-enquiry peak.",
     ])
     h3("Out of scope — deferred (accepted pilot limitations)")
-    ex.bullets(doc, [
+    add_bullet_list(doc, [
         "High availability of any kind: no load balancer, no autoscaling, no Multi-AZ database, no cross-AZ resilience.",
         "Disaster recovery: no cross-region copies, no DR runbook, no tested recovery objectives.",
         "Content delivery / edge caching (CDN) and media offload to object storage.",
         "Web application firewall and advanced security hardening beyond the baseline.",
     ])
     h3("Out of MTS scope entirely — YAT responsibility")
-    ex.bullets(doc, [
+    add_bullet_list(doc, [
         "Website content authoring, information architecture, and visual redesign (YAT Marketing — the site was migrated as-is).",
         "Ongoing operation and support of the website after handover (YAT ICT).",
         "Domain-registrar account administration beyond the cutover DNS change (YAT ICT).",
@@ -143,7 +145,7 @@ def build(path):
 
     h1("2. Design Inputs and Requirements")
     h3("2.1 Inputs")
-    ex.bullets(doc, [
+    add_bullet_list(doc, [
         "Website Migration Requirements — the requirements the migration had to meet.",
         "Engagement Role Brief — engagement scope; re-host (no redesign) and content preservation.",
         "ICT Manager Consultation Notes — the requirements consultation (drivers, availability stance, integrations, cutover constraints).",
@@ -189,7 +191,7 @@ def build(path):
                ["MTS-Consultants", "MTS during build + cutover", "Admin during build; removed at handover"],
                ["Website-Instance role", "EC2 instance profile for the website", "S3 read/write (backups); CloudWatch logs/metrics"]],
               widths=[3.5, 5.0, 7.5])
-    ex.bullets(doc, [
+    add_bullet_list(doc, [
         "MFA required for all human users (User Access Policy; ACSC Essential Eight).",
         "No long-lived access keys for humans; EC2 access to AWS via the instance profile.",
         "Configuration decision left to the implementer: the administrative SSH access path to the instance.",
@@ -201,7 +203,7 @@ def build(path):
               [["public-web-a", "10.0.1.0/24", "Website EC2 (CMS)", "Yes"],
                ["private-data-a", "10.0.21.0/24", "Database (RDS)", "No"]],
               widths=[4.0, 3.5, 5.5, 3.0])
-    ex.bullets(doc, [
+    add_bullet_list(doc, [
         "Internet Gateway for the public subnet; the EC2 instance has an Elastic IP and serves traffic directly (no load balancer in the baseline).",
         "Route tables: public-web → IGW; private-data → no internet route.",
         "There is no second AZ and no -b subnets — the single-AZ shape is the defining property of the baseline.",
@@ -210,18 +212,18 @@ def build(path):
                         "Figure 4.4 — Website baseline network topology (single-AZ, single instance).",
                         "Source diagram: website-baseline-single-az.drawio")
     h3("4.5 Compute (single EC2 instance)")
-    ex.bullets(doc, [
+    add_bullet_list(doc, [
         "A single EC2 instance (e.g. t3.small/medium — final type an implementer decision) running the LAMP stack and the CMS, in public-web-a with an Elastic IP.",
         "No Auto Scaling Group and no load balancer: the instance is the website. This is the principal single point of failure, accepted for the pilot.",
         "EBS: gp3 root volume holding the OS, the CMS application, and uploaded media (the CMS stores uploads on local disk by default).",
     ])
     h3("4.6 TLS / HTTPS")
-    ex.bullets(doc, [
+    add_bullet_list(doc, [
         "HTTPS terminates on the EC2 instance itself (there is no load balancer or CDN to terminate TLS at the edge).",
         "The certificate mechanism (e.g. an automatically-renewed certificate on the instance vs an imported certificate) is an implementer decision.",
     ])
     h3("4.7 Database (RDS)")
-    ex.bullets(doc, [
+    add_bullet_list(doc, [
         "Amazon RDS for MySQL (preserves the existing CMS schema and data); engine version confirmed against the CMS at build time.",
         "A small general-purpose instance class (e.g. db.t3.small — an implementer decision); gp3 storage sized to footprint + growth.",
         "Multi-AZ DISABLED (single-AZ baseline); storage encryption enabled (KMS).",
@@ -232,7 +234,7 @@ def build(path):
               [["EC2 root volume", "EBS gp3", "OS, CMS application, and uploaded media"],
                ["Backups bucket", "S3", "Nightly database dumps and media snapshots"]],
               widths=[4.0, 4.5, 7.5])
-    ex.bullets(doc, [
+    add_bullet_list(doc, [
         "Backups bucket: block all public access; SSE-S3 encryption; versioning enabled.",
         "Media is served from the instance, not from object storage or a CDN — an accepted pilot simplification (and a candidate first improvement later).",
     ])
@@ -241,7 +243,7 @@ def build(path):
               [["sg-web", "HTTP:80 + HTTPS:443 from 0.0.0.0/0; SSH:22 from an admin source (implementer decision)", "MySQL:3306 to sg-db; HTTPS to AWS APIs / updates"],
                ["sg-db", "MySQL:3306 from sg-web only", "none"]],
               widths=[3.0, 8.0, 5.0])
-    ex.bullets(doc, [
+    add_bullet_list(doc, [
         "Encryption in transit: HTTPS to visitors; TLS from EC2 to RDS.",
         "Encryption at rest: EBS, RDS, and S3 all enabled.",
         "No web application firewall in the baseline (a deferred improvement).",
@@ -256,7 +258,7 @@ def build(path):
                ["RDS CPU high", "≥ 80% over 10 min"],
                ["RDS free storage low", "< 15%"]],
               widths=[8.0, 8.0])
-    ex.bullets(doc, ["Logging: web/CMS and RDS logs → CloudWatch Logs; VPC flow logs enabled. No cross-AZ or replica-lag alarms (there is no second AZ or replica)."])
+    add_bullet_list(doc, ["Logging: web/CMS and RDS logs → CloudWatch Logs; VPC flow logs enabled. No cross-AZ or replica-lag alarms (there is no second AZ or replica)."])
     h3("4.11 Naming and tagging conventions")
     ex.para(doc, "Naming pattern yat-web-<resource-type>-<env> (e.g. yat-web-ec2-prod). Mandatory tags:")
     ex.etable(doc, ["Tag", "Value"],
@@ -270,7 +272,7 @@ def build(path):
                ["EC2 EBS volume", "Daily AMI/EBS snapshot (Data Lifecycle Manager)", "7 days"],
                ["Database / media", "Nightly dump + media snapshot to the S3 backups bucket", "Versioned"]],
               widths=[4.5, 7.5, 4.0])
-    ex.bullets(doc, ["Cross-Region backup copies are out of scope for the baseline — there is no disaster-recovery tier."])
+    add_bullet_list(doc, ["Cross-Region backup copies are out of scope for the baseline — there is no disaster-recovery tier."])
     h3("4.13 Recovery objectives — baseline state")
     ex.para(doc, "The baseline's recovery posture is backup-based and unmeasured: recovery means rebuilding the "
                  "single instance and restoring from the most recent backup. No RTO or RPO was committed for the "
@@ -279,7 +281,7 @@ def build(path):
     h3("4.14 Single points of failure (known and accepted)")
     ex.para(doc, "The baseline is single-AZ and single-instance by design. The following are known single points "
                  "of failure, accepted as residual risk for the pilot and recorded for a future engagement:")
-    ex.bullets(doc, [
+    add_bullet_list(doc, [
         "The single EC2 instance — its failure takes the whole website offline.",
         "The single Availability Zone — an AZ-level event takes everything down.",
         "The single RDS instance — no standby; failure or maintenance interrupts the site.",
@@ -297,7 +299,7 @@ def build(path):
     h1("5. Implementation Sequencing")
     ex.para(doc, "Because this migrated a live website, the build was sequenced around a cutover timed to avoid "
                  "the enrolment-enquiry peak:")
-    ex.bullets(doc, [
+    add_bullet_list(doc, [
         "Provision the foundation: account, VPC, single-AZ subnets, security groups, IAM.",
         "Stand up the EC2 instance and the RDS database; install the LAMP stack and the CMS.",
         "Migrate content: export the on-premises CMS database and import to RDS; copy uploaded media and assets to the instance.",
@@ -317,7 +319,7 @@ def build(path):
     h1("7. Out of Scope")
     ex.para(doc, "Stated explicitly — these are the deliberate gaps in the baseline, and the natural inputs to "
                  "any future improvement or disaster-recovery work:")
-    ex.bullets(doc, [
+    add_bullet_list(doc, [
         "Load balancer (ALB) and an Auto Scaling Group across multiple AZs.",
         "Multi-AZ RDS; cross-AZ subnets; replica/standby database.",
         "Content delivery network (CDN) and media offload to object storage.",
@@ -327,7 +329,7 @@ def build(path):
     ])
 
     h1("8. References")
-    ex.bullets(doc, [
+    add_bullet_list(doc, [
         "Website Migration Requirements; Engagement Role Brief; ICT Manager Consultation Notes.",
         "ICT Environment Overview (on-premises current state).",
         "Privacy Policy; User Access Policy; Industry Standards Reference (AWS Well-Architected, ACSC Essential Eight).",

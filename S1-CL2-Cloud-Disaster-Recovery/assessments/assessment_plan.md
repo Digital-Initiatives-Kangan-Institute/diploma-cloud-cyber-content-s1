@@ -87,7 +87,7 @@
 - **End of AT1 (Part C) — design approval:** the Solution Design + DR Plan approved at the presentation, before any build. Carries ICTCLD501 element 5.
 - **End of AT2 — build sign-off:** the implemented, monitored infrastructure signed off via the Deployment Report. Carries ICTCLD503 element 4 (`PC 4.2/4.3`) + ICTCLD505 element 4 (`PC 4.2`).
 
-**Template basis:** AT1 uses the institutional **Project Assessment** template (multi-part, as CL1 AT1–AT3 did). The **DR Plan template** (Part B) and **AT1 DR-Plan assessor exemplar** are already built (`scripts/build_dr_plan_template.py`, `scripts/build_at1_dr_plan_exemplar.py`); the exemplar needs the regulatory/microservice material **de-weaved** out (that content moves to the Part A Solution Design). A **Solution Design** exemplar + template (Part A) and the **Part C** presentation are to be authored, reusing the existing Solution Design / Business-Case-Presentation document types.
+**Template basis:** AT1 uses the institutional **Project Assessment** template (multi-part, as CL1 AT1–AT3 did). The **DR Plan template** (Part B) and **AT1 DR-Plan assessor exemplar** are already built (`scripts/build_dr_plan_template.py`, `scripts/build_s1_cl2_at1_dr_plan_exemplar.py`); the exemplar needs the regulatory/microservice material **de-weaved** out (that content moves to the Part A Solution Design). A **Solution Design** exemplar + template (Part A) and the **Part C** presentation are to be authored, reusing the existing Solution Design / Business-Case-Presentation document types.
 
 ---
 

@@ -21,7 +21,7 @@ and SEO that an internal authenticated system would not need.
 Figures are indicative and internally consistent with the DR Plan exemplar (primary
 ap-southeast-2 Sydney; India slice ap-south-1 Mumbai; availability >= 99.9%).
 
-Reuses the docx brand helpers (build_bc_template) + the exemplar helpers (build_bc_exemplar).
+Reuses the docx brand helpers (build_bc_template) + the exemplar helpers (build_s1_cl1_at1_bc_exemplar).
 
 Usage:  python scripts/build_at1_solution_design_exemplar.py [output.docx]
 Default: S1-CL2-Cloud-Disaster-Recovery/assessments/AT1/AT1-exemplar-solution-design.docx
@@ -30,8 +30,10 @@ import sys
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
+sys.path.insert(0, str(next(d for d in Path(__file__).resolve().parents if (d / "helpers" / "__init__.py").exists())))  # noqa: E402
+from helpers.docx_body_text import add_bullet_list  # noqa: E402
 import build_bc_template as bc  # noqa: E402  (shared branding helpers + palette)
-import build_bc_exemplar as ex  # noqa: E402  (uoc, para, bullets, etable)
+import build_s1_cl1_at1_bc_exemplar as ex  # noqa: E402  (uoc, para, bullets, etable)
 
 from docx import Document  # noqa: E402
 from docx.enum.section import WD_SECTION  # noqa: E402
@@ -137,7 +139,7 @@ def build(path):
                  "database, and Amazon S3 for media. It is highly available within the region but was sized for "
                  "an Australian audience served entirely from Sydney.")
     ex.para(doc, "Reviewed layer by layer against R1–R4, four gaps drive this design:")
-    ex.bullets(doc, [
+    add_bullet_list(doc, [
         "Edge / global delivery — anonymous India visitors are served entirely from Sydney; there is no CDN, "
         "so static and cacheable content travels the full distance on every request, hurting latency (R1).",
         "Read-path scale — the Auto Scaling group scales compute, but there is no caching layer to absorb a "
@@ -156,7 +158,7 @@ def build(path):
     h1("4. Architecture Design")
     ex.uoc(doc, "[ICTCLD503 PC 1.4] design architecture changes using cloud services (overview) · [ICTCLD503 PC 1.5] scale for a global user base")
     h3("4.1 Assumptions and constraints")
-    ex.bullets(doc, [
+    add_bullet_list(doc, [
         "The baseline is fully implemented: the website runs highly available in ap-southeast-2 (multi-AZ ALB / ASG / RDS, media on S3).",
         "The change is incremental — this design modifies the baseline rather than rebuilding it.",
         "Data residency is a fixed input: India-cohort access logs must be in India; the main website database "
@@ -284,7 +286,7 @@ def build(path):
     h1("8. Simulation and Verification Plan")
     ex.para(doc, "How the design will be shown to work; the evidence is produced in Phase 2.")
     h3("8.1 Web-scale verification")
-    ex.bullets(doc, [
+    add_bullet_list(doc, [
         "A load test ramps anonymous concurrent visitors to the projected global peak; the Auto Scaling group "
         "scales out and back, edge offload and cache hit-rate are measured, and p95 latency for an "
         "India-region client stays within target (R1, R2).",
@@ -292,7 +294,7 @@ def build(path):
         "throttle abusive traffic, and the origin rejects non-CloudFront traffic (R3, R4).",
     ])
     h3("8.2 Microservice verification")
-    ex.bullets(doc, [
+    add_bullet_list(doc, [
         "Fire sample webhook events; confirm each is persisted exactly once in the ap-south-1 DynamoDB table.",
         "Force a downstream stall; confirm events queue in SQS and drain without loss.",
         "Confirm the audit store location is ap-south-1 (R5).",
@@ -300,7 +302,7 @@ def build(path):
 
     # 9 Out of Scope
     h1("9. Out of Scope")
-    ex.bullets(doc, [
+    add_bullet_list(doc, [
         "Disaster recovery — covered by the companion DR Plan (Part B).",
         "The implementation and its evidence — the Phase 2 Deployment Report (AT2).",
         "The legal determination of the residency obligations — owned by YAT compliance; treated here as "
@@ -311,7 +313,7 @@ def build(path):
 
     # 10 References
     h1("10. References")
-    ex.bullets(doc, [
+    add_bullet_list(doc, [
         "Functional & Non-Functional Requirements (YAT Website Global Expansion)",
         "Data Residency & Sovereignty Requirements (DPDP Act 2023; CERT-In Directions 2022)",
         "Website Specification",
