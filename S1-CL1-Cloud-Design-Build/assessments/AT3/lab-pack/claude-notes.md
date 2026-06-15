@@ -29,10 +29,12 @@ The paper spec couldn't anticipate deploy realities:
 
 - ✅ **Proven live (2026-06-07):** CREATE_COMPLETE in the Cloud Architecting Sandbox (Sydney) and
   serves the placeholder page end-to-end. Committed `eae2e18`.
-- **Parked — RDS Multi-AZ:** not supported in the sandbox ("do not create a standby instance").
-  Affects AT3's DB-failover demo. Decide: design-it-and-document-the-constraint, a read-replica
-  alternative, or run that one step elsewhere. (The compute/AZ failure sims that 502 needs ARE
-  allowed.)
+- ✅ **RDS Multi-AZ — supported (proven live 2026-06-15).** The earlier "not supported / do not
+  create a standby instance" reading is **wrong for the Cloud Architecting Sandbox**: the AT3
+  hardened end-state (RDS `MultiAZ: true`, MySQL 8.4.8, `db.t3.medium`, standby in `ap-southeast-2a`)
+  reached CREATE_COMPLETE there, alongside cross-AZ compute (2× `t3.medium` in 2a/2b, healthy).
+  Proven with a throwaway probe (baseline + both multi-AZ flips). **AT3 keeps the real live Multi-AZ
+  DB failover demo — no fallback needed.** Required lab for AT3 = the Cloud Architecting Sandbox.
 - **Parked — EC2 instance role:** the AT2 design gives the instance an "Application-Service" role
   (RDS/S3/CloudWatch access); this baseline runs with none. Decide whether to re-add it as a
   clean optional parameter (on if a lab supplies a usable role, off otherwise).
