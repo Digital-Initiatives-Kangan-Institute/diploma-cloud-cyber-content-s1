@@ -15,8 +15,9 @@ import sys
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-import kangan_deck as k                 # noqa: E402  brand palette + layouts
-from kangan_deck import visual_slide    # noqa: E402  used bare in build()
+sys.path.insert(0, str(next(d for d in Path(__file__).resolve().parents if (d / "helpers" / "__init__.py").exists())))  # noqa: E402
+from helpers import kangan_deck as k  # noqa: E402
+from helpers.kangan_deck import visual_slide    # noqa: E402  used bare in build()
 
 OUT_DEFAULT = "S1-CL1-Cloud-Design-Build/delivery/topic_01/Topic_01_Slides.pptx"
 
