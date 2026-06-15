@@ -21,7 +21,7 @@ from helpers.docx_tables import add_criterion_row, add_section_row, clear_table_
 
 from docx import Document  # noqa: E402
 
-TEMPLATE = "templates/Project Assessment - Student.docx"
+TEMPLATE = str(Path(__file__).resolve().parents[2] / "kangan-templates" / "Project Assessment - Student.docx")
 
 
 def build(path):

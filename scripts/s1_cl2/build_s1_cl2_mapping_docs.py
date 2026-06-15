@@ -33,7 +33,7 @@ from docx import Document  # noqa: E402
 REPO = Path(__file__).resolve().parents[2]  # scripts/s1_cl2/ -> content repo root
 UOC = REPO / "S1-CL2-Cloud-Disaster-Recovery" / "units_of_competency"
 MAPPINGS = REPO / "S1-CL2-Cloud-Disaster-Recovery" / "mappings"
-TEMPLATE = REPO / "templates" / "Assessment Mapping Tool.docx"
+TEMPLATE = REPO / "kangan-templates" / "Assessment Mapping Tool.docx"
 
 AT1_TITLE = "Cloud Expansion: Design & DR Plan"
 AT2_TITLE = "Cloud Microservice & IaC Implementation"

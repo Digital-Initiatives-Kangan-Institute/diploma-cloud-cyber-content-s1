@@ -27,7 +27,7 @@ from helpers.docx_tables import add_criterion_row, add_section_row, clear_table_
 from docx import Document  # noqa: E402
 from docx.shared import Pt  # noqa: E402
 
-TEMPLATE = "templates/Project Assessment - Assessor.docx"
+TEMPLATE = str(Path(__file__).resolve().parents[2] / "kangan-templates" / "Project Assessment - Assessor.docx")
 
 DETAILS = {
     "qualification": "ICT50220 Diploma of Information Technology",

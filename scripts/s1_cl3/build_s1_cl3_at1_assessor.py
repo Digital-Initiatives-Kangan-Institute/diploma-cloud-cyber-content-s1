@@ -26,7 +26,7 @@ from pathlib import Path
 
 from docx import Document  # noqa: E402
 
-TEMPLATE = "templates/Project Assessment - Assessor.docx"
+TEMPLATE = str(Path(__file__).resolve().parents[2] / "kangan-templates" / "Project Assessment - Assessor.docx")
 
 
 # ---------- cell / table helpers (preserve template styles) ----------
