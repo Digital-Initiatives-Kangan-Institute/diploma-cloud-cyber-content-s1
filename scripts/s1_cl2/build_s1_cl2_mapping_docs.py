@@ -16,8 +16,8 @@ Staged: `--dump <unit>` prints the parsed items + the inverted mapping for revie
 generation of the docx is layered on once the data checks out.
 
 USAGE:
-    python scripts/build_cl2_mapping_docs.py --dump 501
-    python scripts/build_cl2_mapping_docs.py --dump all
+    python scripts/s1_cl2/build_s1_cl2_mapping_docs.py --dump 501
+    python scripts/s1_cl2/build_s1_cl2_mapping_docs.py --dump all
 """
 import copy
 import re
@@ -30,7 +30,7 @@ import build_s1_cl2_at2_assessor as a2   # noqa: E402
 
 from docx import Document  # noqa: E402
 
-REPO = Path(__file__).resolve().parent.parent
+REPO = Path(__file__).resolve().parents[2]  # scripts/s1_cl2/ -> content repo root
 UOC = REPO / "S1-CL2-Cloud-Disaster-Recovery" / "units_of_competency"
 MAPPINGS = REPO / "S1-CL2-Cloud-Disaster-Recovery" / "mappings"
 TEMPLATE = REPO / "templates" / "Assessment Mapping Tool.docx"

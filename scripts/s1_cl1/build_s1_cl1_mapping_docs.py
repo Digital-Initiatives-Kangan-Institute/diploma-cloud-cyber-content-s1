@@ -38,7 +38,7 @@ from pathlib import Path
 from docx import Document
 from docx.oxml.ns import qn
 
-REPO = Path("c:/Users/micro/Documents/Kangan/diploma-cloud-cyber")
+REPO = Path(__file__).resolve().parents[2]  # scripts/s1_cl1/ -> content repo root
 MAPPINGS = REPO / "S1-CL1-Cloud-Design-Build" / "mappings"
 
 # Column indices in the mapping tables (0-indexed)

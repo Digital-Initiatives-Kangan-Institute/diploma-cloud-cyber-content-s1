@@ -156,7 +156,7 @@ Everything here is **new authoring** unless marked *built* (no reuse provenance 
 
 ### Cluster-level
 10. **`assessment_plan.md`** — this document.
-11. **`mappings/`** — the official per-unit Assessment Mapping `.docx` (501/503/505), generated as CL1's were (`scripts/populate_mapping_docs.py` pattern).
+11. **`mappings/`** — the official per-unit Assessment Mapping `.docx` (501/503/505), generated as CL1's were (`scripts/s1_cl1/build_s1_cl1_mapping_docs.py` pattern).
 12. **Cluster cover / instructions** — single front document presenting the engagement narrative + the two-AT / three-part structure.
 13. **Realign `consolidated_uoc.md`** — update its AT1 description from "Part A DR plan + appendices / Part B presentation" to the three-part shape (Part A Solution Design / Part B DR Plan / Part C presentation).
 14. **The 503 web-scale practice on the LMS** (`lms-global-expansion`, the practice vehicle) — delivery, not assessment; deferred.
