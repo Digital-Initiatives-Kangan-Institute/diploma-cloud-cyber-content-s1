@@ -129,7 +129,11 @@ Every group in `consolidated_uoc.md` (82 items) mapped to where it is covered un
 ### AT3 — Implement
 6. **As-deployed Deployment Report exemplar** (reuse the CL2 Deployment Report type) — the whole improved system.
 7. **AT3 Student + Assessor instruments** (individual).
-8. **Deployable improved lab-pack** — the combined CloudFormation (the agreed design as code) + the assessor **reference fallback** template; provided as appendices / lab artefacts.
+8. **AT3 lab artefacts (support — to PRODUCE; the AT3 instruments reference these as provided artefacts and are *draft pending the proving run*).** AT3 follows an **apply-as-update** model: deploy the baseline, then apply the improvement as a CloudFormation **change-set**.
+   - **Baseline lab-pack** — the *existing state* as CloudFormation: single-AZ Ledgerline (Windows EC2 + internal ALB + single-AZ RDS for SQL Server + S3 + VPC), **encrypted at rest, empty database** (the system + data are imaginary story; data is out of scope). CL1-AT3 pattern, re-pointed at Ledgerline.
+   - **Reference upgrade change-set** — the model implementation of the agreed design *as a CloudFormation update to the baseline stack* (same logical IDs); doubles as the **AT2 model answer** + the **AT3 fallback** if a team's write is unusable. All changes **in-place/additive** — no replacements, since encryption is baseline.
+   - **Live proving run** — deploy baseline → apply the change-set → verify (Multi-AZ failover, scale-out) → tear down, in an Academy lab; confirms **SQL-Server-Multi-AZ feasibility** + the change-set mechanics. Required before AT3 is final.
+   - Local validation harness (cfn-lint + pytest) + student README, per docs/lab-pack-standard.md.
 
 ### Cluster-level
 9. **`assessment_plan.md`** — this document.
@@ -140,11 +144,12 @@ Every group in `consolidated_uoc.md` (82 items) mapped to where it is covered un
 
 ## 7. Open questions / TBDs
 
-1. **Component breakdown — `[TBD — needs discussion]`.** Confirm the ~4 IaC modules for the AT2 write-allocation (candidate: **network / compute / database / storage**), one per team member (teams of four). With the write divided (not the demonstration), each need only be a sensible separable IaC unit — the "must carry all four concerns" constraint relaxes (AT3 demonstrates the whole).
+1. **Component breakdown — resolved.** The approved Solution Design commits the **four** CloudFormation component stacks (**network / compute / database / storage**); these are the AT2 write-allocation units (one per team member, teams of four).
 2. **Team model — resolved:** **teams of 4**, one IaC component each; formation at the assessor's discretion; AT2 run as **rotating-chair working meetings** (each chairs ≥1; assessor observes the chair).
 3. **Vehicle & `[ICTCLD504 KE 6]` — resolved:** assess on Ledgerline, practise on the website; KE 6 as the contextual object-storage contrast question in the AT1 design.
 4. **Business case — dropped:** not required by either UoC and out of sequence; the 504 approval gate is the AT1 design presentation; cost-benefit rides in the Solution Design.
 5. **UoC transcription — resolved (2026-06-11);** **source-assessment reuse — accepted author-fresh;** **Pre-validation — downstream gate** (run by the validation team after authoring).
+6. **Encryption / data — resolved (2026-06-16):** the baseline is **encrypted at rest** (RDS/EBS/S3) and the lab database is **empty** — the accounting system and its data are imaginary story justifying the infrastructure choices. **Encryption is not an improvement** and data migration is **out of scope**, so every AT3 change is an **in-place/additive change-set** (no replacement, no IR-4 data-loss exposure). CL3 is an *infrastructure*-improvement exercise, not a data one.
 
 ---
 

@@ -6,20 +6,20 @@ Institutional compliance document (NOT a YAT-branded artefact): loads the offici
 styles exactly (Details, Teacher/Assessor instructions, Marking Guide, Instructions to Student,
 Benchmark). Mirrors the approved CL1/CL2 AT1 assessor instruments.
 
-AT1 = Team Setup (individual) — a single deliverable:
-  Team Plan  (BSBXTW401 element 1 + the task-allocation slice of element 2)
+AT1 = Design (individual) — ICTCLD504 elements 1 (analyse) + 2 (design), two parts:
+  Part A  Solution Design  — analyse the single-AZ Ledgerline baseline and design the whole
+          improvement (four components: network / compute / database / storage; across all four
+          optimisation concerns: security, reliability, scalability, cost; incl. the India
+          residency slice), documented and justified.
+  Part B  Design presentation — present the proposed architecture for review and obtain sign-off
+          to proceed.
 
-AT1 is the team / project setup only — how the student will lead the improvement team. The
-technical analysis and the improvement design are AT2; the implementation is AT3. This keeps the
-evidence unambiguous: AT1 is 401-led, AT2 integrates both units, AT3 is 504-led.
+The worked model answer lives in the YAT-branded exemplar (build_s1_cl3_at1_solution_design_exemplar).
+This document carries the task instructions and the marking guide with bidirectional UoC traceability.
+The CloudFormation write and the deployment are AT2 / AT3; AT1 is the design.
 
-Knowledge evidence: the Team Plan carries a written Knowledge Evidence appendix (T6) for the
-BSBXTW401 element-1 knowledge. The worked model answer lives in the YAT-branded exemplar
-(build_cl3_team_plan_exemplar); this document carries the task instructions and the marking guide
-with bidirectional UoC traceability.
-
-Usage:  python scripts/build_cl3_at1_assessor.py [output.docx]
-Default: S1-CL3-Cloud-Infrastructure-Improvement/assessments/AT1/AT1-Team-Setup-Assessor.docx
+Usage:  python scripts/s1_cl3/build_s1_cl3_at1_assessor.py [output.docx]
+Default: S1-CL3-Cloud-Infrastructure-Improvement/assessments/AT1/AT1-Design-Assessor.docx
 """
 import sys
 from pathlib import Path
@@ -40,42 +40,48 @@ from helpers.docx_tables import add_criterion_row, add_section_row, clear_table_
 DETAILS = {
     "qualification": "ICT50220 Diploma of Information Technology",
     "units": [
-        "BSBXTW401 Lead and facilitate a team",
+        "ICTCLD504 Improve cloud-based infrastructure",
     ],
-    "task_title": "AT1 – Team Setup",
+    "task_title": "AT1 – Design",
     "task_number": "1 of 3",
 }
 
 OVERVIEW = (
-    "Students are assessed individually on setting up the improvement team for the Ledgerline "
-    "cloud-infrastructure improvement engagement. Working as the team lead of an MP Tech Solutions "
-    "(MTS) improvement team, each student produces a Team Plan — how the team will work: its "
-    "objectives and responsibilities, per-member performance expectations, accountability "
-    "strategies, contingency/risk planning, and the role and task allocation. This is the "
-    "team-setup phase; the team analyses and designs the improvement in AT2 and implements it in "
-    "AT3. AT1 is completed individually."
+    "Students are assessed individually on designing the cloud-infrastructure improvement for the "
+    "YAT Ledgerline (Accounting) system. Working as an MP Tech Solutions (MTS) consultant, each "
+    "student analyses the current single-Availability-Zone baseline and designs an improvement "
+    "across all four optimisation concerns — security, reliability, scalability and cost — including "
+    "the infrastructure changes needed to meet the applicable Indian regulatory requirements, then "
+    "presents the proposed architecture for review and obtains sign-off to proceed. The deliverables "
+    "are a Solution Design (Part A) and a design presentation (Part B). The improvement is to the "
+    "cloud infrastructure only; the application and its data are out of scope. AT1 is completed "
+    "individually."
 )
 
 TASKS = [
-    "In this project the student takes on the role of the team lead of an MTS improvement team "
-    "engaged by YAT College to improve the cloud infrastructure of its Ledgerline (Accounting) "
-    "system, following YAT's India-campus partnership. AT1 is completed individually and has one "
-    "deliverable:",
-    "• Team Plan — the team lead's plan for how the improvement team will work: common objectives "
-    "and responsibilities, per-member performance expectations and behaviours, accountability "
-    "strategies, contingency/risk planning, and the allocation of the improvement work across the "
-    "team. Produced in the YAT Team Plan template.",
-    "The technical analysis and the improvement design are assessed in AT2; AT1 sets up the team "
-    "and the project.",
+    "In this project the student takes on the role of an MTS consultant engaged by YAT College to "
+    "improve the cloud infrastructure of its Ledgerline (Accounting) system, following YAT's "
+    "India-campus partnership. AT1 is completed individually and has two parts:",
+    "• Part A — Solution Design: analyse the current single-AZ baseline and design the improvement "
+    "across the four components (network, compute, database, storage) and all four optimisation "
+    "concerns (security, reliability, scalability, cost), including the infrastructure changes that "
+    "meet the Indian regulatory requirements. Documented and justified in the YAT Solution Design "
+    "template, with a Knowledge Evidence appendix.",
+    "• Part B — Design presentation: present the proposed architecture to the required personnel for "
+    "review, respond to questions, and obtain sign-off to proceed to deployment.",
+    "The team-based implementation planning is AT2 and the deployment is AT3; AT1 is the individual "
+    "design and its approval.",
 ]
 
 RESOURCES = [
     "Teacher/assessor supplied resources / Access to:",
     "• The YAT scenario site / intranet — the Ledgerline Cloud Infrastructure Improvement project "
-    "(Engagement Role Brief, Improvement Requirements, ICT Manager Consultation Notes), which "
-    "frames the engagement the team plan is for.",
-    "• The YAT Team Plan template (intranet Templates section).",
-    "• The YAT Document Archive — examples of previous MTS team plans.",
+    "(Engagement Role Brief, Improvement Requirements, ICT Manager Consultation Notes, Indian "
+    "Regulatory Requirements) and the current-state ICT records (the Accounting System Cloud "
+    "Architecture Baseline Design, Infrastructure Specifications, Application Specification, "
+    "Operational Costing) — the baseline the student analyses and improves.",
+    "• The YAT Solution Design template (intranet Templates section).",
+    "• A room and schedule for the Part B design presentation.",
 ]
 
 CRITERIA_STATEMENT = (
@@ -86,54 +92,90 @@ CRITERIA_STATEMENT = (
 )
 
 CONDITIONS = [
-    "C1 — The YAT scenario site / intranet is accessible to the student throughout the assessment.",
-    "C2 — The student has access to the YAT Team Plan template.",
-    "C3 — AT1 is completed individually; each student authors their own Team Plan.",
-    "C4 — The improvement team and its membership (which the Team Plan plans for) are confirmed "
-    "with the assessor; teams are formed at the assessor's discretion.",
+    "C1 — The YAT scenario site / intranet (the Ledgerline Cloud Infrastructure Improvement project "
+    "and the current-state ICT records) is accessible to the student throughout the assessment.",
+    "C2 — The student has access to the YAT Solution Design template.",
+    "C3 — AT1 is completed individually; each student authors their own Solution Design and delivers "
+    "their own presentation.",
+    "C4 — The Part B presentation is scheduled and observed by the assessor, who records the "
+    "presentation observation and the sign-off decision.",
 ]
 
-# Marking guide: the Team Plan criteria. UoC traceability is carried in the Benchmark.
-TEAM_PLAN = [
-    "T1 — Team objectives and outcomes: identifies the common objectives of the improvement team, "
-    "the responsibilities, and the required outcome(s).",
-    "T2 — Performance expectations: uses performance plans to establish expected outcomes, goals "
-    "and behaviours for individual team members, in line with the team objective and relevant "
-    "policies.",
-    "T3 — Accountability strategies: selects appropriate strategies to ensure team members are "
-    "accountable for their roles and responsibilities.",
-    "T4 — Contingency / risk planning: plans for contingencies that could impact the team.",
-    "T5 — Task allocation: allocates the improvement work (the four dimensions — security, "
-    "reliability, scalability, cost) to team members with appropriate instruction, considering "
-    "contingencies.",
-    "T6 — Knowledge Evidence appendix: written contextual responses linking the plan to the "
-    "organisational requirements, the legislative requirements relevant to the workplace, and the "
-    "typical workplace contingencies relevant to this team.",
-    "T7 — Document quality: the Team Plan uses the YAT Team Plan template, plain professional "
-    "English, and is complete and internally consistent.",
+# Marking guide — Part A (Solution Design) and Part B (presentation). UoC traceability is in the Benchmark.
+PART_A = [
+    "D1 — Architecture review: reviews and evaluates the current single-AZ Ledgerline infrastructure "
+    "and identifies the business impact of its design (single points of failure, the idle-profile "
+    "cost, scalability headroom, the compliance position).",
+    "D2 — Options and confirmed decisions: identifies architectural options and patterns, assesses "
+    "their benefits and differences against the current business needs, and confirms the design "
+    "decisions.",
+    "D3 — Goals and metrics: sets measurable security, reliability, scalability and cost goals and "
+    "confirms the performance metrics the design is measured against.",
+    "D4 — Improvement design: improves compute, storage, database and network across all four "
+    "optimisation concerns into one integrated architecture (Multi-AZ reliability, elastic-on-demand "
+    "scalability, in-place security hardening, proportionate cost optimisation).",
+    "D5 — Regulatory compliance: assesses the infrastructure against the Indian Regulatory "
+    "Requirements and includes the infrastructure changes that close the gaps (the light India "
+    "residency slice — CERT-In logs and books-of-account retrievability).",
+    "D6 — Documented and justified: the architecture is documented and justified in the Solution "
+    "Design, each improvement carrying a proportionate cost-versus-benefit rationale (sound "
+    "engineering, not gold-plating).",
+    "D7 — Knowledge Evidence appendix: written contextual responses (object storage; avoiding single "
+    "points of failure and testing for them; cloud features for each optimisation concern) about the "
+    "student's own design.",
 ]
 
-# Benchmark: per-criterion UoC evidenced (bidirectional traceability). KE is allocated to the
-# written KE appendix (T6); the body criteria carry the PC / PE / FS they demonstrate.
+PART_B = [
+    "D8 — Design presentation: presents the proposed architecture for review to the required "
+    "personnel using appropriate industry language, and responds to questions to confirm the design.",
+    "D9 — Sign-off: obtains sign-off to proceed to deployment from the required personnel.",
+]
+
+QUALITY = [
+    "D10 — Document quality: the Solution Design uses the YAT Solution Design template, plain "
+    "professional English, and is complete and internally consistent.",
+]
+
+# Benchmark: per-criterion UoC evidenced (bidirectional traceability). Every PC/PE/KE/FS item
+# allocated to AT1 in the cluster assessment plan (ICTCLD504 el 1-2) is covered below.
 BENCHMARK = [
-    ("Team Plan (BSBXTW401, element 1 + task allocation)", [
-        ("T1", "[BSBXTW401 PC 1.1] identify common objectives of the workplace team, responsibilities "
-               "and required outcome(s)."),
-        ("T2", "[BSBXTW401 PC 1.2] use performance plans to establish expected outcomes, goals and "
-               "behaviours for individual team members in accordance with the team objective and "
-               "relevant policies."),
-        ("T3", "[BSBXTW401 PC 1.3] select appropriate strategies to ensure team members are "
-               "accountable for their roles and responsibilities."),
-        ("T4", "[BSBXTW401 PC 1.4] plan for contingencies that could impact the team."),
-        ("T5", "[BSBXTW401 PC 2.2] allocate tasks to team members and provide appropriate "
-               "instruction; [PE 1] assign tasks with appropriate instruction, considering required "
-               "contingencies."),
-        ("T6", "[BSBXTW401 KE 1] organisational requirements relevant to workplace teams; [KE 2] "
-               "legislative requirements relevant to the workplace; [KE 9] typical workplace "
-               "contingencies — evidenced as written contextual responses against the student's own "
-               "team plan."),
-        ("T7", "[BSBXTW401 FS Get the work done] plans, organises and implements work activities in "
-               "line with organisational policies and procedures."),
+    ("Part A — Solution Design (ICTCLD504 element 1 — analyse)", [
+        ("D1", "[ICTCLD504 PC 1.1] identify and review the business's cloud architecture design; "
+               "[PC 1.2] evaluate the architecture and identify the business impact of design "
+               "decisions."),
+        ("D2", "[ICTCLD504 PC 1.3] identify design patterns and architectural options; [PC 1.4] "
+               "determine and assess the benefits and differences against the current business model "
+               "and needs; [PC 1.5] confirm system design decisions according to business needs."),
+        ("D3", "[ICTCLD504 PC 1.6] set business goals for security, reliability, high-performance and "
+               "cost; [PC 2.1] evaluate and confirm performance metrics; [PE 3] determine performance "
+               "metrics and business goals."),
+    ]),
+    ("Part A — Solution Design (ICTCLD504 element 2 — design & improve)", [
+        ("D4", "[ICTCLD504 PC 2.2] select and improve compute, storage, database and network "
+               "resources according to business needs; [PC 2.3] review and improve the architecture "
+               "to enhance security, reliability, scalability and cost optimisation; [PE 1] assess, "
+               "identify and improve cloud architecture according to design decisions."),
+        ("D5", "[ICTCLD504 PC 1.2] business impact of the regulatory requirements; [PC 2.3] improve "
+               "the architecture to meet them (the India residency slice). [AC 5] specific "
+               "requirements and legislative requirements."),
+        ("D6", "[ICTCLD504 PC 2.4] document the proposed architecture; [FS Writing] writes technical "
+               "data logically; [KE 4] design principles for cloud applications; [KE 5] migrating "
+               "principles; [KE 9] features of cloud services to improve the four concerns."),
+        ("D7", "[ICTCLD504 KE 1] industry technology standards; [KE 2] industry-standard hardware/"
+               "software products; [KE 3] methods and impacts of cloud adoption; [KE 6] use of object "
+               "storage for static web sites; [KE 8] testing/debugging incl. avoiding single point "
+               "failures — written contextual responses against the student's own design."),
+    ]),
+    ("Part B — Design presentation (ICTCLD504 element 2 close)", [
+        ("D8", "[ICTCLD504 PC 2.4] present the proposed architecture for review to required personnel; "
+               "[FS Oral communication] presents proposed solutions using appropriate industry "
+               "language and confirms requirements through questioning."),
+        ("D9", "[ICTCLD504 PC 2.5] obtain sign off to proceed to deployment with required personnel."),
+    ]),
+    ("Document quality (Foundation Skills)", [
+        ("D10", "[ICTCLD504 FS Reading] interprets complex technical and operational documentation; "
+                "[FS Writing] writes and edits technical data in a logical manner. (FS Problem solving "
+                "and Self-management are co-evidenced through the analysis and design choices.)"),
     ]),
 ]
 
@@ -142,61 +184,63 @@ STUDENT_INTRO = [
     ("YAT College is a Registered Training Organisation (RTO) based at 175 Cremorne Street, Cremorne "
      "VIC. Following a new campus partnership in India, YAT wants the cloud infrastructure of its "
      "Ledgerline (Accounting) system confirmed as stable, reliable and fit for purpose, and "
-     "compliant with the Indian regulatory requirements that now apply — and improved where it "
-     "falls short.", "Assessor text"),
-    ("You are the team lead of an MP Tech Solutions (MTS) improvement team, reporting to Pat Lin "
-     "(MTS Senior Consultant), who liaises with Sam Walker, the YAT ICT Manager. In AT1 you set the "
-     "team up: you plan how your team will work so it can analyse and design the improvement in AT2 "
-     "and implement it in AT3. AT1 is your own individual work, and it is about leading the team — "
-     "the technical analysis and design come in AT2.", "Assessor text"),
-    ("The engagement framing is provided on the intranet (the Ledgerline Cloud Infrastructure "
-     "Improvement project: the Engagement Role Brief, Improvement Requirements, and Consultation "
-     "Notes). You produce the team plan — it is not provided to you. (The provided Engagement Role "
-     "Brief sets the consulting roles and reporting; your Team Plan is your own plan for your team.)",
-     "Assessor text"),
+     "compliant with the Indian regulatory requirements that now apply — and improved where it falls "
+     "short. The improvement is to the cloud infrastructure only; the Ledgerline application and its "
+     "data are not yours to change.", "Assessor text"),
+    ("You are an MP Tech Solutions (MTS) consultant, reporting to Pat Lin (MTS Senior Consultant), "
+     "who liaises with Sam Walker, the YAT ICT Manager. In AT1 you analyse the current cloud "
+     "infrastructure and design the improvement, then present it for approval. AT1 is your own "
+     "individual work. (The team plans and builds the agreed design in AT2, and each engineer "
+     "deploys it in AT3.)", "Assessor text"),
+    ("The engagement framing and the current-state records are provided on the intranet (the "
+     "Ledgerline Cloud Infrastructure Improvement project, and the Accounting System Baseline Design, "
+     "Infrastructure Specifications, Application Specification and Operational Costing). The analysis "
+     "and the design are yours to produce.", "Assessor text"),
 ]
 
 STUDENT_TASK = [
-    ("Your task — the Team Plan", "Heading 2"),
-    ("Using the YAT Team Plan template (download from the intranet's Templates section), produce a "
-     "plan for how you will lead the improvement team. Your plan must cover:", "Assessor text"),
-    ("• The team's common objectives, responsibilities and required outcomes for the engagement.", "Assessor text"),
-    ("• Per-member performance expectations — the expected outcomes, goals and behaviours for each "
-     "team member, in line with the team objective and YAT's policies.", "Assessor text"),
-    ("• Accountability strategies — how you will ensure each member is accountable for their role.", "Assessor text"),
-    ("• Contingency / risk planning — the contingencies that could impact the team and how you will "
-     "plan for them.", "Assessor text"),
-    ("• Task allocation — how you allocate the improvement work across the team. Each member owns "
-     "one improvement dimension (security, reliability, scalability or cost); allocate with clear "
-     "instruction and account for contingencies.", "Assessor text"),
-    ("Knowledge Evidence appendix (required). At the end of your Team Plan, add a Knowledge "
-     "Evidence appendix and answer the following in your own words, about your own plan:", "Assessor text"),
-    ("• Which organisational requirements (workplace policies, codes of conduct, organisational "
-     "reputation and culture) shape how your team must operate, and how does your plan reflect "
-     "them?", "Assessor text"),
-    ("• Which legislative requirements are relevant to your team's work, and how does your plan "
-     "account for them?", "Assessor text"),
-    ("• What typical workplace contingencies could impact your team (for example unplanned leave, "
-     "re-allocation of work, succession for a key role), and how does your plan handle them?", "Assessor text"),
-    ("Resources — on the YAT intranet: the Ledgerline Cloud Infrastructure Improvement project "
-     "(Engagement Role Brief, Improvement Requirements, Consultation Notes) and the YAT Team Plan "
-     "template.", "Assessor text"),
-    ("Submit the populated Team Plan (.docx) with the Knowledge Evidence appendix completed.", "Assessor text"),
+    ("Part A — your Solution Design", "Heading 2"),
+    ("Using the YAT Solution Design template (download from the intranet's Templates section), "
+     "analyse the current single-AZ Ledgerline infrastructure and design the improvement. Your "
+     "Solution Design must:", "Assessor text"),
+    ("• Review and evaluate the current architecture and identify the business impact of its design "
+     "(its single points of failure, its idle-profile cost, its scalability headroom, and its "
+     "position against the Indian regulatory requirements).", "Assessor text"),
+    ("• Set measurable security, reliability, scalability and cost goals and the performance metrics "
+     "you will measure the design against.", "Assessor text"),
+    ("• Design the improvement across the four components — network, compute, database and storage — "
+     "improving each across all four concerns into one integrated architecture, and include the "
+     "infrastructure changes that meet the Indian regulatory requirements.", "Assessor text"),
+    ("• Document and justify each improvement on a cost-versus-benefit basis — proportionate to an "
+     "internal, business-hours finance system (sound engineering, not gold-plating).", "Assessor text"),
+    ("Knowledge Evidence appendix (required). At the end of your Solution Design, add a Knowledge "
+     "Evidence appendix and answer the following in your own words, about your own design:", "Assessor text"),
+    ("• How does the accounting system's use of object storage differ from a system that serves "
+     "objects publicly (for example a website), and how would you provision that storage if it were "
+     "needed here?", "Assessor text"),
+    ("• How does your design avoid single points of failure, and how would you test that it does?", "Assessor text"),
+    ("• For each of the four optimisation concerns, name a cloud feature your design uses and the "
+     "improvement it delivers.", "Assessor text"),
+    ("Part B — your design presentation", "Heading 2"),
+    ("Present your proposed architecture to the required personnel (your assessor, in the role of "
+     "the YAT ICT Manager / MTS Senior Consultant) for review. Walk through the design and its "
+     "justification, respond to questions, and obtain sign-off to proceed to deployment.", "Assessor text"),
+    ("Submit the populated Solution Design (.docx) with the Knowledge Evidence appendix completed, "
+     "and deliver the Part B presentation at the scheduled time.", "Assessor text"),
 ]
 
 TIPS = [
     ("Tips for success", "Heading 2"),
-    ("AT1 is about leading the team, not the technology. Plan how your team will work — objectives, "
-     "expectations, accountability, contingencies and who does what. The technical analysis and "
-     "design are AT2; do not start them here.", "Assessor text"),
-    ("Your Team Plan is yours; the Engagement Role Brief is provided. The provided Engagement Role "
-     "Brief sets the MTS / YAT consulting roles and reporting. Your Team Plan is your own plan for "
-     "your improvement team — don't just restate the role brief.", "Assessor text"),
-    ("Allocate by dimension. Each member owns one of security, reliability, scalability or cost. "
-     "Make the allocation clear, with the instruction each member needs, and allow for "
-     "contingencies.", "Assessor text"),
-    ("Write to your own plan. The Knowledge Evidence appendix asks about your own team and "
-     "engagement — answer in your own words, not from a textbook.", "Assessor text"),
+    ("Improve the infrastructure, not the application. The Ledgerline application and its data are "
+     "fixed inputs — you are improving the cloud infrastructure underneath them.", "Assessor text"),
+    ("Cover all four concerns on the whole system. Security, reliability, scalability and cost each "
+     "need to be addressed — don't leave one out.", "Assessor text"),
+    ("Be proportionate. This is an internal, business-hours finance system; justify each improvement "
+     "against the business need rather than adding capability by default.", "Assessor text"),
+    ("Scalability means the ability to scale on demand, not a forecast that load will grow — design "
+     "for elastic headroom, and be ready to explain how you would demonstrate it.", "Assessor text"),
+    ("Write to your own design. The Knowledge Evidence appendix and the presentation are about your "
+     "own design choices — answer and present in your own words.", "Assessor text"),
 ]
 
 
@@ -225,8 +269,14 @@ def build(path):
     # ---- Table 2: Marking Guide ----
     t_mark = doc.tables[2]
     clear_table_rows(t_mark, 2)  # keep header rows
-    add_section_row(t_mark, "Team Plan")
-    for c in TEAM_PLAN:
+    add_section_row(t_mark, "Part A — Solution Design")
+    for c in PART_A:
+        add_criterion_row(t_mark, c)
+    add_section_row(t_mark, "Part B — Design Presentation")
+    for c in PART_B:
+        add_criterion_row(t_mark, c)
+    add_section_row(t_mark, "Document quality")
+    for c in QUALITY:
         add_criterion_row(t_mark, c)
 
     # ---- Instructions to Student ----
@@ -253,6 +303,6 @@ def build(path):
 
 
 if __name__ == "__main__":
-    default = "S1-CL3-Cloud-Infrastructure-Improvement/assessments/AT1/AT1-Team-Setup-Assessor.docx"
+    default = "S1-CL3-Cloud-Infrastructure-Improvement/assessments/AT1/AT1-Design-Assessor.docx"
     out = sys.argv[1] if len(sys.argv) > 1 else default
     build(out)

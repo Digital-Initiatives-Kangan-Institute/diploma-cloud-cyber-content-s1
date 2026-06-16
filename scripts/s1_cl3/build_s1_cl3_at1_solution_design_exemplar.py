@@ -155,8 +155,8 @@ def build(path, exemplar=True):
     ])
     h3("3.2 Current state against the four concerns and compliance")
     add_data_table(doc, ["Concern", "Current state", "Gap"],
-              [["Security", "Internal-only (VPN), security groups in place; patching/role/encryption posture not hardened",
-                "Tighten least-privilege, encryption at rest, managed patching and secrets"],
+              [["Security", "Internal-only (VPN), encrypted at rest, security groups in place; patching/role posture not hardened",
+                "Tighten least-privilege, managed patching, secrets and TLS (encryption at rest is already in the baseline)"],
                ["Reliability", "Single-AZ compute and database; 99.5% business-hours target",
                 "Remove the single-AZ SPOFs (Multi-AZ) so AZ/instance failure is survived automatically"],
                ["Scalability", "ASG target-tracking exists; subnets/endpoints not sized for elastic growth",
@@ -169,7 +169,7 @@ def build(path, exemplar=True):
     h3("3.3 Goals and metrics")
     ev("[ICTCLD504 PC 1.6] set business goals for security, reliability, performance and cost · [ICTCLD504 PC 2.1] confirm performance metrics")
     add_data_table(doc, ["Concern", "Goal", "Metric"],
-              [["Security", "Least-privilege, encrypted, managed-patch posture", "0 plaintext secrets; 100% volumes/buckets encrypted; patch compliance reported"],
+              [["Security", "Least-privilege, secrets-managed, managed-patch posture (baseline already encrypted at rest)", "0 plaintext secrets; managed-patch compliance reported; least-privilege roles/SGs in place"],
                ["Reliability", "Survive an AZ/instance failure automatically within business hours", "RTO < 15 min on AZ failure (auto-failover); 99.9% business-hours availability"],
                ["Scalability", "Elastic on demand for the month-end/EOFY peak", "Demonstrated scale-out under a controlled load test; no manual capacity change"],
                ["Cost", "Cut spend on the idle profile without losing service", "Compute hours reduced outside business hours; storage cost/GB reduced via tiering"],
@@ -226,7 +226,7 @@ def build(path, exemplar=True):
     h3("4.6 Component 3 — Database (RDS for SQL Server)")
     ev("[ICTCLD504 PC 2.2] improve database resources · [ICTCLD504 PC 2.3] improve for the four concerns")
     add_data_table(doc, ["Concern", "Improvement"],
-              [["Security", "Encryption at rest (KMS) and in transit; credentials in Secrets Manager with rotation; security group restricting access to the app tier; not publicly accessible"],
+              [["Security", "Encryption in transit (TLS); credentials in Secrets Manager with rotation; security group restricting access to the app tier; not publicly accessible (encryption at rest is already enabled in the baseline)"],
                ["Reliability", "Multi-AZ deployment — synchronous standby in the second AZ with automatic failover; automated backups and point-in-time recovery"],
                ["Scalability", "Right-sized instance class; storage autoscaling enabled; a read replica noted as headroom for month-end reporting (not provisioned by default — proportionate)"],
                ["Cost", "Right-sized to measured load; a Savings Plan / Reserved Instance for the steady baseline; SQL Server licensing model reviewed (License Included vs BYOL) and made explicit; backup retention tuned (long-term financial-records retention handled by export to S3, not live RDS)"]],
@@ -235,7 +235,7 @@ def build(path, exemplar=True):
     h3("4.7 Component 4 — Storage (S3 + EBS) and the India residency slice")
     ev("[ICTCLD504 PC 2.2] improve storage resources · [ICTCLD504 PC 2.3] improve for the four concerns")
     add_data_table(doc, ["Concern", "Improvement"],
-              [["Security", "SSE-KMS on all buckets and volumes; S3 Block Public Access; bucket policies; S3 access logging"],
+              [["Security", "S3 Block Public Access; bucket policies; S3 access logging (encryption at rest is already enabled in the baseline)"],
                ["Reliability", "S3 durability with versioning for document attachments; automated EBS snapshots; lifecycle policies"],
                ["Scalability", "S3 absorbs unbounded document growth (~4 GB/yr) with no capacity planning; EBS gp3 volumes resized live (elastic volumes) as the footprint grows"],
                ["Cost", "S3 lifecycle / Intelligent-Tiering moves older scanned documents to IA/Glacier — a large saving over the 7-year retention"]],
