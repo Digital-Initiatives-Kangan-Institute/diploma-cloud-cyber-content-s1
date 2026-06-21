@@ -58,8 +58,9 @@ TASKS = [
     "CloudFormation change-set to the running stack (deploying the approved architecture).",
     "• Monitoring and measuring the deployed architecture against the performance metrics and "
     "business goals; testing and demonstrating security, reliability, scalability and cost "
-    "optimisation on the whole deployed system (including a failover demonstration and a scale-out "
-    "demonstration).",
+    "optimisation on the whole deployed system (including, for reliability, an application-tier "
+    "failover demonstration and a database backup/restore and DR demonstration, and a scale-out "
+    "demonstration for scalability).",
     "• Applying short-term refinements to the deployed resources according to the test results.",
     "• Documenting the as-deployed architecture and test results (highlighting the changes from the "
     "approved design), describing a long-term improvement strategy, and obtaining final sign-off.",
@@ -104,8 +105,10 @@ PART_A = [
     "E2 — Monitor and measure: monitors and measures the deployed architecture against the "
     "performance metrics and business goals (e.g. CloudWatch metrics and alarms).",
     "E3 — Test and demonstrate: tests and demonstrates security, reliability, scalability and cost "
-    "optimisation on the deployed resources — including a reliability (failover) demonstration and a "
-    "scalability (scale-out) demonstration on the whole system.",
+    "optimisation on the deployed resources — for reliability, an application-tier failover "
+    "demonstration (terminate an instance; the Auto Scaling group recovers across AZs) and a database "
+    "backup/restore and cross-Region DR demonstration (the database is single-instance — no Multi-AZ "
+    "failover); and a scalability (scale-out) demonstration on the whole system.",
     "E4 — Refine: applies short-term refinements to the deployed resources according to the test "
     "results (e.g. tunes a scaling policy, an alarm threshold, a security group, or a size).",
 ]
@@ -182,8 +185,8 @@ STUDENT_TASK = [
     ("• Monitored and measured the deployed system against its performance metrics and business "
      "goals.", "Assessor text"),
     ("• Tested and demonstrated all four optimisation concerns on the whole system — security, "
-     "reliability (a failover demonstration), scalability (a scale-out demonstration), and cost "
-     "optimisation.", "Assessor text"),
+     "reliability (an application-tier failover demonstration plus a database backup/restore and DR "
+     "demonstration), scalability (a scale-out demonstration), and cost optimisation.", "Assessor text"),
     ("• Applied short-term refinements to the deployed resources based on what your tests showed.", "Assessor text"),
     ("• Documented the as-deployed architecture and test results (highlighting the changes from the "
      "approved design), described a long-term improvement strategy, and obtained final sign-off.", "Assessor text"),
@@ -195,8 +198,9 @@ TIPS = [
     ("Tips for success", "Heading 2"),
     ("Deploy the whole system, demonstrate the whole system. You are assessed on the improved "
      "infrastructure end to end, across all four concerns — not just one part of it.", "Assessor text"),
-    ("Demonstrate, don't just describe. Reliability and scalability need to be shown — trigger a "
-     "failover and a scale-out and capture the evidence.", "Assessor text"),
+    ("Demonstrate, don't just describe. Reliability and scalability need to be shown — trigger an "
+     "application-tier failover (terminate an instance and watch the ASG recover across AZs), run a "
+     "database restore / DR drill, and trigger a scale-out, capturing the evidence for each.", "Assessor text"),
     ("Refine from your results. Your tests will show something worth tuning — make the refinement and "
      "record why.", "Assessor text"),
     ("Tear down cleanly. Delete your stack and end the lab when you are done, to free the lab "
