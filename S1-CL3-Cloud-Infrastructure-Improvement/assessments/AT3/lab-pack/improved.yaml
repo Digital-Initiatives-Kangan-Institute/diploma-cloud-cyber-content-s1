@@ -1,0 +1,466 @@
+AWSTemplateFormatVersion: '2010-09-09'
+
+Description: >-
+  YAT Ledgerline - AT3 IMPROVED state, applied as a CloudFormation change-set (stack update) to the
+  SAME stack created from baseline.yaml. Same logical IDs, so changes are in-place/additive - no
+  resource is replaced.
+
+  Changes: the application tier becomes Multi-AZ (the ASG spreads across two AZs behind the internal
+  ALB, min 2 / desired 2); database backup retention is raised for recovery-based DR, but the RDS
+  instance STAYS SINGLE-AZ - Ledgerline does not support a Multi-AZ database, so there is deliberately
+  NO MultiAZ change; an S3 lifecycle tiers older attachments for cost. The cross-Region DR backup copy
+  (Melbourne, ap-southeast-4) is a CLI step, not a CFN property (see README). The India residency slice
+  (CERT-In logs + books in ap-south-1 Mumbai) is a separate stack (india-residency.yaml).
+
+Parameters:
+  EnvName:
+    Type: String
+    Default: prod
+    AllowedValues: [dev, prod]
+    Description: Environment suffix used in resource names.
+
+  WindowsAmiId:
+    Type: AWS::SSM::Parameter::Value<AWS::EC2::Image::Id>
+    Default: /aws/service/ami-windows-latest/Windows_Server-2016-English-Full-Base
+    Description: Auto-resolves the latest Windows Server 2016 AMI (no hardcoded AMI to age).
+
+  InstanceType:
+    Type: String
+    Default: t3.medium
+    Description: Ledgerline application tier EC2 instance type (AWS Academy may restrict types).
+
+  DBEngine:
+    Type: String
+    Default: sqlserver-se
+    AllowedValues: [sqlserver-se, sqlserver-ex, sqlserver-web]
+    Description: >-
+      RDS SQL Server edition. Must match the value used for baseline.yaml so the change-set does not
+      replace the database.
+
+  DBInstanceClass:
+    Type: String
+    Default: db.t3.medium
+    Description: RDS instance class (must match baseline.yaml; the database stays Single-AZ).
+
+  DBMasterUsername:
+    Type: String
+    Default: ledgeradmin
+    MinLength: 4
+    Description: RDS master username (must match baseline.yaml).
+
+  DBMasterPassword:
+    Type: String
+    NoEcho: true
+    MinLength: 8
+    Description: RDS master password (must match baseline.yaml).
+
+  InstanceProfileName:
+    Type: String
+    Default: ''
+    Description: EC2 instance profile name. LEAVE BLANK (default) - no IAM is created in the lab.
+
+  AdminCidr:
+    Type: String
+    Default: 10.0.0.0/16
+    Description: CIDR allowed RDP to the app instances (default VPC-internal only).
+
+Conditions:
+  HasInstanceProfile: !Not [!Equals [!Ref InstanceProfileName, '']]
+
+Resources:
+
+  # ---------- Network (unchanged from the baseline) ----------
+  Vpc:
+    Type: AWS::EC2::VPC
+    Properties:
+      CidrBlock: 10.0.0.0/16
+      EnableDnsHostnames: true
+      EnableDnsSupport: true
+      Tags:
+        - { Key: Name, Value: !Sub 'ledgerline-${EnvName}' }
+        - { Key: Project, Value: YAT-Ledgerline }
+        - { Key: Environment, Value: !Ref EnvName }
+
+  InternetGateway:
+    Type: AWS::EC2::InternetGateway
+    Properties:
+      Tags:
+        - { Key: Name, Value: !Sub 'ledgerline-igw-${EnvName}' }
+
+  IgwAttachment:
+    Type: AWS::EC2::VPCGatewayAttachment
+    Properties:
+      VpcId: !Ref Vpc
+      InternetGatewayId: !Ref InternetGateway
+
+  PublicNatA:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref Vpc
+      CidrBlock: 10.0.1.0/24
+      AvailabilityZone: !Select [0, !GetAZs '']
+      MapPublicIpOnLaunch: true
+      Tags:
+        - { Key: Name, Value: !Sub 'public-nat-a-${EnvName}' }
+
+  PublicNatB:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref Vpc
+      CidrBlock: 10.0.2.0/24
+      AvailabilityZone: !Select [1, !GetAZs '']
+      MapPublicIpOnLaunch: true
+      Tags:
+        - { Key: Name, Value: !Sub 'public-nat-b-${EnvName}' }
+
+  PrivateAppA:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref Vpc
+      CidrBlock: 10.0.11.0/24
+      AvailabilityZone: !Select [0, !GetAZs '']
+      Tags:
+        - { Key: Name, Value: !Sub 'private-app-a-${EnvName}' }
+
+  PrivateAppB:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref Vpc
+      CidrBlock: 10.0.12.0/24
+      AvailabilityZone: !Select [1, !GetAZs '']
+      Tags:
+        - { Key: Name, Value: !Sub 'private-app-b-${EnvName}' }
+
+  PrivateDataA:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref Vpc
+      CidrBlock: 10.0.21.0/24
+      AvailabilityZone: !Select [0, !GetAZs '']
+      Tags:
+        - { Key: Name, Value: !Sub 'private-data-a-${EnvName}' }
+
+  PrivateDataB:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref Vpc
+      CidrBlock: 10.0.22.0/24
+      AvailabilityZone: !Select [1, !GetAZs '']
+      Tags:
+        - { Key: Name, Value: !Sub 'private-data-b-${EnvName}' }
+
+  NatEip:
+    Type: AWS::EC2::EIP
+    Properties:
+      Domain: vpc
+
+  NatGateway:
+    Type: AWS::EC2::NatGateway
+    Properties:
+      AllocationId: !GetAtt NatEip.AllocationId
+      SubnetId: !Ref PublicNatA
+      Tags:
+        - { Key: Name, Value: !Sub 'ledgerline-nat-${EnvName}' }
+
+  PublicRouteTable:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      VpcId: !Ref Vpc
+      Tags:
+        - { Key: Name, Value: !Sub 'public-rt-${EnvName}' }
+
+  PublicDefaultRoute:
+    Type: AWS::EC2::Route
+    DependsOn: IgwAttachment
+    Properties:
+      RouteTableId: !Ref PublicRouteTable
+      DestinationCidrBlock: 0.0.0.0/0
+      GatewayId: !Ref InternetGateway
+
+  PublicNatAAssoc:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      RouteTableId: !Ref PublicRouteTable
+      SubnetId: !Ref PublicNatA
+
+  PublicNatBAssoc:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      RouteTableId: !Ref PublicRouteTable
+      SubnetId: !Ref PublicNatB
+
+  PrivateRouteTable:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      VpcId: !Ref Vpc
+      Tags:
+        - { Key: Name, Value: !Sub 'private-rt-${EnvName}' }
+
+  PrivateDefaultRoute:
+    Type: AWS::EC2::Route
+    Properties:
+      RouteTableId: !Ref PrivateRouteTable
+      DestinationCidrBlock: 0.0.0.0/0
+      NatGatewayId: !Ref NatGateway
+
+  PrivateAppAAssoc:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      RouteTableId: !Ref PrivateRouteTable
+      SubnetId: !Ref PrivateAppA
+
+  # IMPROVEMENT: associate the 2nd app subnet so the Multi-AZ ASG has a routed subnet in AZ b
+  PrivateAppBAssoc:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      RouteTableId: !Ref PrivateRouteTable
+      SubnetId: !Ref PrivateAppB
+
+  # ---------- Security groups (unchanged) ----------
+  AlbSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Internal ALB - HTTP from internal (VPN-connected) clients only
+      VpcId: !Ref Vpc
+      SecurityGroupIngress:
+        - { IpProtocol: tcp, FromPort: 80, ToPort: 80, CidrIp: 10.0.0.0/16, Description: HTTP from internal clients }
+      Tags:
+        - { Key: Name, Value: !Sub 'sg-alb-${EnvName}' }
+
+  AppSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: App tier - HTTP from the internal ALB, RDP from the admin CIDR
+      VpcId: !Ref Vpc
+      SecurityGroupIngress:
+        - { IpProtocol: tcp, FromPort: 80, ToPort: 80, SourceSecurityGroupId: !Ref AlbSecurityGroup, Description: HTTP from ALB }
+        - { IpProtocol: tcp, FromPort: 3389, ToPort: 3389, CidrIp: !Ref AdminCidr, Description: RDP from admin }
+      Tags:
+        - { Key: Name, Value: !Sub 'sg-app-${EnvName}' }
+
+  DbSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Database - SQL Server (1433) from the app tier only
+      VpcId: !Ref Vpc
+      SecurityGroupIngress:
+        - { IpProtocol: tcp, FromPort: 1433, ToPort: 1433, SourceSecurityGroupId: !Ref AppSecurityGroup, Description: SQL Server from app }
+      Tags:
+        - { Key: Name, Value: !Sub 'sg-db-${EnvName}' }
+
+  # ---------- Compute (IMPROVED: Auto Scaling group now spans TWO AZs) ----------
+  AppLaunchTemplate:
+    Type: AWS::EC2::LaunchTemplate
+    Properties:
+      LaunchTemplateName: !Sub 'ledgerline-app-${EnvName}'
+      LaunchTemplateData:
+        ImageId: !Ref WindowsAmiId
+        InstanceType: !Ref InstanceType
+        IamInstanceProfile: !If
+          - HasInstanceProfile
+          - Name: !Ref InstanceProfileName
+          - !Ref AWS::NoValue
+        SecurityGroupIds:
+          - !Ref AppSecurityGroup
+        UserData:
+          Fn::Base64: |
+            <powershell>
+            Install-WindowsFeature -Name Web-Server -IncludeManagementTools
+            Set-Content -Path "C:\inetpub\wwwroot\index.html" -Value "Ledgerline infrastructure ready - awaiting application deployment"
+            </powershell>
+        TagSpecifications:
+          - ResourceType: instance
+            Tags:
+              - { Key: Name, Value: !Sub 'ledgerline-app-${EnvName}' }
+              - { Key: Project, Value: YAT-Ledgerline }
+
+  AppAutoScalingGroup:
+    Type: AWS::AutoScaling::AutoScalingGroup
+    Properties:
+      AutoScalingGroupName: !Sub 'ledgerline-app-${EnvName}'
+      MinSize: '2'                    # IMPROVED: was 1
+      MaxSize: '4'                    # IMPROVED: was 2
+      DesiredCapacity: '2'            # IMPROVED: was 1
+      VPCZoneIdentifier:
+        - !Ref PrivateAppA            # IMPROVED: now spans BOTH AZs (application-tier Multi-AZ)
+        - !Ref PrivateAppB
+      LaunchTemplate:
+        LaunchTemplateId: !Ref AppLaunchTemplate
+        Version: !GetAtt AppLaunchTemplate.LatestVersionNumber
+      TargetGroupARNs:
+        - !Ref AppTargetGroup
+      HealthCheckType: ELB
+      HealthCheckGracePeriod: 300
+      Tags:
+        - { Key: Name, Value: !Sub 'ledgerline-app-${EnvName}', PropagateAtLaunch: true }
+
+  AppScalingPolicy:
+    Type: AWS::AutoScaling::ScalingPolicy
+    Properties:
+      AutoScalingGroupName: !Ref AppAutoScalingGroup
+      PolicyType: TargetTrackingScaling
+      TargetTrackingConfiguration:
+        PredefinedMetricSpecification:
+          PredefinedMetricType: ASGAverageCPUUtilization
+        TargetValue: 70
+
+  # ---------- Internal load balancer (unchanged) ----------
+  AppLoadBalancer:
+    Type: AWS::ElasticLoadBalancingV2::LoadBalancer
+    Properties:
+      Name: !Sub 'ledgerline-${EnvName}'
+      Scheme: internal
+      Type: application
+      Subnets:
+        - !Ref PrivateAppA
+        - !Ref PrivateAppB
+      SecurityGroups:
+        - !Ref AlbSecurityGroup
+
+  AppTargetGroup:
+    Type: AWS::ElasticLoadBalancingV2::TargetGroup
+    Properties:
+      Name: !Sub 'ledgerline-${EnvName}'
+      VpcId: !Ref Vpc
+      Port: 80
+      Protocol: HTTP
+      TargetType: instance
+      HealthCheckPath: /
+      HealthCheckProtocol: HTTP
+      Matcher:
+        HttpCode: '200'
+
+  AppListener:
+    Type: AWS::ElasticLoadBalancingV2::Listener
+    Properties:
+      LoadBalancerArn: !Ref AppLoadBalancer
+      Port: 80
+      Protocol: HTTP
+      DefaultActions:
+        - Type: forward
+          TargetGroupArn: !Ref AppTargetGroup
+
+  # ---------- Database (IMPROVED backups; STILL Single-AZ - no Multi-AZ for Ledgerline) ----------
+  DbSubnetGroup:
+    Type: AWS::RDS::DBSubnetGroup
+    Properties:
+      DBSubnetGroupDescription: Ledgerline data subnets (spans 2 AZs - required even for Single-AZ)
+      SubnetIds:
+        - !Ref PrivateDataA
+        - !Ref PrivateDataB
+
+  Database:
+    Type: AWS::RDS::DBInstance
+    DeletionPolicy: Delete
+    UpdateReplacePolicy: Delete
+    Properties:
+      DBInstanceIdentifier: !Sub 'ledgerline-${EnvName}'
+      Engine: !Ref DBEngine
+      LicenseModel: license-included
+      DBInstanceClass: !Ref DBInstanceClass
+      AllocatedStorage: '20'
+      MultiAZ: false                  # UNCHANGED on purpose - Ledgerline does not support Multi-AZ
+      StorageEncrypted: true
+      MasterUsername: !Ref DBMasterUsername
+      MasterUserPassword: !Ref DBMasterPassword
+      DBSubnetGroupName: !Ref DbSubnetGroup
+      VPCSecurityGroups:
+        - !Ref DbSecurityGroup
+      BackupRetentionPeriod: 14       # IMPROVED: was 7 - wider point-in-time-restore window for DR
+      PubliclyAccessible: false
+      Tags:
+        - { Key: Name, Value: !Sub 'ledgerline-${EnvName}' }
+        - { Key: Project, Value: YAT-Ledgerline }
+
+  # ---------- Storage (IMPROVED: lifecycle tiering on attachments for cost) ----------
+  AttachmentsBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: !Sub 'ledgerline-attachments-${EnvName}-${AWS::Region}-${AWS::AccountId}'
+      VersioningConfiguration:
+        Status: Enabled
+      BucketEncryption:
+        ServerSideEncryptionConfiguration:
+          - ServerSideEncryptionByDefault:
+              SSEAlgorithm: AES256
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: true
+        BlockPublicPolicy: true
+        IgnorePublicAcls: true
+        RestrictPublicBuckets: true
+      LifecycleConfiguration:         # IMPROVED: tier older scanned documents to cheaper storage
+        Rules:
+          - Id: tier-older-attachments
+            Status: Enabled
+            Transitions:
+              - StorageClass: STANDARD_IA
+                TransitionInDays: 90
+              - StorageClass: GLACIER
+                TransitionInDays: 365
+
+  BackupsBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: !Sub 'ledgerline-backups-${EnvName}-${AWS::Region}-${AWS::AccountId}'
+      VersioningConfiguration:
+        Status: Enabled
+      BucketEncryption:
+        ServerSideEncryptionConfiguration:
+          - ServerSideEncryptionByDefault:
+              SSEAlgorithm: AES256
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: true
+        BlockPublicPolicy: true
+        IgnorePublicAcls: true
+        RestrictPublicBuckets: true
+
+  # ---------- Monitoring (unchanged) ----------
+  AlarmAppCpuHigh:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmName: !Sub 'ledgerline-app-cpu-high-${EnvName}'
+      Namespace: AWS/EC2
+      MetricName: CPUUtilization
+      Dimensions:
+        - Name: AutoScalingGroupName
+          Value: !Ref AppAutoScalingGroup
+      Statistic: Average
+      Period: 300
+      EvaluationPeriods: 2
+      Threshold: 80
+      ComparisonOperator: GreaterThanThreshold
+      TreatMissingData: notBreaching
+
+  AlarmRdsCpuHigh:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmName: !Sub 'ledgerline-rds-cpu-high-${EnvName}'
+      Namespace: AWS/RDS
+      MetricName: CPUUtilization
+      Dimensions:
+        - Name: DBInstanceIdentifier
+          Value: !Ref Database
+      Statistic: Average
+      Period: 300
+      EvaluationPeriods: 2
+      Threshold: 80
+      ComparisonOperator: GreaterThanThreshold
+      TreatMissingData: notBreaching
+
+Outputs:
+  AlbDnsName:
+    Description: Internal DNS of the load balancer (reachable from inside the VPC / over the VPN).
+    Value: !GetAtt AppLoadBalancer.DNSName
+
+  RdsEndpoint:
+    Description: RDS SQL Server endpoint address.
+    Value: !GetAtt Database.Endpoint.Address
+
+  AttachmentsBucketName:
+    Value: !Ref AttachmentsBucket
+
+  BackupsBucketName:
+    Value: !Ref BackupsBucket
+
+  VpcId:
+    Value: !Ref Vpc

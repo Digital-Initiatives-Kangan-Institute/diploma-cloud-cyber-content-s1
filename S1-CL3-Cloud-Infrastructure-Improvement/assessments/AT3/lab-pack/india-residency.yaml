@@ -1,0 +1,70 @@
+AWSTemplateFormatVersion: '2010-09-09'
+
+Description: >-
+  YAT Ledgerline - India residency slice. A SEPARATE stack deployed in ap-south-1 (Mumbai), because
+  one CloudFormation stack is region-bound and the rest of Ledgerline stays in ap-southeast-2
+  (Sydney). This is the light IR-3 compliance slice: only regulatory logs and a books-of-account
+  export are held in India; the main system and its primary data remain in Sydney.
+
+  Deploy this stack with the region set to Mumbai (ap-south-1). It creates two private, encrypted,
+  versioned S3 buckets:
+   - CERT-In system/access logs, retained at least 180 days (CERT-In Directions 2022);
+   - a periodic books-of-account export, retained for Companies-Act 2013 retrievability in India.
+
+  Creates NO IAM (the lab forbids it). Empty buckets - clean teardown.
+
+Parameters:
+  EnvName:
+    Type: String
+    Default: prod
+    AllowedValues: [dev, prod]
+    Description: Environment suffix used in resource names.
+
+Resources:
+
+  CertInLogsBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: !Sub 'ledgerline-india-certin-logs-${EnvName}-${AWS::Region}-${AWS::AccountId}'
+      VersioningConfiguration:
+        Status: Enabled
+      BucketEncryption:
+        ServerSideEncryptionConfiguration:
+          - ServerSideEncryptionByDefault:
+              SSEAlgorithm: AES256
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: true
+        BlockPublicPolicy: true
+        IgnorePublicAcls: true
+        RestrictPublicBuckets: true
+      LifecycleConfiguration:
+        Rules:
+          - Id: certin-180-day-retention
+            Status: Enabled
+            ExpirationInDays: 200          # >= 180 days (CERT-In), small margin
+            NoncurrentVersionExpirationInDays: 200
+
+  BooksOfAccountBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: !Sub 'ledgerline-india-books-${EnvName}-${AWS::Region}-${AWS::AccountId}'
+      VersioningConfiguration:
+        Status: Enabled
+      BucketEncryption:
+        ServerSideEncryptionConfiguration:
+          - ServerSideEncryptionByDefault:
+              SSEAlgorithm: AES256
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: true
+        BlockPublicPolicy: true
+        IgnorePublicAcls: true
+        RestrictPublicBuckets: true
+
+Outputs:
+  CertInLogsBucketName:
+    Description: Mumbai bucket holding CERT-In system/access logs (>= 180-day retention).
+    Value: !Ref CertInLogsBucket
+
+  BooksOfAccountBucketName:
+    Description: Mumbai bucket holding the books-of-account export (Companies-Act retrievability).
+    Value: !Ref BooksOfAccountBucket
