@@ -31,12 +31,15 @@ model:
    ASG instance AZs. The README says so explicitly. This is a deliberate divergence from the CL1 pattern,
    driven by the scenario.
 
-3. **SQL Server edition is a parameter; default `sqlserver-se` (Standard, license-included).** The scenario
-   establishes Standard edition. The edition does **not** gate anything in this lab — the DB is empty and is
-   never made Multi-AZ — so if SE `license-included` proves infeasible or too credit-hungry in the sandbox,
-   flip `DBEngine` to `sqlserver-ex` (Express, free). The no-Multi-AZ decision is an *application* constraint,
-   not an edition one, so the substitution does not change what AT3 assesses. **Confirm SE feasibility in the
-   proving run** (the one real unknown — see below).
+3. **SQL Server edition is a parameter; default `sqlserver-ex` (Express, free).** SE (Standard,
+   license-included) is **not deployable in the sandbox** — `db.t3.medium` + `sqlserver-se` is rejected and the
+   sandbox caps RDS at `db.t3.medium` (SE needs a larger class; proven live 2026-06-21), so both templates
+   default to Express. The DB is empty and is never made Multi-AZ, so the edition does not change what AT3
+   assesses (the no-Multi-AZ decision is an *application* constraint, not an edition one). **Decision
+   (2026-06-21): the in-world scenario stays on Standard; the lab deploys Express as a documented stand-in** —
+   the lab DB is empty, so Express's limits (10 GB/db, RAM/cores) never bite; same "the lab simulates X"
+   pattern as region simulation. The README discloses the substitution to students. No scenario rewrite (a
+   real engine change is huge — see the parked note below).
 
 4. **Cross-Region DR backup copy is a documented CLI step, not in the template.** RDS automated-backup
    replication to a second Region (Melbourne, `ap-southeast-4`, to keep financial data in Australia) is set
@@ -48,21 +51,40 @@ model:
    ASG is kept single-AZ (one subnet) so the baseline is genuinely non-HA at the compute tier. `improved.yaml`
    adds the 2nd app-subnet route-table association and spreads the ASG across both app subnets.
 
-## Status & parked (for the proving run)
+## Proving run — PROVEN live 2026-06-21 (Cloud Architecting Sandbox)
 
-- **NOT yet proven live.** Required before AT3 is final — one Academy session (Cloud Architecting Sandbox):
-  1. Deploy `baseline.yaml` in Sydney; confirm CREATE_COMPLETE, target healthy, RDS Available + Multi-AZ No.
-  2. Update the stack with `improved.yaml`; confirm the change-set preview is **Modify only (no Replace)**,
-     UPDATE_COMPLETE, and the ASG now runs 2 instances across 2 AZs.
-  3. Demonstrate reliability: terminate an app instance and watch the ASG replace it across AZs; run an RDS
-     point-in-time restore (and, if doing DR, a cross-Region restore) — these are the AT3 reliability
-     demonstrations (there is no DB failover to show; that is the point).
-  4. Demonstrate scalability (scale-out) and confirm the S3 lifecycle on the attachments bucket.
-  5. Deploy `india-residency.yaml` in Mumbai; confirm the two buckets; tear everything down.
-- **KEY UNKNOWN: SQL Server SE `license-included` on `db.t3.medium` in the Cloud Architecting Sandbox.**
-  MySQL Multi-AZ was proven there (2026-06-15) but SQL Server SE has not been deployed there. If SE will not
-  create (edition/class/license restriction) or burns credits too fast, set `DBEngine=sqlserver-ex` and
-  re-run — record the outcome back into this file and `docs/lab-pack-standard.md`.
+What was confirmed:
+- **Express baseline deploys clean** — `CREATE_COMPLETE` in **both `us-east-1` and `ap-southeast-2` (Sydney)**,
+  `sqlserver-ex` on `db.t3.medium`.
+- **Apply-as-update works with the DB untouched** — `UPDATE_COMPLETE`; the change-set modified only the ASG and
+  the attachments bucket (lifecycle) and added the 2nd app-subnet route association — **no `Database` change**
+  (see the `rds:ModifyDBInstance` finding below).
+- **App-tier Multi-AZ** — ASG settled at `Desired=2`, two instances across two AZs; the DB stayed single-AZ /
+  Multi-AZ No.
+- **India residency slice** — `CREATE_COMPLETE` in **`ap-south-1` (Mumbai)**, both buckets; the cross-region
+  split (main region + a separate Mumbai stack) works.
+
+NOT run — config validated but no explicit live demo: the **failover** (terminate-an-instance) and **scale-out**
+demos, and a **PITR restore**. Standard ASG behaviour and the scaling policy is in place; PITR/restore perms are
+**unverified** (see the finding) and worth a future check.
+
+Findings (also recorded in `docs/lab-pack-standard.md`):
+- **SQL Server SE is NOT deployable in the sandbox.** `db.t3.medium` + `sqlserver-se` + `license-included` is
+  rejected ("RDS does not support creating a DB instance with the following combination...") — SE needs a larger
+  class than the sandbox permits. **Both templates default to `sqlserver-ex` (Express)**, which deploys fine.
+- **The lab role denies `rds:ModifyDBInstance`.** The `voclabs` role can **create** an RDS instance (the
+  baseline built) but **cannot modify** an existing one — the original `improved.yaml` raised
+  `BackupRetentionPeriod` 7->14 and hit `AccessDenied`. So the change-set must leave the DB **untouched** (it
+  now does). This blocks **any** in-lab DB modification (CFN *or* console), so the DB-tier DR improvements
+  (wider retention, cross-Region copy) are **design-level only, not lab-executable**; DB reliability is shown
+  via the baseline's automated backups + PITR (restore perms unverified).
+- **DECIDED (2026-06-21): keep the scenario on SQL Server Standard; Express is a lab-only stand-in.** A real
+  engine change (e.g. PostgreSQL) was scoped and rejected — it spans ~30+ files across the active CL3 **and the
+  completed CL1/CL2 clusters**, and worse, it **deletes the commercial-licensing cost-benefit element** (the
+  ~$27k/yr Ledgerline+SQL-Server licensing, license-included-vs-BYOL) that is the assessed differentiator from
+  the open-source LMS. So the scenario is unchanged; the lab substitutes Express and the README says so. The
+  only residual tidy: the soft `~13.5 vs ~22 GB` SQL-data figure (low priority). Tracked in MEMORY
+  `[[s1cl3-assessment]]`.
 - Watch SQL Server RDS **create time** (typically longer than MySQL); the README budgets ~15 min.
 
 ## Local validation (done)

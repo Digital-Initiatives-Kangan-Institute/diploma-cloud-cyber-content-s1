@@ -6,11 +6,12 @@ Description: >-
   resource is replaced.
 
   Changes: the application tier becomes Multi-AZ (the ASG spreads across two AZs behind the internal
-  ALB, min 2 / desired 2); database backup retention is raised for recovery-based DR, but the RDS
-  instance STAYS SINGLE-AZ - Ledgerline does not support a Multi-AZ database, so there is deliberately
-  NO MultiAZ change; an S3 lifecycle tiers older attachments for cost. The cross-Region DR backup copy
-  (Melbourne, ap-southeast-4) is a CLI step, not a CFN property (see README). The India residency slice
-  (CERT-In logs + books in ap-south-1 Mumbai) is a separate stack (india-residency.yaml).
+  ALB, min 2 / desired 2); an S3 lifecycle tiers older attachments for cost. The RDS instance is
+  deliberately LEFT UNCHANGED by this change-set - Ledgerline does not support a Multi-AZ database, and
+  the AWS Academy lab role cannot rds:ModifyDBInstance, so the DB tier's DR improvements (wider backup
+  retention + the cross-Region backup copy to Melbourne, ap-southeast-4) are out-of-band steps, not CFN
+  properties (see README). The India residency slice (CERT-In logs + books in ap-south-1 Mumbai) is a
+  separate stack (india-residency.yaml).
 
 Parameters:
   EnvName:
@@ -31,11 +32,12 @@ Parameters:
 
   DBEngine:
     Type: String
-    Default: sqlserver-se
+    Default: sqlserver-ex
     AllowedValues: [sqlserver-se, sqlserver-ex, sqlserver-web]
     Description: >-
       RDS SQL Server edition. Must match the value used for baseline.yaml so the change-set does not
-      replace the database.
+      replace the database. Defaults to sqlserver-ex (Express): the sandbox does not support
+      sqlserver-se on its permitted instance classes (see baseline.yaml).
 
   DBInstanceClass:
     Type: String
@@ -366,7 +368,10 @@ Resources:
       DBSubnetGroupName: !Ref DbSubnetGroup
       VPCSecurityGroups:
         - !Ref DbSecurityGroup
-      BackupRetentionPeriod: 14       # IMPROVED: was 7 - wider point-in-time-restore window for DR
+      # Retention widening to 14 days is now an OUT-OF-BAND DR step: the AWS Academy lab role denies
+      # rds:ModifyDBInstance, so the change-set must not modify the DB. See README. (Real-world IaC
+      # with full IAM could set 14 here; the lab cannot, and the legacy DB tier is hands-off anyway.)
+      BackupRetentionPeriod: 7        # UNCHANGED from baseline - DB is untouched by this change-set
       PubliclyAccessible: false
       Tags:
         - { Key: Name, Value: !Sub 'ledgerline-${EnvName}' }

@@ -31,13 +31,15 @@ Parameters:
 
   DBEngine:
     Type: String
-    Default: sqlserver-se
+    Default: sqlserver-ex
     AllowedValues: [sqlserver-se, sqlserver-ex, sqlserver-web]
     Description: >-
-      RDS SQL Server edition. Ledgerline runs Standard edition (sqlserver-se, license-included).
-      sqlserver-ex (Express, free) is a fallback if SE license-included is not feasible/affordable
-      in the lab - the database is empty and is never made Multi-AZ, so the edition does not affect
-      what AT3 assesses (the no-Multi-AZ decision is an application constraint, not an edition one).
+      RDS SQL Server edition. Defaults to sqlserver-ex (Express, free): the AWS Academy Cloud
+      Architecting Sandbox does NOT support Standard edition (sqlserver-se, license-included) on its
+      permitted instance classes - db.t3.medium + sqlserver-se is rejected (proven live 2026-06-21),
+      and the sandbox caps RDS at db.t3.medium. The database is empty and is never made Multi-AZ, so
+      the edition does not affect what AT3 assesses (the no-Multi-AZ decision is an application
+      constraint, not an edition one). sqlserver-se remains selectable where a larger class is allowed.
 
   DBInstanceClass:
     Type: String

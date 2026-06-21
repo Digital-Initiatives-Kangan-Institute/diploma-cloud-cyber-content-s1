@@ -86,11 +86,15 @@ def test_improved_compute_is_multi_az():
         assert len(zones) == 2, f"improved {name} must span TWO subnets (application-tier Multi-AZ)"
 
 
-def test_improved_widens_backup_retention():
-    # The DB reliability improvement is recovery-based: a wider point-in-time-restore window.
+def test_improved_does_not_modify_db():
+    # The AWS Academy lab role cannot rds:ModifyDBInstance, and the legacy DB tier is not restructured
+    # by the improvement, so the Database resource MUST be identical in baseline and improved (the
+    # change-set produces NO diff on the DB). DR improvements (wider retention, cross-Region copy) are
+    # out-of-band steps, not CFN changes.
     base_db = next(iter(_of_type(_load(BASELINE), "AWS::RDS::DBInstance").values()))
     imp_db = next(iter(_of_type(_load(IMPROVED), "AWS::RDS::DBInstance").values()))
-    assert imp_db["Properties"]["BackupRetentionPeriod"] > base_db["Properties"]["BackupRetentionPeriod"]
+    assert imp_db["Properties"] == base_db["Properties"], \
+        "improved.yaml must NOT modify the Database (sandbox denies rds:ModifyDBInstance)"
 
 
 # ---- internal ALB (internal-only system, no public ingress) ----
