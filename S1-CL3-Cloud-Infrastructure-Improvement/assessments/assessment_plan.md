@@ -129,11 +129,10 @@ Every group in `consolidated_uoc.md` (82 items) mapped to where it is covered un
 ### AT3 — Implement
 6. **As-deployed Deployment Report exemplar** (reuse the CL2 Deployment Report type) — the whole improved system.
 7. **AT3 Student + Assessor instruments** (individual).
-8. **AT3 lab artefacts (support — to PRODUCE; the AT3 instruments reference these as provided artefacts and are *draft pending the proving run*).** AT3 follows an **apply-as-update** model: deploy the baseline, then apply the improvement as a CloudFormation **change-set**.
-   - **Baseline lab-pack** — the *existing state* as CloudFormation: single-AZ Ledgerline (Windows EC2 + internal ALB + single-AZ RDS for SQL Server + S3 + VPC), **encrypted at rest, empty database** (the system + data are imaginary story; data is out of scope). CL1-AT3 pattern, re-pointed at Ledgerline.
-   - **Reference upgrade change-set** — the model implementation of the agreed design *as a CloudFormation update to the baseline stack* (same logical IDs); doubles as the **AT2 model answer** + the **AT3 fallback** if a team's write is unusable. All changes **in-place/additive** — no replacements, since encryption is baseline.
-   - **Live proving run** — deploy baseline → apply the change-set → verify (application-tier failover via instance termination, a database backup/restore + cross-Region DR drill, and a scale-out) → tear down, in an Academy lab; confirms the **SQL Server single-instance baseline** deploys + the **change-set mechanics**. (No SQL-Server-Multi-AZ to prove — the database stays single-instance per the Ledgerline constraint.) Required before AT3 is final.
-   - Local validation harness (cfn-lint + pytest) + student README, per docs/lab-pack-standard.md.
+8. **AT3 lab artefacts (support) — produced + proven live 2026-06-21** (AWS Academy Cloud Architecting Sandbox; full record in `docs/lab-pack-standard.md` + the lab-pack `claude-notes.md`). AT3 follows an **apply-as-update** model: deploy the baseline, then apply the improvement as a CloudFormation **change-set**.
+   - **Baseline lab-pack** — the *existing state* as CloudFormation: single-AZ Ledgerline (Windows EC2 + internal ALB + single-AZ RDS for SQL Server + S3 + VPC), **encrypted at rest, empty database** (the system + data are imaginary story; data is out of scope). CL1-AT3 pattern, re-pointed at Ledgerline. The lab deploys **SQL Server Express** as a stand-in for the scenario's Standard edition (SE is not deployable on the sandbox's permitted instance classes).
+   - **Reference upgrade change-set** — the model implementation of the agreed design *as a CloudFormation update to the baseline stack* (same logical IDs); doubles as the **AT2 model answer** + the **AT3 fallback** if a team's write is unusable. All changes are **in-place/additive — no replacements**, and the change-set **leaves the RDS instance untouched** (the lab role denies `rds:ModifyDBInstance` — RDS is create-only; DB-tier DR config is out-of-band).
+   - Local validation harness (cfn-lint clean + pytest 15/15) + student README, per docs/lab-pack-standard.md.
 
 ### Cluster-level
 9. **`assessment_plan.md`** — this document.
