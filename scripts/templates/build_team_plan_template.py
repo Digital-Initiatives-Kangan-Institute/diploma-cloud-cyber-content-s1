@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
 """Build the YAT / MTS Team Plan template (.docx) — the in-world student-facing template.
 
-Derived from the AT1 Team Plan exemplar (build_s1_cl3_at1_team_plan_exemplar) by stripping the worked
+Derived from the AT2 Team Plan exemplar (build_s1_cl3_at2_team_plan_exemplar) by stripping the worked
 content and the UoC `Evidences:` tags and replacing them with section guidance and blank
 response areas / tables. Branding follows scenario/branding/brand-pack.md via build_bc_template.
 
 This is the in-world template (no assessment/UoC scaffolding) — the canonical shape of a YAT / MTS
-team plan, used as the basis for the AT1 Part A deliverable (BSBXTW401 element 1 + task
+team plan, used as the basis for the AT2 Part A deliverable (BSBXTW401 element 1 + task
 allocation). The Knowledge Evidence appendix is kept as a prompt because the team plan is where
 the BSBXTW401 element-1 knowledge is evidenced; the specific questions live in the assessment task.
 
@@ -57,7 +57,7 @@ def build(path):
         ("Prepared for", "[ MTS Senior Consultant — engagement supervision ]"),
         ("Prepared by", "[ Your name — team lead ]"),
         ("Engagement", "[ Engagement name ]"),
-        ("Team", "[ Your team — list each member and the dimension they own ]"),
+        ("Team", "[ Your team — list each member and the cloud component they own ]"),
         ("Document version", "[ e.g. v0.1 ]"),
         ("Date", "[ Date ]"),
         ("Classification", "Internal — MTS / YAT"),
@@ -88,34 +88,35 @@ def build(path):
                      "the responsibilities — keep it focused on what the team is set up to deliver.")
     add_response_placeholder(doc)
 
-    h1("2. Team structure and dimension ownership")
-    add_guidance_text(doc, "List your team members and the improvement dimension each owns (security, "
-                     "reliability, scalability, cost) so the team covers all four. Note who is leading "
-                     "this phase — the lead role rotates. Add rows as needed.")
-    add_template_table(doc, ["Member", "Dimension owned", "Focus of the dimension"],
-             [["[ Name ]", "[ Security / Reliability / Scalability / Cost ]", "[ … ]"]] * 4,
+    h1("2. Team structure and component ownership")
+    add_guidance_text(doc, "List your team members and the cloud component each owns (network, compute, "
+                     "database, storage) so the team covers the whole system, one component each. Note who "
+                     "is leading this phase — the lead role rotates. Add rows as needed.")
+    add_template_table(doc, ["Member", "Component owned", "Scope of the component"],
+             [["[ Name ]", "[ Network / Compute / Database / Storage ]", "[ … ]"]] * 4,
              widths=[4.2, 3.5, 8.0])
 
     h1("3. Performance expectations")
     add_guidance_text(doc, "For each member, set the expected outcomes, goals and behaviours — in line with "
                      "the team objective and YAT's policies (Change Management Procedure, Security and "
                      "Incident Response Policy, Privacy / Data Handling Policy). One row per member.")
-    add_template_table(doc, ["Member (dimension)", "Expected outcomes", "Goals", "Expected behaviours"],
+    add_template_table(doc, ["Member (component)", "Expected outcomes", "Goals", "Expected behaviours"],
              [["[ Member ]", "[ … ]", "[ … ]", "[ … ]"]] * 4,
              widths=[3.4, 4.0, 4.0, 4.1])
 
     h1("4. Accountability strategies")
     add_guidance_text(doc, "How will you make sure each member is accountable for their role and "
-                     "responsibilities? Consider owned-dimension deliverables, the sign-off gates, the "
+                     "responsibilities? Consider owned-component deliverables, the team sign-off gate, the "
                      "led-meeting record, peer review at integration, and the escalation path.")
     add_response_placeholder(doc)
 
     h1("5. Task allocation")
-    add_guidance_text(doc, "Allocate the improvement work across the team, by dimension, with the instruction "
-                     "each member needs and an allowance for your contingencies (§6). Each member carries "
-                     "their dimension across analysis (AT1), design (AT2) and implementation (AT3).")
-    add_template_table(doc, ["Member", "Allocated tasks (AT1 → AT2 → AT3)", "Instruction / notes"],
-             [["[ Member ]", "[ … ]", "[ … ]"]] * 4,
+    add_guidance_text(doc, "Allocate the infrastructure-as-code one component per member, with the "
+                     "instruction each member needs and an allowance for your contingencies (§6). Each member "
+                     "writes their component to the approved design and integrates it into the team's single "
+                     "deployable template.")
+    add_template_table(doc, ["Member", "Component allocated (CloudFormation to write)", "Instruction / notes"],
+             [["[ Member ]", "[ Network / Compute / Database / Storage ]", "[ … ]"]] * 4,
              widths=[3.0, 7.5, 5.0])
 
     h1("6. Contingency planning")

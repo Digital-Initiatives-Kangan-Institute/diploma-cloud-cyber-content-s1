@@ -115,8 +115,6 @@ Every group in `consolidated_uoc.md` (82 items) mapped to where it is covered un
 
 ## 6. Required authoring worklist
 
-> **Build status note:** the previously-built AT1 "Team Setup" Team-Plan artefacts are **repurposed into AT2 Part A** (the project/team plan). The new **AT1 (Solution Design) and AT3 (Deployment Report) are unbuilt.** The `scripts/s1_cl3/build_s1_cl3_at1_*` files + `assessments/AT1/*` need renaming/relocating to AT2.
-
 ### AT1 — Design
 1. **Solution Design exemplar** (reuse the CL2 Solution Design type) — the agreed "to be" improvement (all four components, all four concerns, compliance slice, cost-benefit, IaC-partitioned), + the contextual `KE 6` question. *(Generated; a stripped, in-world copy = the design provided to AT2.)*
 2. **AT1 Student + Assessor instruments** — the Solution Design deliverable (Part A) + the presentation/sign-off (Part B); marking guide with bidirectional UoC traceability + the FS-Oral observation.
