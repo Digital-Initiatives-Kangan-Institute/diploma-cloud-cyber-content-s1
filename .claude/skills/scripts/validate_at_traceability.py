@@ -119,14 +119,17 @@ def resolve_tags(line: str):
 
 
 def split_benchmark(text: str):
-    """Return (pre_benchmark_text, benchmark_text). The benchmark section starts at the last
-    heading-like line mentioning 'benchmark' or 'traceability'."""
+    """Return (pre_benchmark_text, benchmark_text). The benchmark section starts at the FIRST
+    heading-like line mentioning 'benchmark' or 'traceability', so a multi-part AT with more than one
+    benchmark sub-section (e.g. a Part-A 'Design Benchmark' + a Part-B 'Report Benchmark') is captured
+    whole — taking the last heading would drop every sub-section above it."""
     lines = text.splitlines()
     idx = None
     for i, ln in enumerate(lines):
         s = ln.strip()
         if BENCH_HEADING.search(s) and len(s) < 80 and "[" not in s:
             idx = i
+            break
     if idx is None:
         return text, ""
     return "\n".join(lines[:idx]), "\n".join(lines[idx:])
