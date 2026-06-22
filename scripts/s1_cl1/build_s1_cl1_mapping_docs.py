@@ -1,42 +1,28 @@
-"""Populate the S1-CL1 per-UoC Assessment Mapping docx files.
+"""S1-CL1 Assessment Mapping docs — THIN WRAPPER (cluster data + delegation only).
 
-For each of the 3 unit mapping docx files (ICTCLD401, ICTCLD502, ICTICT517),
-write the criterion code(s) (e.g. "A4", "A4, B3") into the AT1/AT2/AT3 columns
-for each UoC item row in:
+================================================================================
+⚠  NOT the canonical generator. The docx-building mechanics live in the shared engine
+   ┖─ scripts/mapping/generate_mapping_doc.py  ← the single generator for ALL clusters.
+   CL1 is the LEGACY cluster: it has no invertible assessor benchmark, so the engine drives it from
+   the hand-authored DATA_* dicts below (CLUSTERS "cl1", source:"data"). This module now keeps only
+   that data + UNIT_DATA — which the validate-mapping-doc skill reads as CL1's oracle; the
+   docx-building mechanics (formerly an in-place edit of a pre-populated docx) are the engine's.
+   • To (re)generate:   python scripts/mapping/generate_mapping_doc.py --build cl1
+   • Contract + pipeline + CL1 conformance status: docs/mapping-document-standard.md
+   Full conformance (real machine-readable, UoC-tagged benchmarks in CL1's assessors) is a separate
+   retrofit; the CL2/CL3 engine entries are the worked examples of the intended implementation.
+================================================================================
 
-- Table 3 — Critical Aspects / Assessment Conditions
-    (special: original block row preserved; per-AC rows inserted below)
-- Table 4 — Elements / Performance Criteria (PCs)
-    (match by parsing leading "X.Y" from col 1)
-- Table 5 — Required Skills / Performance Evidence (PEs)
-    (positional: data rows in source-UoC order)
-- Table 6 — Required Knowledge / Knowledge Evidence (KEs)
-    (positional: data rows in source-UoC order)
-- Table 7 — Foundation Skills (FSs)
-    (match by skill name in col 0)
-
-Data is sourced from the AT1, AT2, AT3 assessor docx reverse-maps + the
-assessment_plan.md group coverage map. Reflects the 2026-05-25 502 PC
-reassignment (PCs 1.3, 4.1, 4.2, 4.3 moved AT3 → AT2) and the AT3 v1.0
-simplified shape (no closure pack; no SRM; HA Deployment Report carries
-PCs 5.1, 5.2, 5.3).
+DATA_401/502/517 map each PC/PE/KE/FS/AC item to its AT1/AT2/AT3 criterion code(s). Reflects the
+2026-05-25 502 PC reassignment (PCs 1.3, 4.1, 4.2, 4.3 moved AT3 → AT2) and the AT3 v1.0 simplified
+shape (no closure pack; no SRM; HA Deployment Report carries PCs 5.1, 5.2, 5.3).
 
 USAGE:
-    python populate_mapping_docs.py 401     # do just ICTCLD401
-    python populate_mapping_docs.py 502     # do just ICTCLD502
-    python populate_mapping_docs.py 517     # do just ICTICT517
-    python populate_mapping_docs.py all     # do all three
-
-Each run backs up the docx to <name>.docx.bak before editing.
+    python scripts/s1_cl1/build_s1_cl1_mapping_docs.py {401|502|517|all}   # delegates to the engine
 """
 
-import copy
-import shutil
 import sys
 from pathlib import Path
-
-from docx import Document
-from docx.oxml.ns import qn
 
 REPO = Path(__file__).resolve().parents[2]  # scripts/s1_cl1/ -> content repo root
 MAPPINGS = REPO / "S1-CL1-Cloud-Design-Build" / "mappings"
@@ -298,253 +284,25 @@ UNIT_DATA = {
     "502": ("ICTCLD502_Assessment_Mapping.docx", DATA_502),
     "517": ("ICTICT517_Assessment_Mapping.docx", DATA_517),
 }
-
-# Table indices (zero-based) — confirmed by inspection of the three docx files
-TABLE_AC = 3
-TABLE_PC = 4
-TABLE_PE = 5
-TABLE_KE = 6
-TABLE_FS = 7
-
-# Column indices for the AT columns
-# Tables 3, 5, 6: cols 1,2,3,4,5 = AT1..AT5 (col 0 = description)
-# Table 4 (PC):   cols 2,3,4,5,6 = AT1..AT5 (col 0 = element, col 1 = PC)
-# Table 7 (FS):   cols 3,4,5,6,7 = AT1..AT5 (cols 0/1/2 = skill / PC / description)
-AT_COLS_AC = (1, 2, 3)  # AT1, AT2, AT3 in Table 3
-AT_COLS_PC = (2, 3, 4)
-AT_COLS_PE = (1, 2, 3)
-AT_COLS_KE = (1, 2, 3)
-AT_COLS_FS = (3, 4, 5)
-
-
-def set_cell_text(cell, value: str) -> None:
-    """Replace cell content with `value` while preserving the first paragraph
-    and run structure (so existing formatting carries). If the cell already has
-    non-empty text, leave it untouched (don't overwrite Tim's prior edits).
-    """
-    if cell.text.strip():
-        return  # respect prior content
-    # Clear paragraphs, then write into the first one
-    for p in cell.paragraphs:
-        for r in list(p.runs):
-            r.text = ""
-    if cell.paragraphs:
-        first = cell.paragraphs[0]
-        if first.runs:
-            first.runs[0].text = value
-        else:
-            first.add_run(value)
-    else:
-        cell.add_paragraph(value)
-
-
-def populate_pcs(table, pcs_data: dict, results: list) -> None:
-    """For each data row in Table 4, parse the leading 'X.Y ' from col 1 and
-    look up the mapping. Skip header rows."""
-    for ri, row in enumerate(table.rows):
-        c1 = row.cells[1].text.strip()
-        # The PC text starts with "X.Y " — extract that prefix
-        import re
-        m = re.match(r"^(\d+\.\d+)\b", c1)
-        if not m:
-            continue  # header row or untextual
-        pc_num = m.group(1)
-        if pc_num not in pcs_data:
-            results.append(("PC", pc_num, "NO DATA", None))
-            continue
-        codes = pcs_data[pc_num]
-        for col_idx, at_key in zip(AT_COLS_PC, ("AT1", "AT2", "AT3")):
-            value = codes.get(at_key, "")
-            if value:
-                set_cell_text(row.cells[col_idx], value)
-        results.append(("PC", pc_num, "OK", codes))
-
-
-def populate_positional(table, data_list: list, at_cols, label: str, results: list) -> None:
-    """For tables where each data row maps to the next entry in data_list.
-    Skip the first two rows (header rows) and apply data in order."""
-    data_rows = list(table.rows)[2:]  # rows 0 and 1 are headers
-    if len(data_rows) != len(data_list):
-        results.append((label, "ROW COUNT MISMATCH", f"docx has {len(data_rows)}, data has {len(data_list)}", None))
-        return
-    for i, (row, codes) in enumerate(zip(data_rows, data_list)):
-        for col_idx, at_key in zip(at_cols, ("AT1", "AT2", "AT3")):
-            value = codes.get(at_key, "")
-            if value:
-                set_cell_text(row.cells[col_idx], value)
-        results.append((label, f"#{i+1}", "OK", codes))
-
-
-def populate_fss(table, fss_data: dict, results: list) -> None:
-    """For each data row in Table 7, match col 0 (skill name) against fss_data."""
-    for ri, row in enumerate(table.rows):
-        c0 = row.cells[0].text.strip()
-        if c0 in ("", "Foundation Skills (If specified in the UOC)",
-                  "Skill (Copy and paste these from the UOC)"):
-            continue
-        if c0 not in fss_data:
-            results.append(("FS", c0, "NO DATA", None))
-            continue
-        codes = fss_data[c0]
-        for col_idx, at_key in zip(AT_COLS_FS, ("AT1", "AT2", "AT3")):
-            value = codes.get(at_key, "")
-            if value:
-                set_cell_text(row.cells[col_idx], value)
-        results.append(("FS", c0, "OK", codes))
-
-
-def insert_ac_rows(table, acs_data: list, results: list) -> None:
-    """Populate the AC table (or any split-style table).
-
-    Two cases are handled:
-
-    (a) **Single-block source row** — the table has exactly one data row
-        containing the full AC block joined together (e.g. 401's AC table as
-        shipped from the source UoC). Action: preserve the block row as
-        context; insert one new per-AC row below it for each item in
-        acs_data.
-
-    (b) **Pre-split source rows** — the table already has multiple data rows,
-        one per AC item, with the AT columns empty (typically Tim's prior
-        in-flight editing for 502 and 517). Action: match each acs_data
-        item to an existing row by substring (case-insensitive). Populate
-        the AT columns of the matched row. For any items not matched,
-        append a new row at the end.
-
-    Cell-text preservation: if a cell already has content (e.g. from a
-    prior partial edit), leave it alone — don't overwrite.
-    """
-    data_rows = list(table.rows)[2:]  # skip 2 header rows
-    pre_split = len(data_rows) > 1
-
-    # The "template" row carries the styling for any new rows we insert.
-    # When pre-split, use the last data row as template; when single-block,
-    # use the only data row.
-    template_xml = data_rows[-1]._tr
-    insert_after = template_xml
-
-    matched_row_ids = set()
-
-    for label, codes in acs_data:
-        # When pre-split, first try to match the label against an existing row
-        if pre_split:
-            matched = None
-            for row in data_rows:
-                if id(row._tr) in matched_row_ids:
-                    continue
-                row_text = row.cells[0].text.strip().lower()
-                if label.lower() in row_text:
-                    matched = row
-                    break
-            if matched is not None:
-                matched_row_ids.add(id(matched._tr))
-                for col_idx, at_key in zip(AT_COLS_AC, ("AT1", "AT2", "AT3")):
-                    value = codes.get(at_key, "")
-                    if value:
-                        set_cell_text(matched.cells[col_idx], value)
-                results.append(("AC", label[:60], "MATCHED EXISTING", codes))
-                continue
-            # Fall through to insert if no match
-
-        # Insert a new row using the template
-        new_tr = copy.deepcopy(template_xml)
-        insert_after.addnext(new_tr)
-        insert_after = new_tr  # next row will go after this one
-        # Find the new row by matching XML element identity
-        new_row = None
-        for r in table.rows:
-            if r._tr is new_tr:
-                new_row = r
-                break
-        if new_row is None:
-            results.append(("AC", label[:40], "ROW LOOKUP FAILED", None))
-            continue
-        # Clear col 0 and set to the AC label
-        cell0 = new_row.cells[0]
-        for p in cell0.paragraphs:
-            for r in list(p.runs):
-                r.text = ""
-        # Remove all paragraphs except one, then set its text
-        if cell0.paragraphs:
-            first_p = cell0.paragraphs[0]
-            if first_p.runs:
-                first_p.runs[0].text = label
-            else:
-                first_p.add_run(label)
-            # Remove any additional paragraphs (the AC block had many)
-            for p in cell0.paragraphs[1:]:
-                p._element.getparent().remove(p._element)
-        # Fill AT columns
-        for col_idx, at_key in zip(AT_COLS_AC, ("AT1", "AT2", "AT3")):
-            value = codes.get(at_key, "")
-            if value:
-                # The template row's AT columns may have inherited content;
-                # explicitly clear then set
-                cell = new_row.cells[col_idx]
-                for p in cell.paragraphs:
-                    for r in list(p.runs):
-                        r.text = ""
-                if cell.paragraphs:
-                    first_p = cell.paragraphs[0]
-                    if first_p.runs:
-                        first_p.runs[0].text = value
-                    else:
-                        first_p.add_run(value)
-                for p in cell.paragraphs[1:]:
-                    p._element.getparent().remove(p._element)
-            else:
-                # Clear the cell completely
-                cell = new_row.cells[col_idx]
-                for p in cell.paragraphs:
-                    for r in list(p.runs):
-                        r.text = ""
-                for p in cell.paragraphs[1:]:
-                    p._element.getparent().remove(p._element)
-        results.append(("AC", label[:60], "OK", codes))
-
-
-def process_unit(unit_key: str) -> None:
-    fname, data = UNIT_DATA[unit_key]
-    docx_path = MAPPINGS / fname
-    backup_path = docx_path.with_suffix(".docx.bak")
-
-    # Back up
-    shutil.copy2(docx_path, backup_path)
-    print(f"Backup: {backup_path}")
-
-    doc = Document(str(docx_path))
-
-    results = []
-    populate_pcs(doc.tables[TABLE_PC], data["pcs"], results)
-    if "pes" in data:
-        populate_positional(doc.tables[TABLE_PE], data["pes"], AT_COLS_PE, "PE", results)
-    if "pes_split" in data:
-        # 517 special case: split single-row PE block into per-PE rows
-        insert_ac_rows(doc.tables[TABLE_PE], data["pes_split"], results)
-    populate_positional(doc.tables[TABLE_KE], data["kes"], AT_COLS_KE, "KE", results)
-    populate_fss(doc.tables[TABLE_FS], data["fss"], results)
-    insert_ac_rows(doc.tables[TABLE_AC], data["acs"], results)
-
-    doc.save(str(docx_path))
-
-    # Report
-    print(f"\n--- {fname} ---")
-    ok = sum(1 for r in results if r[2] == "OK")
-    issues = [r for r in results if r[2] != "OK"]
-    print(f"  {ok} rows populated successfully")
-    if issues:
-        print(f"  {len(issues)} issues:")
-        for r in issues:
-            print(f"    {r}")
+# ----------------------------------------------------------------------------
+# docx generation — delegated to the shared engine (scripts/mapping/generate_mapping_doc.py).
+# CL1 has no invertible assessor benchmark, so the engine drives it from the DATA_* dicts above
+# (synthesised into a direct inversion via the CLUSTERS "cl1" source:"data" path). This module now
+# keeps only that data + UNIT_DATA — which the validate-mapping-doc skill reads as CL1's oracle;
+# the docx-building mechanics are the engine's, one code path for all clusters.
+# ----------------------------------------------------------------------------
 
 
 def main():
-    if len(sys.argv) != 2 or sys.argv[1] not in ("401", "502", "517", "all"):
-        print("Usage: populate_mapping_docs.py {401|502|517|all}")
+    if len(sys.argv) == 2 and sys.argv[1] in ("401", "502", "517", "all"):
+        sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "mapping"))
+        import generate_mapping_doc as engine  # noqa: E402
+        only = None if sys.argv[1] == "all" else [UNIT_DATA[sys.argv[1]][0].split("_Assessment_Mapping")[0]]
+        for out in engine.build_cluster("cl1", only=only):
+            print(f"Wrote {out}")
+    else:
+        print("Usage: build_s1_cl1_mapping_docs.py {401|502|517|all}")
         sys.exit(2)
-    targets = ["401", "502", "517"] if sys.argv[1] == "all" else [sys.argv[1]]
-    for t in targets:
-        process_unit(t)
 
 
 if __name__ == "__main__":
