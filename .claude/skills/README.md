@@ -21,9 +21,17 @@ split them — a validator without its engine breaks.
 | [validate-uoc-consolidation](validate-uoc-consolidation/) | 1.0.0 | Prove `consolidated_uoc.md` holds every source item exactly once (MISSING / UNEXPECTED / DUPLICATED). |
 | [validate-at-traceability](validate-at-traceability/) | 1.0.0 | Prove one assessment task's marking criteria each carry a valid UoC tag and every tag resolves. |
 | [validate-cluster-coverage](validate-cluster-coverage/) | 1.0.0 | Prove a cluster's ATs *together* evidence every consolidated item (gaps + phantoms). |
+| [validate-mapping-doc](validate-mapping-doc/) | 1.0.0 | Prove a unit's Assessment Mapping docx is **complete** vs its UoC and **accurate** vs the marking benchmarks. |
 
 **Shared engine — `scripts/`:** `inventory_uoc.py` · `transcribe_uoc.py` · `validate_uoc.py` ·
-`validate_consolidated.py` · `validate_at_traceability.py` · `validate_cluster_coverage.py`.
+`validate_consolidated.py` · `validate_at_traceability.py` · `validate_cluster_coverage.py` ·
+`validate_mapping_doc.py`.
+
+> **`validate-mapping-doc` dependency note:** its **completeness** check is stdlib-only and portable
+> like the rest of the pack. Its **accuracy** cross-check additionally imports the cluster's
+> `scripts/s1_clN/build_s1_clN_mapping_docs.py` (which uses python-docx) to derive the benchmark oracle
+> — so that half is coupled to this repo's generator layout, and is skipped (not failed) where the
+> generator or python-docx is absent. Born here; not yet upstreamed to ClaudePatternsAndSkills.
 
 ## Standalone skills
 
