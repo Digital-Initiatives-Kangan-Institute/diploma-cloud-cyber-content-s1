@@ -74,6 +74,10 @@ RESOURCES = [
     "deploys and then upgrades.",
     "• The approved improvement design and the team's validated implementation (the CloudFormation "
     "change-set applied to the baseline).",
+    "• Assessor reference combined template (the lab-pack improved.yaml) — an optional fallback the "
+    "assessor may supply if a student's AT2 team implementation is not appropriate to deploy in AT3, so "
+    "the individual can deploy and be assessed on their own AT3 work rather than be blocked by the "
+    "team's result.",
     "• The YAT Deployment Report template (intranet Templates section).",
     "• The AWS Academy lab environment specified in the lab-pack, with the console / CLI access and "
     "the resources the deployment requires.",
