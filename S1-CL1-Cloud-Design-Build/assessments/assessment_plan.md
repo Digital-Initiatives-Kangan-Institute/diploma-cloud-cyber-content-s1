@@ -107,8 +107,9 @@ becomes the AT2 brief.
 autoscaling; misnamed "Knowledge Questions" in source but a 6–8h AWS practical with screenshot evidence).
 Contextual reflective questions reframe 401 AT1 Q6–Q12 (the Q12 DNS placeholder bug fixed). **Changes:**
 Part 1.1 abstract requirement-comparisons → YAT-specific choices from the AT1 action plan; Part 1.2 IAM cast
-"software dev team" → YAT ICT staff + MTS consultants + students; web payload kept (generic) or a YAT-LMS
-stub; Part 5.6 feedback routed through YAT's change-management procedure. **Thread:** the AT2 environment is
+"software dev team" → YAT ICT staff + MTS consultants + students; web payload is a generic placeholder page
+served by the app tier (LMS application installation out of scope — YAT in-house); Part 5.6 feedback routed
+through YAT's change-management procedure. **Thread:** the AT2 environment is
 the AT3 starting state.
 
 **AT3** draws from **502 AT2** (all five activities — HA requirements, availability evaluation + SPOFs +
@@ -153,7 +154,7 @@ Condition each environmental requirement discharges.
 | **SR-CL1-02** | The YAT College case study — strategic plan, ICT goals, current ICT environment description, on-prem network diagram, stakeholder hierarchy | AT1, AT2, AT3 | [ICTICT517 AC 1] · [ICTICT517 AC 2] · [ICTICT517 AC 3] · [ICTICT517 AC 5] |
 | **SR-CL1-03** | A superior/stakeholder (the MTS consultant / YAT ICT manager) to role-play the AT1 presentation + the AT3 closure sign-off | AT1, AT3 | [ICTICT517 AC 4] |
 | **SR-CL1-04** | Requirements + data sources to determine user/business requirements (incl. user-access + business protocols) | AT1, AT2, AT3 | [ICTCLD401 AC 4] · [ICTCLD502 AC 3] · [ICTCLD502 AC 5] · [ICTCLD502 AC 8] |
-| **SR-CL1-05** | A web-application deployment payload (generic web service / YAT-LMS stub) deployed in AT2 and hardened in AT3 | AT2, AT3 | — |
+| **SR-CL1-05** | A deployable app-tier web endpoint — a placeholder page served by the app tier (provisioned by the AT3 baseline lab-pack) — sufficient to demonstrate the ALB, health checks and HA failover. The LMS application itself is **out of scope** (YAT in-house; not student-deployed in AT2/AT3) | AT2, AT3 | — |
 | **SR-CL1-06** | The supplied CBA, Draft-Plan and Feedback-Record templates (ICTICT517) | AT1 | — |
 | **SR-CL1-07** | The artefact thread — the AT1 action plan is the AT2 brief; the AT2-built environment is the AT3 starting state | AT2, AT3 | — |
 | **SR-CL1-08** | YAT's documented change-management procedure as the formal closure process (change request, risk assessment, ICT-manager sign-off) | AT3 | — |
@@ -183,7 +184,9 @@ contextual question); keep 517 AT3 Part 1 CBA (already YAT) and the AWS Academy 
 1. **Scenario** — YAT throughout (recommended) vs a reskinned alternative (RTO context close to Tim's
    workplace).
 2. **517 AT5 MCQs** — drop entirely (recommended) or reformulate selectively as contextual AT1 questions.
-3. **AT2 web payload** — keep the public Python sample (`ictcld401-python-app`) or a YAT-LMS stub.
+3. **AT2 web payload** — RESOLVED: the app tier serves a **placeholder page** (via the AT3 baseline
+   lab-pack); LMS application installation is **out of scope** (YAT in-house). No real app/stub is deployed —
+   the AT2/AT3 instruments explicitly exclude application-deployment work.
 4. **Oral Communication sufficiency** — two observation meetings (AT1 presentation + AT3 closure) cover all
    three units' Oral FS; is a third mid-project check-in needed?
 5. **Pre-validation** — run the institutional Pre-Validation Tool over each AT before submission (downstream
