@@ -24,16 +24,16 @@ UoC **taught / developed** in this Topic (all evidenced by Part-B criteria — s
 
 | UoC item | Descriptor | Part-B criterion | Component |
 |---|---|---|---|
-| `[ICTCLD401 PC 4.1]` | Document and communicate work to required personnel | B4 | C1 · C2 |
-| `[ICTICT517 PC 1.4]` | Report on proposed changes, gaps and improvement opportunities to superior (verbal) | B1 | C2 |
-| `[ICTICT517 PC 2.4]` | Provide the documented evaluation to superior and walk through for feedback | B2 | C1 · C2 |
-| `[ICTICT517 PC 3.3]` | Provide action plan to superior; seek feedback and approval (verbal) | B3 | C1 · C2 |
-| `[ICTICT517 FS Oral Communication]` | Plain English, translating technical terms, to articulate ideas/requirements/plans | B7 | C2 |
-| `[ICTCLD502 FS Oral communication]` | Listening/questioning to articulate complex concepts for the intended audience | B9 | C2 · C3 |
-| `[ICTCLD401 PC 4.2]` | Seek and respond to feedback as required (Q&A) | B5 | C3 |
-| `[ICTCLD502 PC 5.2]` | Confirm, seek and respond to feedback with required personnel | B6 | C3 |
-| `[ICTICT517 FS Interact with others]` | Appropriate conventions/protocols; accommodate others; cooperate | B5 · B6 | C3 |
-| `[ICTICT517 FS Oral Communication]` | Elicits information using effective listening and questioning techniques | B8 | C3 |
+| [ICTCLD401 PC 4.1] | Document and communicate work to required personnel | B4 | C1 · C2 |
+| [ICTICT517 PC 1.4] | Report on proposed changes, gaps and improvement opportunities to superior (verbal) | B1 | C2 |
+| [ICTICT517 PC 2.4] | Provide the documented evaluation to superior and walk through for feedback | B2 | C1 · C2 |
+| [ICTICT517 PC 3.3] | Provide action plan to superior; seek feedback and approval (verbal) | B3 | C1 · C2 |
+| [ICTICT517 FS Oral Communication] | Plain English, translating technical terms, to articulate ideas/requirements/plans | B7 | C2 |
+| [ICTCLD502 FS Oral communication] | Listening/questioning to articulate complex concepts for the intended audience | B9 | C2 · C3 |
+| [ICTCLD401 PC 4.2] | Seek and respond to feedback as required (Q&A) | B5 | C3 |
+| [ICTCLD502 PC 5.2] | Confirm, seek and respond to feedback with required personnel | B6 | C3 |
+| [ICTICT517 FS Interact with others] | Appropriate conventions/protocols; accommodate others; cooperate | B5 · B6 | C3 |
+| [ICTICT517 FS Oral Communication] | Elicits information using effective listening and questioning techniques | B8 | C3 |
 
 UoC **applied** here but **produced/taught earlier** (not re-done):
 

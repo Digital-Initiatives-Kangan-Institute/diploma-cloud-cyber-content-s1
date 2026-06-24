@@ -24,12 +24,12 @@ UoC **taught / developed** in this Topic:
 
 | UoC item | Descriptor | Component |
 |---|---|---|
-| `[ICTICT517 PC 2.3]` | Prioritise proposed changes to refine opportunities and assist in scheduling implementation | C1 |
-| `[ICTICT517 PE 4]` | Determine and prioritise proposed changes to meet organisational needs | C1 |
-| `[ICTICT517 PC 3.1]` | Develop action plan to implement proposed changes including prioritised schedule and consistency with organisational policy and procedures | C2 |
-| `[ICTICT517 PC 3.2]` | Detail standards, targets and implementation methods in action plan | C2 |
-| `[ICTICT517 PE 6]` | Develop an action plan for implementation | C2 |
-| `[ICTICT517 PC 3.3]` | Provide action plan to superior for feedback and approval | C3 (the written ask in §11) |
+| [ICTICT517 PC 2.3] | Prioritise proposed changes to refine opportunities and assist in scheduling implementation | C1 |
+| [ICTICT517 PE 4] | Determine and prioritise proposed changes to meet organisational needs | C1 |
+| [ICTICT517 PC 3.1] | Develop action plan to implement proposed changes including prioritised schedule and consistency with organisational policy and procedures | C2 |
+| [ICTICT517 PC 3.2] | Detail standards, targets and implementation methods in action plan | C2 |
+| [ICTICT517 PE 6] | Develop an action plan for implementation | C2 |
+| [ICTICT517 PC 3.3] | Provide action plan to superior for feedback and approval | C3 (the written ask in §11) |
 
 UoC **applied** here but **taught/produced earlier** (not re-done):
 

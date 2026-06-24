@@ -31,11 +31,11 @@ UoC **taught / developed** in this Topic:
 
 | UoC item | Descriptor | Component |
 |---|---|---|
-| `[ICTCLD401 PC 4.1]` | Document and communicate work to required personnel | C2 |
-| `[ICTCLD401 PC 4.2]` | Seek and respond to feedback as required | C4 |
-| `[ICTCLD401 PC 4.3]` | Save and store user documentation according to organisational policies and procedures | C1 |
-| `[ICTCLD401 KE]` | The unit's knowledge evidence — evidenced **contextually** in the report (shared responsibility, managed/self-hosted, storage/scaling/db options, cost models) | C3 |
-| `[ICTCLD401 PE 1 · PE 2]` | The built artefacts are the evidence — assembled into the report's appendices here | C1 |
+| [ICTCLD401 PC 4.1] | Document and communicate work to required personnel | C2 |
+| [ICTCLD401 PC 4.2] | Seek and respond to feedback as required | C4 |
+| [ICTCLD401 PC 4.3] | Save and store user documentation according to organisational policies and procedures | C1 |
+| [ICTCLD401 KE 4, 5, 6, 7] | The unit's knowledge evidence — evidenced **contextually** in the report (shared responsibility, managed/self-hosted, storage/scaling/db options, cost models) | C3 |
+| [ICTCLD401 PE 1 · PE 2] | The built artefacts are the evidence — assembled into the report's appendices here | C1 |
 | `[ICTCLD502]` | Documentation of the implemented architecture (partial — AT2 portion) | C2 *(confirm)* |
 
 > **AT2 marking home:** the **Deployment Report as a whole** (every criterion is evidenced in it); element 4 (documentation/feedback/storage) is *developed* here. Report sections **§1–§7 + Appendices A/B/C**. AT2 build-topic refs **T15 (evidence capture) · T16 (report writing) · T17 (contextual KE) · T18 (reflection)**.

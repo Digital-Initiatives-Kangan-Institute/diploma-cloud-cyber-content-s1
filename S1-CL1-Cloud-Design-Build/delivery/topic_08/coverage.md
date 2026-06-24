@@ -35,19 +35,19 @@ UoC **taught / developed** in this Topic:
 
 | UoC item | Descriptor | Component |
 |---|---|---|
-| `[ICTCLD401 PC 2.3]` | Create virtual machine according to business processing and operating system requirements | C1 |
-| `[ICTCLD401 PC 2.4]` | Define, add and expand storage on virtual machine | C1 |
-| `[ICTCLD401 PC 2.5]` | Deploy a managed database within virtual network | C3 |
-| `[ICTCLD401 PC 3.1]` | Configure and apply autoscaling to virtual machines to scale by business metrics | C2 |
-| `[ICTCLD401 PC 3.2]` | Test automatic scaling and fix errors as required | C2 |
-| `[ICTCLD401 PC 2.6]` | Test access between resources within virtual network and fix errors (app→db portion) | C1 · C3 *(completes T7)* |
-| `[ICTCLD401 KE]` | VM sizing — CPU, memory, storage, network bandwidth | C1 |
-| `[ICTCLD401 KE]` | Virtual vs physical machines | C1 *(primer)* |
-| `[ICTCLD401 KE]` | Load balancing and autoscaling; vertical vs horizontal scaling | C2 |
-| `[ICTCLD401 KE]` | Relational / data-warehouse / NoSQL; self-hosted, managed, cloud-native databases | C3 |
-| `[ICTCLD401 KE]` | Storage options — block, object, archive, network filesystems | C1 (block) · C4 (object/archive) |
-| `[ICTCLD401 KE]` | Storage backups and lifecycle | C3 (RDS backups) · C4 (S3 lifecycle) |
-| `[ICTCLD401 PE]` | **Configure compute, storage, database and autoscaling resources within a virtual network** | C1–C4 *(core PE)* |
+| [ICTCLD401 PC 2.3] | Create virtual machine according to business processing and operating system requirements | C1 |
+| [ICTCLD401 PC 2.4] | Define, add and expand storage on virtual machine | C1 |
+| [ICTCLD401 PC 2.5] | Deploy a managed database within virtual network | C3 |
+| [ICTCLD401 PC 3.1] | Configure and apply autoscaling to virtual machines to scale by business metrics | C2 |
+| [ICTCLD401 PC 3.2] | Test automatic scaling and fix errors as required | C2 |
+| [ICTCLD401 PC 2.6] | Test access between resources within virtual network and fix errors (app→db portion) | C1 · C3 *(completes T7)* |
+| [ICTCLD401 KE 5] | VM sizing — CPU, memory, storage, network bandwidth | C1 |
+| [ICTCLD401 KE 6] | Virtual vs physical machines | C1 *(primer)* |
+| [ICTCLD401 KE 5, 6] | Load balancing and autoscaling; vertical vs horizontal scaling | C2 |
+| [ICTCLD401 KE 6] | Relational / data-warehouse / NoSQL; self-hosted, managed, cloud-native databases | C3 |
+| [ICTCLD401 KE 6] | Storage options — block, object, archive, network filesystems | C1 (block) · C4 (object/archive) |
+| [ICTCLD401 KE 5] | Storage backups and lifecycle | C3 (RDS backups) · C4 (S3 lifecycle) |
+| [ICTCLD401 PE 2] | **Configure compute, storage, database and autoscaling resources within a virtual network** | C1–C4 *(core PE)* |
 
 > **AT2 marking home: A3 (workload-tier build narrative)** *(confirm — Topic 6 = A2 foundation; this is the workload tier)*. AT2 Deployment Report sections **§4.5 Compute · §4.6 Load balancing · §4.7 Database · §4.8 Storage**. AT2 build-topic refs **T6 (EC2) · T7 (ALB+ASG) · T8 (RDS) · T9 (S3)**.
 

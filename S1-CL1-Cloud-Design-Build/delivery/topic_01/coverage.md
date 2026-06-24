@@ -24,14 +24,14 @@ Knowledge Evidence **taught / developed** in this Topic:
 
 | UoC item | Descriptor | Component |
 |---|---|---|
-| `[ICTCLD401 KE 11]` | Cloud models — on-premises / private / hybrid / public | C1 |
-| `[ICTCLD401 KE 3]` | Principles and functions of cloud computing solutions and technologies, incl. IaaS / PaaS / SaaS | C2 |
-| `[ICTCLD401 KE 2]` | Industry standard hardware and software products | C3 |
-| `[ICTCLD502 KE 2]` | Industry standard hardware and software products | C3 |
-| `[ICTCLD401 KE 1]` | Industry technology standards | C4 |
-| `[ICTCLD502 KE 1]` | Industry technology standards | C4 |
-| `[ICTCLD401 KE 4]` | Cost models and cloud economic theories | C5 |
-| `[ICTCLD502 KE 3]` | Cloud cost models and scalability | C5 |
+| [ICTCLD401 KE 11] | Cloud models — on-premises / private / hybrid / public | C1 |
+| [ICTCLD401 KE 3] | Principles and functions of cloud computing solutions and technologies, incl. IaaS / PaaS / SaaS | C2 |
+| [ICTCLD401 KE 2] | Industry standard hardware and software products | C3 |
+| [ICTCLD502 KE 2] | Industry standard hardware and software products | C3 |
+| [ICTCLD401 KE 1] | Industry technology standards | C4 |
+| [ICTCLD502 KE 1] | Industry technology standards | C4 |
+| [ICTCLD401 KE 4] | Cost models and cloud economic theories | C5 |
+| [ICTCLD502 KE 3] | Cloud cost models and scalability | C5 |
 
 > C1–C5 are simply the things this Topic covers. These UoC items are **taught** here but formally **evidenced for assessment** in AT1 Appendix 2 (§2 below) — Topic 1 *develops* the UoC, the AT *evidences* it.
 

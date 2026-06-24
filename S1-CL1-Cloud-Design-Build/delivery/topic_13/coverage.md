@@ -30,15 +30,15 @@ UoC **taught / developed** in this Topic:
 
 | UoC item | Descriptor | Component |
 |---|---|---|
-| `[ICTCLD502 PC 4.1]` | Implement architecture design in cloud environment | C1 |
-| `[ICTCLD502 PC 4.2]` | Demonstrate connectivity between resources at all tiers | C1 |
-| `[ICTCLD502 PC 4.3]` | Monitor and measure availability of resources | C2 |
-| `[ICTCLD502 PC 4.4]` | Simulate failures of component and confirm infrastructure is fault tolerant | C2 |
-| `[ICTCLD502 PC 4.5]` | Simulate resizing components likely to impact performance and measure availability impact | C2 |
-| `[ICTCLD502 PC 4.6]` | Compare and document simulation findings according to documented design | C3 |
-| `[ICTCLD502 PC 5.1]` | Adjust and improve availability of architecture according to simulations as required | C3 |
-| `[ICTCLD502 PE 1]` | Design and implement at least one fault-tolerant cloud infrastructure resilient to networking/compute/storage/database/data-centre failures | C1 · C2 *(the implement + prove portion)* |
-| `[ICTCLD401 PC 3.2]` | Test automatic scaling and fix errors (applied under load/resize) | C2 *(applied)* |
+| [ICTCLD502 PC 4.1] | Implement architecture design in cloud environment | C1 |
+| [ICTCLD502 PC 4.2] | Demonstrate connectivity between resources at all tiers | C1 |
+| [ICTCLD502 PC 4.3] | Monitor and measure availability of resources | C2 |
+| [ICTCLD502 PC 4.4] | Simulate failures of component and confirm infrastructure is fault tolerant | C2 |
+| [ICTCLD502 PC 4.5] | Simulate resizing components likely to impact performance and measure availability impact | C2 |
+| [ICTCLD502 PC 4.6] | Compare and document simulation findings according to documented design | C3 |
+| [ICTCLD502 PC 5.1] | Adjust and improve availability of architecture according to simulations as required | C3 |
+| [ICTCLD502 PE 1] | Design and implement at least one fault-tolerant cloud infrastructure resilient to networking/compute/storage/database/data-centre failures | C1 · C2 *(the implement + prove portion)* |
+| [ICTCLD401 PC 3.2] | Test automatic scaling and fix errors (applied under load/resize) | C2 *(applied)* |
 
 > **AT3 marking home: Part B — implementation + simulation window.** This Topic develops the skills assessed in AT3 Part B (the ~3.5 h maintenance-window implementation + the failure/resize simulations). AT3 build-topic refs **T9–T14** (implement · connectivity · availability measurement · failure sim · resize sim · compare/test).
 

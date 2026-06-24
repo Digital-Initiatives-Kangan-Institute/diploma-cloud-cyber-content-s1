@@ -34,13 +34,13 @@ UoC **taught / developed** in this Topic:
 
 | UoC item | Descriptor | Component |
 |---|---|---|
-| `[ICTCLD401 PC 2.2]` | Create virtual multi-tier network to support core services and autoscaling | C1 |
-| `[ICTCLD401 PC 2.6]` | Test external network access and access between resources within virtual network and fix errors | C3 *(introduced; completed Topic 8/9)* |
-| `[ICTCLD401 KE]` | Functions/features of networking options — **virtual networks and traffic routing** | C1 |
-| `[ICTCLD401 KE]` | Security mechanisms — **securities as it applies to limiting network traffic within virtual networks** | C2 |
-| `[ICTCLD401 KE]` | **Purpose of domain name system (DNS)** required to connect remote servers when web browsing | C3 |
-| `[ICTCLD401 PE 1]` | Build at least one simple **virtual network** capable of supporting a workload (the network portion) | C1 · C2 |
-| `[ICTCLD401 PE 3]` | Conduct simple tests to confirm access to resources (network reachability portion) | C3 |
+| [ICTCLD401 PC 2.2] | Create virtual multi-tier network to support core services and autoscaling | C1 |
+| [ICTCLD401 PC 2.6] | Test external network access and access between resources within virtual network and fix errors | C3 *(introduced; completed Topic 8/9)* |
+| [ICTCLD401 KE 5] | Functions/features of networking options — **virtual networks and traffic routing** | C1 |
+| [ICTCLD401 KE 9] | Security mechanisms — **securities as it applies to limiting network traffic within virtual networks** | C2 |
+| [ICTCLD401 KE 10] | **Purpose of domain name system (DNS)** required to connect remote servers when web browsing | C3 |
+| [ICTCLD401 PE 1] | Build at least one simple **virtual network** capable of supporting a workload (the network portion) | C1 · C2 |
+| [ICTCLD401 PE 3] | Conduct simple tests to confirm access to resources (network reachability portion) | C3 |
 
 > AT2 criterion **A2** is the marking home (per Topic 6, **A2 bundles IAM + network + security**; Topic 6 took IAM + shared responsibility, **Topic 7 takes network + security groups + DNS**). AT2 Deployment Report section **§4.2 (VPC / subnets / security groups)** + the DNS portion of §4. Maps to the AT2 build-topic refs **T4 (VPC) · T5 (security groups) · T12 (DNS)**.
 

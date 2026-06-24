@@ -30,12 +30,12 @@ UoC **taught / developed** in this Topic:
 
 | UoC item | Descriptor | Component |
 |---|---|---|
-| `[ICTCLD502 PC 3.5]` | Document architecture design (the implemented HA design, as-built) | C1 |
-| `[ICTCLD502 PC 4.6]` | Compare and document simulation findings according to documented design | C1 *(written up in §6; produced in Topic 13)* |
-| `[ICTCLD502 PC 5.2]` | Confirm, seek and respond to feedback with required personnel | C3 |
-| `[ICTCLD502 PC 5.3]` | Obtain final sign off from required personnel | C3 |
-| `[ICTCLD502 KE]` | The unit's knowledge evidence — evidenced **contextually** in §8 (availability, fault tolerance, recovery objectives, redundancy) | C2 |
-| `[ICTCLD502 PE 1]` | The fault-tolerant infrastructure — its design, implementation and validation documented here | C1 |
+| [ICTCLD502 PC 3.5] | Document architecture design (the implemented HA design, as-built) | C1 |
+| [ICTCLD502 PC 4.6] | Compare and document simulation findings according to documented design | C1 *(written up in §6; produced in Topic 13)* |
+| [ICTCLD502 PC 5.2] | Confirm, seek and respond to feedback with required personnel | C3 |
+| [ICTCLD502 PC 5.3] | Obtain final sign off from required personnel | C3 |
+| [ICTCLD502 KE 4] | The unit's knowledge evidence — evidenced **contextually** in §8 (availability, fault tolerance, recovery objectives, redundancy) | C2 |
+| [ICTCLD502 PE 1] | The fault-tolerant infrastructure — its design, implementation and validation documented here | C1 |
 
 > **AT3 marking home:** the **HA Deployment Report as a whole** (incl. §6 simulation findings, §8 KE, Appendix D reflection) + the closure (feedback + sign-off). AT3 build-topic refs **T15–T18** (evidence capture · deliverable writing · contextual KE · reflection) + element 5 closure.
 

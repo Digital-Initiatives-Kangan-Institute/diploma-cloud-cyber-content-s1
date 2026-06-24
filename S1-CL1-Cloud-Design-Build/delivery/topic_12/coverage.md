@@ -30,17 +30,17 @@ UoC **taught / developed** in this Topic:
 
 | UoC item | Descriptor | Component |
 |---|---|---|
-| `[ICTCLD502 PC 2.1]` | Review architecture of a multi-tier application and identify HA requirements | C1 *(the single-AZ baseline is the architecture reviewed)* |
-| `[ICTCLD502 PC 2.2]` | Identify any single points of failure | C1 |
-| `[ICTCLD502 PC 2.3]` | Estimate recovery objectives for components and overall architecture | C1 |
-| `[ICTCLD502 PC 2.4]` | Determine components that must scale vertically and the impact on availability | C1 |
-| `[ICTCLD502 PC 2.5]` | Document architecture review findings | C1 → C3 |
-| `[ICTCLD502 PC 3.1]` | Design equivalent architecture for high availability using cloud services | C2 |
-| `[ICTCLD502 PC 3.2]` | Identify and remove single points of failure as required | C2 |
-| `[ICTCLD502 PC 3.3]` | Estimate recovery objectives for each component and overall architecture | C2 |
-| `[ICTCLD502 PC 3.4]` | Determine components that must scale vertically and the impact on availability | C2 |
-| `[ICTCLD502 PC 3.5]` | Document architecture design | C3 |
-| `[ICTCLD502 KE]` | HA design — reliability, redundancy across AZs, LB + autoscaling, Multi-AZ, recovery objectives | C1 · C2 · C3 |
+| [ICTCLD502 PC 2.1] | Review architecture of a multi-tier application and identify HA requirements | C1 *(the single-AZ baseline is the architecture reviewed)* |
+| [ICTCLD502 PC 2.2] | Identify any single points of failure | C1 |
+| [ICTCLD502 PC 2.3] | Estimate recovery objectives for components and overall architecture | C1 |
+| [ICTCLD502 PC 2.4] | Determine components that must scale vertically and the impact on availability | C1 |
+| [ICTCLD502 PC 2.5] | Document architecture review findings | C1 → C3 |
+| [ICTCLD502 PC 3.1] | Design equivalent architecture for high availability using cloud services | C2 |
+| [ICTCLD502 PC 3.2] | Identify and remove single points of failure as required | C2 |
+| [ICTCLD502 PC 3.3] | Estimate recovery objectives for each component and overall architecture | C2 |
+| [ICTCLD502 PC 3.4] | Determine components that must scale vertically and the impact on availability | C2 |
+| [ICTCLD502 PC 3.5] | Document architecture design | C3 |
+| [ICTCLD502 KE 4, 8] | HA design — reliability, redundancy across AZs, LB + autoscaling, Multi-AZ, recovery objectives | C1 · C2 · C3 |
 
 > **AT3 marking home: Part A — the HA Design document.** This Topic develops the skills assessed in AT3 Part A (502 elements 2–3). AT3 build-topic refs **T5–T8** (baseline review & SPOFs · design the HA-equivalent · sequencing · simulation planning).
 

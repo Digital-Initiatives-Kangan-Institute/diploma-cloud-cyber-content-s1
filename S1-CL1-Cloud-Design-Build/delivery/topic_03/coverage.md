@@ -24,12 +24,12 @@ UoC **taught / developed** in this Topic:
 
 | UoC item | Descriptor | Component |
 |---|---|---|
-| `[ICTICT517 PC 2.1]` | Evaluate impact of proposed changes to ICT systems and products against strategic objectives of organisation | C1 (impact) · C3 (risk/intangibles) |
-| `[ICTICT517 PC 2.2]` | Evaluate the difficulty of implementing proposed changes to ICT systems and products | C1 |
-| `[ICTICT517 PE 5]` | Evaluate the difficulty of implementing proposed changes | C1 |
-| `[ICTICT517 KE 2]` | Methods of evaluation and planning approaches to technical problems and strategic objectives | C1 |
-| `[ICTICT517 KE 3]` | Methods of evaluation of competing and complementary internal and external ICT systems and products | C1 |
-| `[ICTICT517 FS Numeracy]` | Interprets and uses numerical information (the multi-year CBA) | C2 |
+| [ICTICT517 PC 2.1] | Evaluate impact of proposed changes to ICT systems and products against strategic objectives of organisation | C1 (impact) · C3 (risk/intangibles) |
+| [ICTICT517 PC 2.2] | Evaluate the difficulty of implementing proposed changes to ICT systems and products | C1 |
+| [ICTICT517 PE 5] | Evaluate the difficulty of implementing proposed changes | C1 |
+| [ICTICT517 KE 2] | Methods of evaluation and planning approaches to technical problems and strategic objectives | C1 |
+| [ICTICT517 KE 3] | Methods of evaluation of competing and complementary internal and external ICT systems and products | C1 |
+| [ICTICT517 FS Numeracy] | Interprets and uses numerical information (the multi-year CBA) | C2 |
 
 UoC **applied** here but **taught earlier** (not re-taught):
 

@@ -30,13 +30,13 @@ UoC **taught / developed** in this Topic:
 
 | UoC item | Descriptor | Component |
 |---|---|---|
-| `[ICTCLD401 KE]` | Performance monitoring and alarms | C1 |
-| `[ICTCLD401 PC 2.6]` | Test external/internal access and fix errors (validated against the design) | C2 *(developed T7–T8)* |
-| `[ICTCLD401 PC 3.2]` | Test automatic scaling and fix errors (validated) | C2 *(developed T8)* |
-| `[ICTCLD401 PC 1.3]` | Select best cloud computing solution and service according to business requirements | C3 |
-| `[ICTCLD401 PC 1.8]` | Define workload according to business requirements and needs | C3 *(the workload the decisions are justified against)* |
-| `[ICTCLD401 KE]` | Functions/features/uses of compute, storage, scaling, database **options** (the basis for choosing) | C3 |
-| `[ICTCLD401 KE]` | Cost models and cloud economics (the cost basis of a decision, e.g. SQL licence-included vs BYOL) | C3 |
+| [ICTCLD401 KE 5] | Performance monitoring and alarms | C1 |
+| [ICTCLD401 PC 2.6] | Test external/internal access and fix errors (validated against the design) | C2 *(developed T7–T8)* |
+| [ICTCLD401 PC 3.2] | Test automatic scaling and fix errors (validated) | C2 *(developed T8)* |
+| [ICTCLD401 PC 1.3] | Select best cloud computing solution and service according to business requirements | C3 |
+| [ICTCLD401 PC 1.8] | Define workload according to business requirements and needs | C3 *(the workload the decisions are justified against)* |
+| [ICTCLD401 KE 6] | Functions/features/uses of compute, storage, scaling, database **options** (the basis for choosing) | C3 |
+| [ICTCLD401 KE 4] | Cost models and cloud economics (the cost basis of a decision, e.g. SQL licence-included vs BYOL) | C3 |
 | `[ICTCLD502]` | Monitor/measure resources (baseline) — *partial; full availability monitoring is AT3* | C1 *(confirm)* |
 
 > **AT2 marking home: A4 (justification of configuration decisions) + the monitoring/validation portion of the build narrative** *(confirm criterion letters against the AT2 assessor doc)*. Deployment Report sections **§4.10 Monitoring · §4.13 Recovery objectives · §4.16 Configuration decisions (C1–C8, justified)**. AT2 build-topic refs **T10 (CloudWatch) · T13 (config-decision justification) · T14 (testing/validation)**.

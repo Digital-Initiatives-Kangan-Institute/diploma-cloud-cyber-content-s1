@@ -22,12 +22,12 @@ UoC **taught / developed** in this Topic:
 
 | UoC item | Descriptor | Component |
 |---|---|---|
-| `[ICTICT517 PC 1.1]` | Analyse and document current strategic plan against the industry environment and organisational objectives | C1 |
-| `[ICTICT517 PE 1]` | Interpret a strategic plan and objectives | C1 |
-| `[ICTICT517 PC 1.2]` | Determine and document current state of ICT systems and practices | C2 |
-| `[ICTICT517 PE 2]` | Evaluate the current state of ICT | C2 |
-| `[ICTICT517 PC 1.3]` | Compare strategic plan against current state and determine gaps | C3 |
-| `[ICTICT517 PE 3]` | Identify gaps and opportunities; evaluate organisational impact | C3 |
+| [ICTICT517 PC 1.1] | Analyse and document current strategic plan against the industry environment and organisational objectives | C1 |
+| [ICTICT517 PE 1] | Interpret a strategic plan and objectives | C1 |
+| [ICTICT517 PC 1.2] | Determine and document current state of ICT systems and practices | C2 |
+| [ICTICT517 PE 2] | Evaluate the current state of ICT | C2 |
+| [ICTICT517 PC 1.3] | Compare strategic plan against current state and determine gaps | C3 |
+| [ICTICT517 PE 3] | Identify gaps and opportunities; evaluate organisational impact | C3 |
 
 > Cloud-knowledge from Topic 1 is **applied** here (industry context in C1) but not re-taught.
 

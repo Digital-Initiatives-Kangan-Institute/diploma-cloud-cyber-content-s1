@@ -24,16 +24,16 @@ UoC **taught / developed** in this Topic:
 
 | UoC item | Descriptor | Component |
 |---|---|---|
-| `[ICTCLD401 PC 1.4]` | Access account on cloud platform according to business requirements | C1 |
-| `[ICTCLD401 PC 1.2]` | Identify impact of shared security responsibility models | C3 |
-| `[ICTCLD502 PC 1.3]` | Identify level of shared security responsibility models according to business needs | C3 |
-| `[ICTCLD401 PC 1.5]` | Identify user access protocols and policies | C2 |
-| `[ICTCLD401 PC 1.6]` | Configure access functions — users, groups, required permissions | C2 |
-| `[ICTCLD401 PC 1.7]` | Identify and assign security responsibilities per policies/protocols/work function | C2 · C3 |
-| `[ICTCLD401 PC 2.1]` | Create users and groups to create and manage infrastructure | C2 |
-| `[ICTCLD401 KE 7]` | User, business and vendor responsibilities under shared security models | C3 |
-| `[ICTCLD401 KE 8]` | User access protocols and policies per hierarchy and job function | C2 |
-| `[ICTCLD401 PE 1 · PE 2]` | The built artefacts are the evidence (foundation-tier portion) — captured here | C1 |
+| [ICTCLD401 PC 1.4] | Access account on cloud platform according to business requirements | C1 |
+| [ICTCLD401 PC 1.2] | Identify impact of shared security responsibility models | C3 |
+| [ICTCLD502 PC 1.3] | Identify level of shared security responsibility models according to business needs | C3 |
+| [ICTCLD401 PC 1.5] | Identify user access protocols and policies | C2 |
+| [ICTCLD401 PC 1.6] | Configure access functions — users, groups, required permissions | C2 |
+| [ICTCLD401 PC 1.7] | Identify and assign security responsibilities per policies/protocols/work function | C2 · C3 |
+| [ICTCLD401 PC 2.1] | Create users and groups to create and manage infrastructure | C2 |
+| [ICTCLD401 KE 7] | User, business and vendor responsibilities under shared security models | C3 |
+| [ICTCLD401 KE 8] | User access protocols and policies per hierarchy and job function | C2 |
+| [ICTCLD401 PE 1 · PE 2] | The built artefacts are the evidence (foundation-tier portion) — captured here | C1 |
 
 > AT2 criterion **A2** (Foundation-tier build narrative: IAM, network, security) is the marking home for most of these. **A2 bundles IAM + network + security**; this Topic takes **IAM + shared responsibility**, and **network + security groups go to Topic 7**. *(Confirm this split.)*
 

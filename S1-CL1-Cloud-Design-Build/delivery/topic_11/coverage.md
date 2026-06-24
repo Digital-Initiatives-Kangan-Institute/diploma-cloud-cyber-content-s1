@@ -32,12 +32,12 @@ UoC **taught / developed** in this Topic:
 
 | UoC item | Descriptor | Component |
 |---|---|---|
-| `[ICTCLD502 PC 1.1]` | Determine reliability, recoverability and service levels required for application | C1 |
-| `[ICTCLD502 PC 1.2]` | Determine cloud infrastructure according to business needs | C1 |
-| `[ICTCLD502 PC 2.2]` | Identify any single points of failure | C2 *(concept; applied to the baseline in Topic 12)* |
-| `[ICTCLD502 PC 2.3]` | Estimate recovery objectives for components and overall architecture | C2 *(concept)* |
-| `[ICTCLD502 PC 2.4]` | Determine components that must scale vertically and the impact on availability | C2 *(concept)* |
-| `[ICTCLD502 KE]` | HA concepts — fault tolerance, redundancy, availability zones, load balancing, autoscaling, Multi-AZ, failover | C1 · C2 · C3 |
+| [ICTCLD502 PC 1.1] | Determine reliability, recoverability and service levels required for application | C1 |
+| [ICTCLD502 PC 1.2] | Determine cloud infrastructure according to business needs | C1 |
+| [ICTCLD502 PC 2.2] | Identify any single points of failure | C2 *(concept; applied to the baseline in Topic 12)* |
+| [ICTCLD502 PC 2.3] | Estimate recovery objectives for components and overall architecture | C2 *(concept)* |
+| [ICTCLD502 PC 2.4] | Determine components that must scale vertically and the impact on availability | C2 *(concept)* |
+| [ICTCLD502 KE 4, 7, 8] | HA concepts — fault tolerance, redundancy, availability zones, load balancing, autoscaling, Multi-AZ, failover | C1 · C2 · C3 |
 | `[ICTCLD401 PC 1.2 / KE]` | Shared security responsibility (applied at the HA layer) | C1 *(light; taught in Topic 6)* |
 
 > **AT3 marking home:** the concepts here are *examined through* AT3 Part A (the HA Design — Topic 12) and Part B (implement/simulate — Topic 13); Topic 11 itself is **teach + light activity**, not a graded deliverable. AT3 build-topic refs **T1–T4** (HA fundamentals · reliability/SLAs · scaling · LB+autoscaling).
