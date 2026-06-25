@@ -225,8 +225,32 @@ def placeholder(slide, l, t, w, h, label, accent=GOLD_DK):
     _run(p3, label, 12, GREY1, italic=True, font=FONT_LT)
 
 
+def place_image(slide, l, t, w, h, png_path):
+    """Drop a real PNG into the (l,t,w,h) box — aspect-fit and centred (no distortion). Used by the
+    deck builder to place generated diagrams (draw-diagram) / images in-pipeline instead of a
+    placeholder. Native size comes from the file; we scale to fit and centre within the box."""
+    pic = slide.shapes.add_picture(str(png_path), l, t)
+    box_w, box_h = int(w), int(h)
+    scale = min(box_w / pic.width, box_h / pic.height)
+    nw, nh = int(pic.width * scale), int(pic.height * scale)
+    pic.width, pic.height = nw, nh
+    pic.left = int(l) + (box_w - nw) // 2
+    pic.top = int(t) + (box_h - nh) // 2
+    return pic
+
+
+def _image(s, l, t, w, h, img, accent):
+    """Place a real image when `img` is a dict carrying a usable `path`; otherwise emit a labelled
+    placeholder. `img` may be a plain label string (always a placeholder) or {"path", "label"}."""
+    if isinstance(img, dict) and img.get("path"):
+        return place_image(s, l, t, w, h, img["path"])
+    label = img.get("label", "") if isinstance(img, dict) else img
+    return placeholder(s, l, t, w, h, label, accent)
+
+
 def visual_slide(prs, pageno, title, kicker, bullets, images, accent=GOLD):
-    """Content slide with 0..3 labelled image placeholders + bullets."""
+    """Content slide with 0..3 images + bullets. Each image is a label string (-> placeholder) or a
+    dict {"path","label"} (-> the real picture placed in-pipeline, else placeholder)."""
     s = _title_block(prs, title, kicker, accent)
     n = len(images)
     if n == 0:
@@ -236,9 +260,9 @@ def visual_slide(prs, pageno, title, kicker, bullets, images, accent=GOLD):
         if bullets:
             tb, tf = _box(s, Inches(0.72), Inches(1.9), Inches(6.0), Inches(4.7))
             _bullets(tf, bullets, base_size=17)
-            placeholder(s, Inches(7.0), Inches(1.95), Inches(5.6), Inches(4.4), images[0], accent)
+            _image(s, Inches(7.0), Inches(1.95), Inches(5.6), Inches(4.4), images[0], accent)
         else:
-            placeholder(s, Inches(2.7), Inches(1.95), Inches(7.9), Inches(4.5), images[0], accent)
+            _image(s, Inches(2.7), Inches(1.95), Inches(7.9), Inches(4.5), images[0], accent)
     elif n == 2:
         if bullets:
             tb, tf = _box(s, Inches(0.72), Inches(1.85), Inches(11.9), Inches(1.3))
@@ -246,8 +270,8 @@ def visual_slide(prs, pageno, title, kicker, bullets, images, accent=GOLD):
             ytop = Inches(3.35)
         else:
             ytop = Inches(2.1)
-        placeholder(s, Inches(0.9), ytop, Inches(5.5), Inches(3.3), images[0], accent)
-        placeholder(s, Inches(6.9), ytop, Inches(5.5), Inches(3.3), images[1], accent)
+        _image(s, Inches(0.9), ytop, Inches(5.5), Inches(3.3), images[0], accent)
+        _image(s, Inches(6.9), ytop, Inches(5.5), Inches(3.3), images[1], accent)
     else:  # 3 across
         if bullets:
             tb, tf = _box(s, Inches(0.72), Inches(1.85), Inches(11.9), Inches(1.0))
@@ -255,8 +279,8 @@ def visual_slide(prs, pageno, title, kicker, bullets, images, accent=GOLD):
             ytop = Inches(3.0)
         else:
             ytop = Inches(2.2)
-        for x, lab in zip([Inches(0.72), Inches(4.42), Inches(8.12)], images):
-            placeholder(s, x, ytop, Inches(3.6), Inches(3.4), lab, accent)
+        for x, img in zip([Inches(0.72), Inches(4.42), Inches(8.12)], images):
+            _image(s, x, ytop, Inches(3.6), Inches(3.4), img, accent)
     _footer(s, pageno, accent=accent)
     return s
 

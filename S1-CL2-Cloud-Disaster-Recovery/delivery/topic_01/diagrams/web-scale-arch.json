@@ -1,0 +1,22 @@
+{
+  "title": "Target web-scale architecture",
+  "nodes": [
+    {"id": "users", "label": "Global users\n(anonymous, read-heavy)", "row": 0, "col": 1, "fill": "grey"},
+    {"id": "s3",    "label": "S3\n(static assets)",                  "row": 1, "col": 0, "fill": "amber"},
+    {"id": "edge",  "label": "CloudFront + WAF\n(CDN edge · DDoS/bot)", "row": 1, "col": 1, "fill": "blue"},
+    {"id": "alb",   "label": "Application\nLoad Balancer",           "row": 2, "col": 1, "fill": "blue"},
+    {"id": "asg",   "label": "Auto Scaling group\n(app tier · multi-AZ)", "row": 3, "col": 1, "fill": "green"},
+    {"id": "cache", "label": "ElastiCache\n(in-memory)",            "row": 3, "col": 2, "fill": "purple"},
+    {"id": "rds",   "label": "RDS\n(Multi-AZ relational)",          "row": 4, "col": 0, "fill": "amber"},
+    {"id": "ddb",   "label": "DynamoDB\n(NoSQL)",                    "row": 4, "col": 2, "fill": "amber"}
+  ],
+  "edges": [
+    {"from": "users", "to": "edge", "label": ""},
+    {"from": "edge",  "to": "s3",   "label": "static"},
+    {"from": "edge",  "to": "alb",  "label": "dynamic"},
+    {"from": "alb",   "to": "asg",  "label": ""},
+    {"from": "asg",   "to": "cache","label": ""},
+    {"from": "asg",   "to": "rds",  "label": ""},
+    {"from": "asg",   "to": "ddb",  "label": ""}
+  ]
+}
