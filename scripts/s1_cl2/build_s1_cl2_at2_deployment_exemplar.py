@@ -12,8 +12,8 @@ operate the provided template + author own), the monitoring strand, and the buil
 Reuses the Deployment Report shell (as CL1 AT2) with a serverless + IaC build narrative (S4)
 and testing (S6). Evidence is described, not captured: "[SCREENSHOT - should show ...]". Retains
 UoC `Evidences:` tags and the Knowledge Evidence appendix responses (assessor layers an org template
-omits). The lab environment / deployment region is TBA (advised before the build); region is the
-deploy target, not a template parameter.
+omits). The lab deploys to us-east-1 (per the region-substitution standard); region is the deploy
+target, not a template parameter.
 
 Reuses the docx brand helpers (build_bc_template) and prose/table helpers (build_s1_cl1_at1_bc_exemplar).
 
@@ -146,10 +146,10 @@ def build(path):
                  "using the services, the provided data-store template, the supplied microservice code, and the "
                  "webhook contract supplied for the engagement.")
     add_body_paragraph(doc, "Lab / region note: the AT1 design places the audit log in the India region (ap-south-1) for "
-                 "data residency. The specific AWS Academy lab environment, and therefore the deployment region, "
-                 "is advised before the build; the region is the deploy target (passed to the deploy command), "
-                 "so the same templates target the lab region during the build and ap-south-1 in production - "
-                 "the mechanics are real, only the geography is configurable.")
+                 "data residency. In the AWS Academy Learner Lab the build deploys to us-east-1 "
+                 "[scenario: ap-south-1 (India) | deploy: us-east-1]; the region is the deploy target (passed to "
+                 "the deploy command), so the same templates target us-east-1 in the lab and ap-south-1 in "
+                 "production - the mechanics are real, only the geography is configurable.")
 
     # 3 Scope of Deployment
     h1("3. Scope of Deployment")
@@ -168,8 +168,8 @@ def build(path):
     add_uoc_evidence_tag(doc, "[ICTCLD505 AC 1, 5, 7, 8] (vendor platform, IDE, CLI/SSH, console)")
     add_body_paragraph(doc, "Work was performed in the AWS Academy lab via the console, the AWS CLI, and an IDE. The "
                  "writer function ran under a least-privilege execution role (write to the one DynamoDB table "
-                 "and read from the queue only); no long-lived credentials were created. The exact lab product "
-                 "and the role/region available are those advised for the assessment.")
+                 "and read from the queue only); no long-lived credentials were created. The lab product is the "
+                 "AWS Academy Learner Lab and the deployment region is us-east-1.")
     ev(doc, "SCREENSHOT", "should show the AWS Academy lab session and the function's execution-role policy.")
 
     h3("4.2 Operating the provided data-store template")
@@ -262,7 +262,7 @@ def build(path):
                ["Datastore", "DynamoDB, on-demand (provided template)", "Append-only audit log; scales to zero and to spikes; supplied as the data-store template the student operates"],
                ["Decoupling", "SQS between API Gateway and Lambda", "Buffers spikes so events queue rather than drop"],
                ["Compute", "Lambda (python3.12)", "Serverless; scales with event volume; no servers to run"],
-               ["Region", "Deploy target (advised lab region; ap-south-1 in production)", "Same template deploys to the lab region or production by changing the deploy target, not the body"]],
+               ["Region", "Deploy target - us-east-1 in the lab; ap-south-1 in production", "Same template deploys to us-east-1 or production by changing the deploy target, not the body"]],
               widths=[3.4, 5.0, 7.6])
     add_body_paragraph(doc, "Industry standards: the build uses standard managed cloud services and "
                  "the JSON/HTTPS and IAM standards common to the platform; storage is the managed NoSQL "
@@ -311,8 +311,8 @@ def build(path):
                  "and the redeploy procedure (S7.1).")
     h3("7.3 Known limitations and what's next")
     add_bullet_list(doc, [
-        "Built in the AWS Academy lab; the deployment region is the lab's (advised for the assessment) and "
-        "ap-south-1 in production, set by the deploy target.",
+        "Built in the AWS Academy Learner Lab; deployed to us-east-1, with ap-south-1 the production target, "
+        "set by the deploy target.",
         "The website web-tier scaling (CloudFront / caching / WAF) is designed at AT1 but not built here - "
         "a separate workstream.",
     ])
@@ -323,7 +323,7 @@ def build(path):
     add_uoc_evidence_tag(doc, "[ICTCLD503 PC 4.2] confirm, seek and respond to feedback with required personnel")
     add_data_table(doc, ["Feedback received", "From", "Response", "Action"],
               [["Confirm the audit data stays in the India-region store", "Sam Walker (YAT ICT Manager)",
-                "Confirmed - the table is provisioned in the deployment region (the production target is the India region); region is the deploy target",
+                "Confirmed - the table is provisioned in the deployment region (us-east-1 in the lab; the production target is the India region, ap-south-1); region is the deploy target",
                 "Noted in S2 and S4.2"],
                ["Confirm events can't be lost under load", "Pat Lin (MTS Senior Consultant)",
                 "The SQS buffer queues spikes; demonstrated in S6.4", "Recorded in S6.4"]],
@@ -354,7 +354,7 @@ def build(path):
     add_body_paragraph(doc, "[KE 8] My microservice template exposes EnvName and AuditTableName as parameters, so one "
                  "template deploys dev and prod and connects to the provided data store without editing the "
                  "body; the deployment region is supplied to the deploy command, so the same template targets "
-                 "the lab region or the production India region.")
+                 "us-east-1 in the lab or the production India region (ap-south-1).")
     h3("Q4 - Testing and debugging")
     add_body_paragraph(doc, "[KE 7 / 503 KE 5] I debugged template errors from the CloudFormation stack events (the "
                  "provided template's KeySchema/AttributeDefinitions mismatch as supplied) and microservice "

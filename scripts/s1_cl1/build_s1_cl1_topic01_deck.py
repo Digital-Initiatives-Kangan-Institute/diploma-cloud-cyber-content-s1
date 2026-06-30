@@ -202,7 +202,7 @@ def build(out_path):
         (0, "You'll answer five questions as we navigate; we discuss and reveal each answer."),
     ], ["AWS Management Console illustration"], A3)
     visual_slide(prs, pg(), "Hands-on: Console clickthrough", "", [
-        (0, "Launch the Sandbox environment and connect to the AWS Management Console."),
+        (0, "Launch the AWS Academy Learner Lab and connect to the AWS Management Console."),
         (0, "Open the Services menu — notice services are grouped into categories (EC2 → Compute)."),
         (1, "Q1: which category is the IAM service under?"),
         (1, "Q2: which category is Amazon VPC under?"),

@@ -67,8 +67,7 @@ RESOURCES = [
     "• The YAT scenario site / intranet - the Website Global Expansion project, and the AT1 Solution Design "
     "and Disaster Recovery Plan (the approved design this build implements).",
     "• The YAT Deployment Report template (intranet Templates section).",
-    "• The AWS Academy Learner Lab for the build (the deployment region is confirmed and advised before the "
-    "assessment runs - see Conditions).",
+    "• The AWS Academy Learner Lab for the build (deploy to us-east-1; see Conditions).",
     "• The provided assessment artefacts (Appendices A and B): the data-store infrastructure-as-code "
     "template, the microservice code, and the webhook payload contract.",
 ]
@@ -82,14 +81,15 @@ CRITERIA_STATEMENT = (
 CONDITIONS = [
     "C1 - The YAT scenario site / intranet (including the AT1 Solution Design and DR Plan) is accessible to "
     "the student throughout the assessment.",
-    "C2 - AWS Academy Learner Lab access is available for the student to build, deploy and test. The "
-    "deployment region is confirmed and advised to students before the assessment runs.",
+    "C2 - AWS Academy Learner Lab access is available for the student to build, deploy and test. The lab "
+    "deploys to us-east-1 (the single region the Learner Lab offers).",
     "C3 - The assessor supplies the provided artefacts in Appendices A and B: the data-store template, the "
     "microservice code, and the webhook payload contract.",
     "C4 - Design context: the AT1 design places the audit store in the India region (ap-south-1) for data "
-    "residency. The deployment region in the lab is the lab's (advised before the build); the region is the "
-    "deploy target (the --region flag on the deploy command), not a template parameter, so the same template "
-    "targets the lab region or production. The mechanics are assessed, not the geography.",
+    "residency. In the lab you deploy to us-east-1 - [scenario: ap-south-1 (India) | deploy: us-east-1] - "
+    "because the region is the deploy target (the --region flag on the deploy command), not a template "
+    "parameter, so the same template targets us-east-1 in the lab or ap-south-1 in production. The mechanics "
+    "are assessed, not the geography.",
     "C5 - The assessor role-plays YAT ICT management (Sam Walker, ICT Manager) for the build sign-off.",
 ]
 
@@ -196,10 +196,11 @@ STUDENT_TASK = [
      "confirm a test event is written to the data-store table.", "Assessor text"),
     ("• Monitor, test, document and hand over - configure a metric and alarm, run and record your tests, "
      "produce the infrastructure-as-code user documentation, and obtain sign-off.", "Assessor text"),
-    ("Lab environment: the AWS Academy Learner Lab (and the deployment region) will be advised before you "
-     "start. The AT1 design places the store in India (ap-south-1) for residency; the deployment region is the "
-     "deploy target (the --region flag), so the same template deploys to the lab region or production - "
-     "parameterise environment-specific values (e.g. EnvName), not the region.", "Assessor text"),
+    ("Lab environment: build in the AWS Academy Learner Lab and deploy to us-east-1. The AT1 design places "
+     "the store in India (ap-south-1) for residency - [scenario: ap-south-1 (India) | deploy: us-east-1] - "
+     "but the region is the deploy target (the --region flag), so the same template deploys to us-east-1 in "
+     "the lab or ap-south-1 in production; parameterise environment-specific values (e.g. EnvName), not the "
+     "region.", "Assessor text"),
     ("Knowledge Evidence (required). In a Knowledge Evidence appendix of your Deployment Report, answer "
      "the following questions in your own words, about your own build:", "Assessor text"),
     ("• Why did you use infrastructure as code rather than provisioning by hand?", "Assessor text"),
@@ -282,20 +283,20 @@ APPENDIX_A = [
     ("datastore.yaml", "Heading 2"),
 ]
 APPENDIX_A_AFTER = [
-    ("How to operate it (the region will be advised - substitute it for <REGION>):", "Heading 2"),
+    ("How to operate it (deploy to us-east-1 in the lab; in production this region would be ap-south-1):", "Heading 2"),
 ]
 DATASTORE_OPS = [
     "# Review it first: open the file and note the resources it creates and any dependencies.",
     "",
     "# Deploy:",
-    "aws cloudformation deploy --region <REGION> \\",
+    "aws cloudformation deploy --region us-east-1 \\",
     "  --stack-name yat-audit-store --template-file datastore.yaml \\",
     "  --parameter-overrides EnvName=dev",
     "",
     "# Update (change a parameter, e.g. EnvName=prod) and redeploy the same way; observe the change.",
     "",
     "# Confirm in the console or with the CLI, then delete (clean teardown):",
-    "aws cloudformation delete-stack --region <REGION> --stack-name yat-audit-store",
+    "aws cloudformation delete-stack --region us-east-1 --stack-name yat-audit-store",
 ]
 
 # ---- Appendix B: the PROVIDED microservice code + contract (the student authors the IaC around this) ----
