@@ -4,6 +4,14 @@ Pack-specific notes only. The generic pattern, AWS Academy constraints, validati
 hard-won lessons live in the canonical standard — `docs/lab-pack-standard.md` (umbrella). Below is
 only what is specific to THIS pack. See also `assessments/assessment_plan.md` §6.8.
 
+> **Lab = AWS Academy Learner Lab, `us-east-1`** (course-wide single product; see the region-substitution
+> standard). Design regions stay real — Sydney `ap-southeast-2`, India `ap-south-1`, Melbourne DR
+> `ap-southeast-4` — but everything **deploys to `us-east-1`**, and **residency/DR are design-only** (not
+> deployed). The proving runs below were done in the Cloud Architecting Sandbox *before* the single-product
+> move; their AWS Academy constraints apply to the Learner Lab too, but an explicit **Learner-Lab re-prove
+> of the SQL-Server / `ModifyDBInstance` findings is pending** (only the CL1 multi-AZ slice has been
+> re-proven in the Learner Lab, 2026-06-26).
+
 ## What this pack is
 
 The AT3 environment for **Ledgerline** (the YAT Accounting System). AT3 follows an **apply-as-update**
@@ -13,8 +21,6 @@ model:
 - **`improved.yaml`** — the **approved improvement** applied as a CloudFormation **change-set / stack
   update** to the *same* stack (same logical IDs, so every change is in-place/additive — no replacement).
   Doubles as the AT2 model answer and the AT3 assessor reference/fallback if a team's AT2 write is unusable.
-- **`india-residency.yaml`** — the light IR-3 residency slice, a **separate** stack in `ap-south-1`
-  (Mumbai), because one CloudFormation stack is region-bound.
 
 ## Design decisions specific to this pack
 
@@ -32,8 +38,8 @@ model:
    driven by the scenario.
 
 3. **SQL Server edition is a parameter; default `sqlserver-ex` (Express, free).** SE (Standard,
-   license-included) is **not deployable in the sandbox** — `db.t3.medium` + `sqlserver-se` is rejected and the
-   sandbox caps RDS at `db.t3.medium` (SE needs a larger class; proven live 2026-06-21), so both templates
+   license-included) is **not deployable in the lab** — `db.t3.medium` + `sqlserver-se` is rejected and the
+   lab caps RDS at `db.t3.medium` (SE needs a larger class; proven live in the Sandbox 2026-06-21), so both templates
    default to Express. The DB is empty and is never made Multi-AZ, so the edition does not change what AT3
    assesses (the no-Multi-AZ decision is an *application* constraint, not an edition one). **Decision
    (2026-06-21): the in-world scenario stays on Standard; the lab deploys Express as a documented stand-in** —
@@ -61,8 +67,6 @@ What was confirmed:
   (see the `rds:ModifyDBInstance` finding below).
 - **App-tier Multi-AZ** — ASG settled at `Desired=2`, two instances across two AZs; the DB stayed single-AZ /
   Multi-AZ No.
-- **India residency slice** — `CREATE_COMPLETE` in **`ap-south-1` (Mumbai)**, both buckets; the cross-region
-  split (main region + a separate Mumbai stack) works.
 
 NOT run — config validated but no explicit live demo: the **failover** (terminate-an-instance) and **scale-out**
 demos, and a **PITR restore**. Standard ASG behaviour and the scaling policy is in place; PITR/restore perms are
@@ -89,11 +93,10 @@ Findings (also recorded in `docs/lab-pack-standard.md`):
 
 ## Local validation (done)
 
-- **cfn-lint:** clean (exit 0) on all three templates via the `.cfnlintrc.yaml` template list (W1011 suppressed
+- **cfn-lint:** clean (exit 0) on both templates via the `.cfnlintrc.yaml` template list (W1011 suppressed
   and justified — NoEcho DB password supplied at deploy, not Secrets Manager, to avoid IAM in the lab).
-- **pytest:** 15/15. Asserts the no-DB-Multi-AZ invariant (both templates), single-AZ→2-AZ compute, SQL Server
-  engine, internal ALB, encrypted+empty DB, no IAM, optional instance profile, SSM AMI, locked buckets, the
-  India slice (2 buckets + >=180-day CERT-In retention), and **pure ASCII** (a non-ASCII char in an RDS
-  description fails the live deploy and cfn-lint does not catch it).
+- **pytest:** 13/13. Asserts the no-DB-Multi-AZ invariant (both templates), single-AZ→2-AZ compute, SQL Server
+  engine, internal ALB, encrypted+empty DB, no IAM, optional instance profile, SSM AMI, locked buckets, and
+  **pure ASCII** (a non-ASCII char in an RDS description fails the live deploy and cfn-lint does not catch it).
 - Run: `python -m venv .venv && .venv/bin/python -m pip install -r requirements.txt`, then
   `.venv/bin/cfn-lint` and `.venv/bin/python -m pytest -q`.

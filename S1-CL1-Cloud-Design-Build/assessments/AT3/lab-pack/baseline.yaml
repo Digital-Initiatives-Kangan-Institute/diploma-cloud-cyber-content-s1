@@ -3,11 +3,12 @@ AWSTemplateFormatVersion: '2010-09-09'
 Description: >-
   YAT LMS - AT3 baseline environment (single-AZ, non-HA). Students deploy this at the START
   of AT3 to get a consistent, known starting state, then harden it to multi-AZ high
-  availability. Instantiates the AT2 supplied design in ap-southeast-2.
+  availability. Instantiates the AT2 supplied design (design region ap-southeast-2 Sydney; deploys to
+  us-east-1 in the Learner Lab).
 
   AWS Academy: creates NO IAM (the lab forbids it) - the EC2 instance profile is optional and
   defaults to none. The Windows AMI is resolved from an SSM public parameter so it never goes
-  stale. Proven deployed in the Cloud Architecting Sandbox, ap-southeast-2.
+  stale. Proven deployed in the AWS Academy Learner Lab, us-east-1.
 
   NON-HA BY DESIGN: an internet-facing ALB and an RDS subnet group each require >= 2 AZs, so a
   second public subnet and a second data subnet are present - but the COMPUTE (the Auto Scaling

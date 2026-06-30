@@ -6,7 +6,6 @@ This guide walks you, step by step, through building the **starting environment*
 **What you are doing:**
 1. Deploy the **existing-state** Ledgerline infrastructure (`baseline.yaml`) — a single-AZ environment.
 2. Apply the **approved improvement** (`improved.yaml`) to that same environment as a change-set.
-3. (Optional) Deploy the small **India residency** stack (`india-residency.yaml`) in the Mumbai region.
 
 **You will need:**
 - Your AWS Academy login.
@@ -25,19 +24,26 @@ This guide walks you, step by step, through building the **starting environment*
 
 ---
 
-## Part 1 — Open the AWS sandbox
+## Part 1 — Open the AWS Academy Learner Lab
 
 1. Log in to **AWS Academy** (the Canvas site your teacher gave you).
-2. On your **Dashboard**, open the **AWS Academy Cloud Architecting** course.
-3. On the left menu click **Modules**, scroll to **Sandbox**, and click the **Sandbox environment**.
+2. On your **Dashboard**, open the **AWS Academy Learner Lab** course.
+3. On the left menu click **Modules**, then open the **Learner Lab**.
 4. On the lab page, click **Start Lab**. Wait for the dot next to **AWS** to turn **green**.
 5. Click the green **AWS** dot — the AWS Management Console opens in a new tab.
 
-## Part 2 — Choose the correct region
+## Part 2 — Check the region
 
-6. At the **top-right** of the console, click the region name and choose **Asia Pacific (Sydney)**.
+6. At the **top-right** of the console, confirm the region is **US East (N. Virginia)** — `us-east-1`.
+   The Learner Lab runs only in this region, so it should already be selected; if not, choose it.
 
-> Do this **before** the next part. The main system is built in Sydney.
+> **Region substitution.** Ledgerline is designed to run in Sydney, but the Learner Lab only offers
+> `us-east-1`, so that is where you deploy. Wherever you see this notation, the left side is the real
+> design region and the right side is where you actually deploy:
+>
+> `[scenario: ap-southeast-2 (Sydney) | deploy: us-east-1]`
+>
+> Deploying to `us-east-1` is identical to deploying anywhere else — only the location label changes.
 
 ## Part 3 — Build the baseline (existing state)
 
@@ -76,27 +82,17 @@ You now apply the approved improvement **to the same stack**, so nothing is rebu
 ## Part 6 — Check the improvement applied
 
 22. **App tier now Multi-AZ?** EC2 → **Auto Scaling groups** → `ledgerline-app-prod` → **Instance management**.
-    You should now see **two** instances, in **two different Availability Zones** (e.g. `ap-southeast-2a`
-    and `ap-southeast-2b`). The application tier can now survive an AZ failure.
+    You should now see **two** instances, in **two different Availability Zones** (e.g. `us-east-1a`
+    and `us-east-1b`). The application tier can now survive an AZ failure.
 23. **Database unchanged?** RDS → `ledgerline-prod` is still **Available** and **Multi-AZ = No**.
     That is correct — the improvement does **not** touch the database. Ledgerline does not support a Multi-AZ
     database; its reliability comes from the automated backups and point-in-time restore already in place at
     the baseline, not from failover.
 
-## Part 7 — (Optional) India residency slice
+## Part 7 — Clean up (always do this at the end)
 
-If your assessment asks you to deploy the India residency slice:
-
-24. At the **top-right**, change the region to **Asia Pacific (Mumbai)**.
-25. **CloudFormation** → **Create stack** → upload **`india-residency.yaml`** → stack name
-    `ledgerline-india` → **Submit**. It builds two storage buckets and finishes in a minute or two.
-26. Switch the region **back to Sydney** when you are done.
-
-## Part 8 — Clean up (always do this at the end)
-
-27. **CloudFormation** (Sydney) → select **`ledgerline-baseline`** → **Delete** → confirm. Wait for it to disappear.
-28. If you deployed the India stack: switch to **Mumbai** → delete **`ledgerline-india`** too.
-29. Back on the lab tab, click **End Lab**.
+24. **CloudFormation** (`us-east-1`) → select **`ledgerline-baseline`** → **Delete** → confirm. Wait for it to disappear.
+25. Back on the lab tab, click **End Lab**.
 
 ---
 

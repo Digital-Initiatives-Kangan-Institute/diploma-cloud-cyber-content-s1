@@ -10,8 +10,7 @@ Description: >-
   deliberately LEFT UNCHANGED by this change-set - Ledgerline does not support a Multi-AZ database, and
   the AWS Academy lab role cannot rds:ModifyDBInstance, so the DB tier's DR improvements (wider backup
   retention + the cross-Region backup copy to Melbourne, ap-southeast-4) are out-of-band steps, not CFN
-  properties (see README). The India residency slice (CERT-In logs + books in ap-south-1 Mumbai) is a
-  separate stack (india-residency.yaml).
+  properties (see README).
 
 Parameters:
   EnvName:
@@ -36,7 +35,7 @@ Parameters:
     AllowedValues: [sqlserver-se, sqlserver-ex, sqlserver-web]
     Description: >-
       RDS SQL Server edition. Must match the value used for baseline.yaml so the change-set does not
-      replace the database. Defaults to sqlserver-ex (Express): the sandbox does not support
+      replace the database. Defaults to sqlserver-ex (Express): the lab does not support
       sqlserver-se on its permitted instance classes (see baseline.yaml).
 
   DBInstanceClass:

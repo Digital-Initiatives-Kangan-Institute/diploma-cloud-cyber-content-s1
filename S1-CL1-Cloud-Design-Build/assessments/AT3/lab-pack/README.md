@@ -15,12 +15,12 @@ improve this into a highly available design.
 
 ---
 
-## Part 1 — Open the AWS sandbox
+## Part 1 — Open the AWS Academy Learner Lab
 
 1. Log in to **AWS Academy** (the Canvas site your teacher gave you the link to).
-2. On your **Dashboard**, click the tile named **AWS Academy Cloud Architecting**.
+2. On your **Dashboard**, click the tile named **AWS Academy Learner Lab**.
 3. On the left-hand menu, click **Modules**.
-4. Scroll down the page to the **Sandbox** heading, and click **Sandbox environment**.
+4. Open the **Learner Lab**.
 5. A lab page opens. Near the top you will see a row with **Start Lab**, **End Lab**, and a
    small circle next to the word **AWS**. Click **Start Lab**.
 6. Wait. The circle next to **AWS** turns **yellow** (starting), then **green** (ready). This
@@ -33,13 +33,19 @@ You are now in the AWS console.
 
 ---
 
-## Part 2 — Choose the correct region
+## Part 2 — Check the region
 
-8. Look at the **top-right** of the console. There is a region name there (it probably says
-   *United States (N. Virginia)*).
-9. Click it, and from the list choose **Asia Pacific (Sydney)**.
+8. Look at the **top-right** of the console. The region should say *United States (N. Virginia)* —
+   `us-east-1`. The Learner Lab runs only in this region.
+9. If it shows anything else, click it and choose **US East (N. Virginia)**.
 
-> ⚠️ Do this **before** the next part. Everything must be built in the Sydney region.
+> **Region substitution.** The YAT LMS is designed to run in Sydney, but the Learner Lab only offers
+> `us-east-1`, so that is where you build it. Wherever you see this notation, the left side is the real
+> design region and the right side is where you actually deploy:
+>
+> `[scenario: ap-southeast-2 (Sydney) | deploy: us-east-1]`
+>
+> Deploying to `us-east-1` is identical to deploying anywhere else — only the location label changes.
 
 ---
 
@@ -72,7 +78,7 @@ The environment now starts building. You'll see a list of items turning from
 
 19. Click the **Outputs** tab (near the top, next to Events/Resources).
 20. Find the row **AlbDnsName** and copy its value (it looks like
-    `yat-lms-dev-1234567890.ap-southeast-2.elb.amazonaws.com`).
+    `yat-lms-dev-1234567890.us-east-1.elb.amazonaws.com`).
 21. Open a new browser tab, type `http://` then paste that value, and press Enter.
 22. You should see the text: **"Infrastructure ready - awaiting application deployment"**.
     (If it doesn't load straight away, wait 2–3 minutes and try again — the server takes a

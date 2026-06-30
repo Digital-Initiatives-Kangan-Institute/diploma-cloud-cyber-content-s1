@@ -3,7 +3,8 @@ AWSTemplateFormatVersion: '2010-09-09'
 Description: >-
   YAT Ledgerline (Accounting System) - AT3 existing-state baseline (single-AZ). Deploy this at the
   start of AT3 for the known starting environment, then apply the approved improvement as a
-  CloudFormation change-set (improved.yaml) to the SAME stack. Target region ap-southeast-2 (Sydney).
+  CloudFormation change-set (improved.yaml) to the SAME stack. Design region ap-southeast-2 (Sydney);
+  deploys to us-east-1 in the Learner Lab.
 
   Internal-only finance system (no public ingress): EC2 + Auto Scaling in ONE AZ behind an INTERNAL
   ALB; RDS for SQL Server, SINGLE-AZ, empty and encrypted. A 2nd app subnet and 2nd data subnet exist
@@ -34,10 +35,10 @@ Parameters:
     Default: sqlserver-ex
     AllowedValues: [sqlserver-se, sqlserver-ex, sqlserver-web]
     Description: >-
-      RDS SQL Server edition. Defaults to sqlserver-ex (Express, free): the AWS Academy Cloud
-      Architecting Sandbox does NOT support Standard edition (sqlserver-se, license-included) on its
-      permitted instance classes - db.t3.medium + sqlserver-se is rejected (proven live 2026-06-21),
-      and the sandbox caps RDS at db.t3.medium. The database is empty and is never made Multi-AZ, so
+      RDS SQL Server edition. Defaults to sqlserver-ex (Express, free): the AWS Academy lab does NOT
+      support Standard edition (sqlserver-se, license-included) on its permitted instance classes -
+      db.t3.medium + sqlserver-se is rejected (proven in the Sandbox 2026-06-21), and the lab caps RDS
+      at db.t3.medium. The database is empty and is never made Multi-AZ, so
       the edition does not affect what AT3 assesses (the no-Multi-AZ decision is an application
       constraint, not an edition one). sqlserver-se remains selectable where a larger class is allowed.
 
@@ -64,7 +65,7 @@ Parameters:
     Description: >-
       EC2 instance profile name. LEAVE BLANK (default) to launch with NO instance profile - the
       baseline instances only serve a placeholder page, so they need no IAM, and this works in any
-      lab. Names vary by lab product; the Cloud Architecting Sandbox has no LabInstanceProfile.
+      lab. Names vary by lab product; the Learner Lab provides LabRole if a later step needs one.
 
   AdminCidr:
     Type: String

@@ -16,8 +16,7 @@ from cfnlint.decode import cfn_yaml
 LAB = Path(__file__).resolve().parent.parent
 BASELINE = LAB / "baseline.yaml"
 IMPROVED = LAB / "improved.yaml"
-INDIA = LAB / "india-residency.yaml"
-ALL_TEMPLATES = [BASELINE, IMPROVED, INDIA]
+ALL_TEMPLATES = [BASELINE, IMPROVED]
 
 
 def _load(path):
@@ -140,20 +139,6 @@ def test_buckets_block_public_access():
             pab = bucket["Properties"]["PublicAccessBlockConfiguration"]
             for flag in ("BlockPublicAcls", "BlockPublicPolicy", "IgnorePublicAcls", "RestrictPublicBuckets"):
                 assert pab[flag] is True, f"{path.name}:{name}.{flag} must be true"
-
-
-# ---- India residency slice ----
-
-def test_india_slice_has_certin_and_books_buckets():
-    buckets = _of_type(_load(INDIA), "AWS::S3::Bucket")
-    assert len(buckets) == 2, "india-residency must hold exactly the CERT-In logs + books buckets"
-
-
-def test_certin_retention_at_least_180_days():
-    t = _load(INDIA)
-    certin = t["Resources"]["CertInLogsBucket"]["Properties"]["LifecycleConfiguration"]["Rules"]
-    expiry = next(r["ExpirationInDays"] for r in certin if "ExpirationInDays" in r)
-    assert expiry >= 180, "CERT-In logs must be retained at least 180 days"
 
 
 # ---- pure ASCII (a non-ASCII char in an RDS description fails the live deploy; cfn-lint misses it) ----

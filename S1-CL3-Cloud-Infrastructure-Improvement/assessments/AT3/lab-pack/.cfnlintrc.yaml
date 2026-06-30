@@ -1,7 +1,6 @@
 templates:
   - baseline.yaml
   - improved.yaml
-  - india-residency.yaml
 ignore_checks:
   # W1011: the DB master password is a NoEcho parameter passed at deploy time (not stored). The
   # lab deliberately supplies the secret at deploy, not via Secrets Manager, to keep the baseline
