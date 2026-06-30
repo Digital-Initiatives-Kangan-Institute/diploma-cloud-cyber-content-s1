@@ -149,7 +149,7 @@ the **AC link** names the UoC Assessment Condition each environmental requiremen
 
 | SR | Condition the scenario must enable | AT(s) | AC link |
 |----|---|---|---|
-| **SR-CL3-01** | AWS Academy lab — cloud vendor services, managed DB, console/SDK/CLI, IDE, browser, SSH/RDP; the team build + individual deploy/operate environment | AT2, AT3 | [ICTCLD504 AC 1] · [ICTCLD504 AC 2] · [ICTCLD504 AC 3] · [ICTCLD504 AC 4] · [ICTCLD504 AC 6] · [ICTCLD504 AC 7] · [BSBXTW401 AC 1] |
+| **SR-CL3-01** | AWS Academy Learner Lab (us-east-1) — cloud vendor services, managed DB, console/SDK/CLI, IDE, browser, SSH/RDP; the team build + individual deploy/operate environment | AT2, AT3 | [ICTCLD504 AC 1] · [ICTCLD504 AC 2] · [ICTCLD504 AC 3] · [ICTCLD504 AC 4] · [ICTCLD504 AC 6] · [ICTCLD504 AC 7] · [BSBXTW401 AC 1] |
 | **SR-CL3-02** | Deployable single-AZ Ledgerline **baseline lab-pack** (EC2+ASG / internal ALB / single-AZ RDS for SQL Server / S3 / VPC; encrypted at rest, empty DB) — the as-is system AT3 deploys then improves | AT3 | — |
 | **SR-CL3-03** | Engagement framing — Master Services Agreement, Engagement Role Brief, Improvement Requirements (IR-1…7), ICT Manager Consultation Notes | AT1 | — |
 | **SR-CL3-04** | Indian Regulatory Requirements (CERT-In logging + Companies-Act books-of-account) driving the compliance assessment + the India residency slice | AT1 | [ICTCLD504 AC 5] |

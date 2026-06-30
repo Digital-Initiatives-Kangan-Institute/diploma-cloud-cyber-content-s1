@@ -150,7 +150,7 @@ Condition each environmental requirement discharges.
 
 | SR | Condition the scenario must enable | AT(s) | AC link |
 |----|---|---|---|
-| **SR-CL1-01** | AWS Academy labs (Cloud Foundations [104469] + Cloud Architecting [172221]) — cloud vendor services, managed DB, IDE, browser, SSH/RDP | AT2, AT3 | [ICTCLD401 AC 1] · [ICTCLD401 AC 2] · [ICTCLD401 AC 3] · [ICTCLD502 AC 1] · [ICTCLD502 AC 2] · [ICTCLD502 AC 4] · [ICTCLD502 AC 6] · [ICTCLD502 AC 7] |
+| **SR-CL1-01** | AWS Academy Learner Lab (us-east-1) — cloud vendor services, managed DB, IDE, browser, SSH/RDP | AT2, AT3 | [ICTCLD401 AC 1] · [ICTCLD401 AC 2] · [ICTCLD401 AC 3] · [ICTCLD502 AC 1] · [ICTCLD502 AC 2] · [ICTCLD502 AC 4] · [ICTCLD502 AC 6] · [ICTCLD502 AC 7] |
 | **SR-CL1-02** | The YAT College case study — strategic plan, ICT goals, current ICT environment description, on-prem network diagram, stakeholder hierarchy | AT1, AT2, AT3 | [ICTICT517 AC 1] · [ICTICT517 AC 2] · [ICTICT517 AC 3] · [ICTICT517 AC 5] |
 | **SR-CL1-03** | A superior/stakeholder (the MTS consultant / YAT ICT manager) to role-play the AT1 presentation + the AT3 closure sign-off | AT1, AT3 | [ICTICT517 AC 4] |
 | **SR-CL1-04** | Requirements + data sources to determine user/business requirements (incl. user-access + business protocols) | AT1, AT2, AT3 | [ICTCLD401 AC 4] · [ICTCLD502 AC 3] · [ICTCLD502 AC 5] · [ICTCLD502 AC 8] |
