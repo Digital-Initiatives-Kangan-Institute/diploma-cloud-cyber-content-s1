@@ -1,6 +1,6 @@
 # S1-CL3 Cloud Infrastructure Improvement — Consolidated UoC
 
-> **STATUS: DRAFT.** Every assessable item (PC / FS / PE / KE / AC) from the two cluster units, quoted **verbatim** from the validated UoC transcriptions and tagged `[UNIT SECTION numbering]`. Items are organised under a **topic** structure that follows the engagement workflow (analyse → design/approve → deploy/test → finalise), with a **technical strand** (ICTCLD504) and a **leadership strand** (BSBXTW401) per phase. **The group-level *assessment ideas* are proposals — marked TBD per CLAUDE.md Rule 1.** The cluster uses a **three-AT individual → group → individual** division (AT1 team setup / AT2 group analyse, design & approve / AT3 individual implementation); see the assessment plan for the full structure and coverage map.
+> **STATUS: DRAFT.** Every assessable item (PC / FS / PE / KE / AC) from the two cluster units, quoted **verbatim** from the validated UoC transcriptions and tagged `[UNIT SECTION numbering]`. Items are organised under a **topic** structure that follows the engagement workflow (analyse → design/approve → deploy/test → finalise), with a **technical strand** (ICTCLD504) and a **leadership strand** (BSBXTW401) per phase. **The group-level *assessment ideas* are proposals — marked TBD per CLAUDE.md Rule 1.** The cluster uses a **three-AT individual → group → individual** division (AT1 individual Design — 504 el 1–2 / AT2 group Team Implementation — 401 el 1–4 / AT3 individual Implement — 504 el 3–4); see the assessment plan for the full structure and coverage map.
 
 **Cluster units**
 
@@ -29,34 +29,34 @@ The cluster organises into **four workflow phases**, each with a **technical gro
 
 | Phase / Topic | Groups | Units | Assessment (AT — mode) |
 |---|---|---|---|
-| **1. Analyse & Plan** | G1 (analyse architecture), G2 (plan team outcomes) | 504, 401 | **AT2** (G1 — individual analysis) + **AT1** (G2 — team plan) |
-| **2. Design & Approve** | G3 (design/improve + present + sign-off), G4 (coordinate team) | 504, 401 | **AT2** (group) — G4 allocate also AT1 |
+| **1. Analyse & Plan** | G1 (analyse architecture), G2 (plan team outcomes) | 504, 401 | **AT1** (G1 — individual analysis) + **AT2** (G2 — team plan) |
+| **2. Design & Approve** | G3 (design/improve + present + sign-off), G4 (coordinate team) | 504, 401 | **AT1** (G3 — design + sign-off) + **AT2** (G4 — coordinate/allocate) |
 | **3. Deploy, Test & Support** | G5 (deploy/monitor/test), G6 (support team) | 504, 401 | **AT3** (individual, G5) + **AT2** (group, G6) |
 | **4. Finalise & Review** | G7 (finalise improvements), G8 (monitor team performance) | 504, 401 | **AT3** (individual, G7) + **AT2** (group, G8) |
 | **Cross-cutting** | G9 (foundation skills), G10 (environment & resource access), G11 (assessor requirements) | 504, 401 | both / environment / institutional |
 
 **AT deliverables (three ATs — individual → group → individual; see the assessment plan §3):**
-- **AT1 — Team Setup** *(individual; 401 el 1 + el 2 allocate)* — author the Team Plan: team objectives and responsibilities, per-member performance expectations, accountability strategies, contingency/risk planning, and the role & task allocation. No technical analysis or design — that is AT2.
-- **AT2 — Analyse, Design & Approve** *(group; 504 el 1 + el 2 + 401 el 2–4)* — each student **individually analyses** the baseline (requirements & architecture analysis, incl. the compliance assessment), then the team **designs** the improved architecture (each owns one dimension, integrated), leads meetings, supports and reviews the team, and presents the **business case** for the **deploy sign-off** (`[ICTCLD504 PC 2.5]`).
-- **AT3 — Implementation** *(individual; 504 el 3–4)* — each student deploys, monitors and tests their owned dimension against the metrics, refines, documents the as-deployed result + long-term strategy, and obtains **final sign-off** (`[ICTCLD504 PC 4.3]`).
+- **AT1 — Design** *(individual; 504 el 1–2)* — the Solution Design: **individually analyse** the baseline (review, business-impact, the compliance assessment against the Indian Regulatory Requirements, options) and design the improvement across security/reliability/scalability/cost, then document and present it and obtain **sign-off to proceed to deployment** (`[ICTCLD504 PC 2.4]` / `[ICTCLD504 PC 2.5]`, FS oral). No team leadership — that is AT2.
+- **AT2 — Team Implementation** *(group; 401 el 1–4)* — lead the team that builds the approved design: author the team plan and **allocate one infrastructure component per member**, then coordinate / support / monitor the team as it writes and integrates the CloudFormation across individually-led meetings, to a team sign-off. The IaC write is the leadership vehicle — it is **not** 504-assessed (that is ICTCLD505, CL2).
+- **AT3 — Implement** *(individual; 504 el 3–4)* — deploy the baseline and apply the approved improvement as a CloudFormation **change-set**, monitor / test / demonstrate it against the metrics, apply short-term refinements, document the as-deployed result + long-term strategy, and obtain **final sign-off** (`[ICTCLD504 PC 4.3]`).
 
-**Two approval moments (UoC-faithful):** end of **AT2** = deploy sign-off (`[ICTCLD504 PC 2.5]`); end of **AT3** = final sign-off (`[ICTCLD504 PC 4.3]`).
+**Two approval moments (UoC-faithful):** end of **AT1** = sign-off to proceed to deployment (`[ICTCLD504 PC 2.5]`); end of **AT3** = final sign-off (`[ICTCLD504 PC 4.3]`). *(AT2 also carries its own internal team sign-off on the completed build.)*
 
-**Vehicle (per `scenario-flow.md`):** **Ledgerline** (the Accounting system), single-AZ cloud — the system whose cloud infrastructure is improved. CL3 **assesses on Ledgerline**; the **website is the practice vehicle**. *`[ICTCLD504 KE 6]` (object storage for static web sites) is evidenced as a **contextual knowledge question** (AT2) — the student contrasts Ledgerline with an object-storage-dependent system (e.g. a website) and explains how they would provision that storage if needed.*
+**Vehicle (per `scenario-flow.md`):** **Ledgerline** (the Accounting system), single-AZ cloud — the system whose cloud infrastructure is improved. CL3 **assesses on Ledgerline**; the **website is the practice vehicle**. *`[ICTCLD504 KE 6]` (object storage for static web sites) is evidenced as a **contextual knowledge question** in AT1's design knowledge — the student contrasts Ledgerline with an object-storage-dependent system (e.g. a website) and explains how they would provision that storage if needed.*
 
 **Cross-cutting & delivery environment.** G9 (foundation skills) is co-evidenced inside both ATs' deliverables; G10 (environment & resource access) is provided by the scenario site + AWS Academy labs; G11 (assessor requirements) is the institutional assessor condition.
 
 ---
 
-# Topic 1 — Analyse & Plan → AT2 (analyse, G1) + AT1 (plan team, G2)
+# Topic 1 — Analyse & Plan → AT1 (analyse, G1) + AT2 (plan team, G2)
 
-Set up the team (AT1) and analyse the system (AT2) before designing changes.
+Analyse the system (AT1) and set the team up (AT2) before designing changes.
 
 ## Group 1 — Analyse cloud architecture (ICTCLD504, element 1)
 
 **Why grouped:** the opening of the improve-cycle — review the existing architecture, evaluate it and its business impact, weigh options against the business model, and set the improvement goals.
 
-**Assessment:** an **individual** architecture analysis of the supplied baseline (Ledgerline's current single-AZ cloud infrastructure) — review, business-impact evaluation, the compliance assessment against the Indian Regulatory Requirements, options, and the security / reliability / scalability / cost goals + metrics. Authored individually within the group **AT2** so the holistic element-1 evidence (PC 1.1, PC 1.6) is valid per student; it feeds the team's design (G3).
+**Assessment:** an **individual** architecture analysis of the supplied baseline (Ledgerline's current single-AZ cloud infrastructure) — review, business-impact evaluation, the compliance assessment against the Indian Regulatory Requirements, options, and the security / reliability / scalability / cost goals + metrics. This is the analysis half of **AT1** (the individual Solution Design), so the holistic element-1 evidence (PC 1.1, PC 1.6) is valid per student; it feeds the design (G3, also AT1).
 
 - 1.1 Identify and review business's cloud architecture design [ICTCLD504 PC 1.1]
 - 1.2 Evaluate cloud architecture and identify business impact of design decisions [ICTCLD504 PC 1.2]
@@ -86,7 +86,7 @@ Set up the team (AT1) and analyse the system (AT2) before designing changes.
 
 ---
 
-# Topic 2 — Design & Approve → AT2 (G4 also AT1)
+# Topic 2 — Design & Approve → AT1 (design/approve, G3) + AT2 (coordinate, G4)
 
 Design the improvements, allocate the work, and get approval to deploy.
 
