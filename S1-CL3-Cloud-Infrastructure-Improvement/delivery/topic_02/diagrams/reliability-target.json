@@ -1,0 +1,16 @@
+{
+  "title": "Reliability target — HA app tier, DB stays single-AZ",
+  "nodes": [
+    {"id": "users", "label": "Accounting users",                        "row": 0, "col": 1, "fill": "grey"},
+    {"id": "alb",   "label": "Application Load Balancer",               "row": 1, "col": 1, "fill": "blue"},
+    {"id": "asg",   "label": "App tier\nAuto Scaling · Multi-AZ",       "row": 2, "col": 1, "fill": "green"},
+    {"id": "db",    "label": "RDS SQL Server\nsingle-AZ + automated backup", "row": 3, "col": 1, "fill": "amber"},
+    {"id": "dr",    "label": "Cross-Region DR\nMelbourne (data stays in AU)", "row": 3, "col": 2, "fill": "purple"}
+  ],
+  "edges": [
+    {"from": "users", "to": "alb", "label": ""},
+    {"from": "alb",   "to": "asg", "label": ""},
+    {"from": "asg",   "to": "db",  "label": ""},
+    {"from": "db",    "to": "dr",  "label": "backup / DR copy"}
+  ]
+}

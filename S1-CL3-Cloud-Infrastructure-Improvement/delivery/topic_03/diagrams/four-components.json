@@ -1,0 +1,16 @@
+{
+  "title": "The four improvement components",
+  "nodes": [
+    {"id": "design",  "label": "Improved architecture\n(scales on demand)", "row": 0, "col": 1, "fill": "grey"},
+    {"id": "network", "label": "Network\nVPC · subnets · ELB",  "row": 1, "col": 0, "fill": "blue"},
+    {"id": "compute", "label": "Compute\nAuto Scaling app tier", "row": 1, "col": 1, "fill": "green"},
+    {"id": "database","label": "Database\nRDS · backup · DR",    "row": 1, "col": 2, "fill": "amber"},
+    {"id": "storage", "label": "Storage\nS3 · encrypted",        "row": 1, "col": 3, "fill": "purple"}
+  ],
+  "edges": [
+    {"from": "network",  "to": "design", "label": ""},
+    {"from": "compute",  "to": "design", "label": ""},
+    {"from": "database", "to": "design", "label": ""},
+    {"from": "storage",  "to": "design", "label": ""}
+  ]
+}

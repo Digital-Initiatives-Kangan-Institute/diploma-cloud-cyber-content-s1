@@ -1,0 +1,18 @@
+{
+  "title": "Apply the improvement as an in-place change-set",
+  "nodes": [
+    {"id": "baseline",  "label": "Baseline stack\n(single-AZ)",              "row": 0, "col": 0, "fill": "grey",  "shape": "stadium"},
+    {"id": "changeset", "label": "Create change-set\napp-tier Multi-AZ + scaling", "row": 1, "col": 0, "fill": "blue"},
+    {"id": "review",    "label": "Review change-set\n(what will change)",   "row": 2, "col": 0, "fill": "amber"},
+    {"id": "execute",   "label": "Execute\n(in-place update)",              "row": 3, "col": 0, "fill": "green"},
+    {"id": "improved",  "label": "Improved stack\n(HA app tier)",           "row": 4, "col": 0, "fill": "green", "shape": "stadium"},
+    {"id": "db",        "label": "RDS database\nUNCHANGED",                 "row": 2, "col": 1, "fill": "red"}
+  ],
+  "edges": [
+    {"from": "baseline",  "to": "changeset", "label": ""},
+    {"from": "changeset", "to": "review",    "label": ""},
+    {"from": "review",    "to": "execute",   "label": ""},
+    {"from": "execute",   "to": "improved",  "label": ""},
+    {"from": "review",    "to": "db",         "label": "no DB modify"}
+  ]
+}

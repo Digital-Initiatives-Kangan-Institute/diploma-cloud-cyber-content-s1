@@ -1,0 +1,24 @@
+{
+  "title": "One component per member, integrated into one design",
+  "nodes": [
+    {"id": "m1", "label": "Member A", "row": 0, "col": 0, "fill": "grey"},
+    {"id": "m2", "label": "Member B", "row": 0, "col": 1, "fill": "grey"},
+    {"id": "m3", "label": "Member C", "row": 0, "col": 2, "fill": "grey"},
+    {"id": "m4", "label": "Member D", "row": 0, "col": 3, "fill": "grey"},
+    {"id": "network", "label": "Network",  "row": 1, "col": 0, "fill": "blue"},
+    {"id": "compute", "label": "Compute",  "row": 1, "col": 1, "fill": "green"},
+    {"id": "database","label": "Database", "row": 1, "col": 2, "fill": "amber"},
+    {"id": "storage", "label": "Storage",  "row": 1, "col": 3, "fill": "purple"},
+    {"id": "design",  "label": "Integrated design\none CloudFormation template", "row": 2, "col": 1, "fill": "blue"}
+  ],
+  "edges": [
+    {"from": "m1", "to": "network",  "label": ""},
+    {"from": "m2", "to": "compute",  "label": ""},
+    {"from": "m3", "to": "database", "label": ""},
+    {"from": "m4", "to": "storage",  "label": ""},
+    {"from": "network",  "to": "design", "label": ""},
+    {"from": "compute",  "to": "design", "label": ""},
+    {"from": "database", "to": "design", "label": ""},
+    {"from": "storage",  "to": "design", "label": ""}
+  ]
+}

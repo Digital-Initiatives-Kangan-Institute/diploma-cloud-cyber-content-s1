@@ -1,0 +1,19 @@
+{
+  "title": "Leading the divided build to team sign-off",
+  "nodes": [
+    {"id": "drafts",    "label": "Component drafts\n(each member)",  "row": 0, "col": 0, "fill": "blue",  "shape": "stadium"},
+    {"id": "integrate", "label": "Integrate into\none template",     "row": 1, "col": 0, "fill": "green"},
+    {"id": "review",    "label": "Review & monitor\n(lead)",         "row": 2, "col": 0, "fill": "amber"},
+    {"id": "decision",  "label": "Conflicts or\nissues?",            "row": 3, "col": 0, "fill": "grey",  "shape": "diamond"},
+    {"id": "resolve",   "label": "Facilitate\nresolution",           "row": 3, "col": 1, "fill": "red"},
+    {"id": "signoff",   "label": "Team sign-off",                    "row": 4, "col": 0, "fill": "green", "shape": "stadium"}
+  ],
+  "edges": [
+    {"from": "drafts",    "to": "integrate", "label": ""},
+    {"from": "integrate", "to": "review",    "label": ""},
+    {"from": "review",    "to": "decision",  "label": ""},
+    {"from": "decision",  "to": "resolve",   "label": "Yes"},
+    {"from": "resolve",   "to": "review",    "label": "re-review"},
+    {"from": "decision",  "to": "signoff",   "label": "No"}
+  ]
+}

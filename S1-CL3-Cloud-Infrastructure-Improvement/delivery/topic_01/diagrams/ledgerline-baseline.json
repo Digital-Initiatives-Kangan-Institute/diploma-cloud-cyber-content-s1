@@ -1,0 +1,16 @@
+{
+  "title": "Ledgerline baseline — single-AZ (the current state)",
+  "nodes": [
+    {"id": "users", "label": "Accounting users\n(internal, Sydney)", "row": 0, "col": 1, "fill": "grey"},
+    {"id": "alb",   "label": "Load Balancer\n(single-AZ)",           "row": 1, "col": 1, "fill": "blue"},
+    {"id": "app",   "label": "App tier\nsingle EC2 · single-AZ",     "row": 2, "col": 1, "fill": "green"},
+    {"id": "db",    "label": "RDS SQL Server\nsingle instance · single-AZ", "row": 3, "col": 1, "fill": "amber"},
+    {"id": "s3",    "label": "S3\n(static / backups)",               "row": 2, "col": 2, "fill": "purple"}
+  ],
+  "edges": [
+    {"from": "users", "to": "alb", "label": ""},
+    {"from": "alb",   "to": "app", "label": ""},
+    {"from": "app",   "to": "db",  "label": ""},
+    {"from": "app",   "to": "s3",  "label": ""}
+  ]
+}
