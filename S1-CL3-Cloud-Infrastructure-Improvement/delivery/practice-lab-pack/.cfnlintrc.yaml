@@ -1,0 +1,7 @@
+templates:
+  - baseline.yaml
+ignore_checks:
+  # W1011: the DB master password is a NoEcho parameter passed at deploy time (not stored). Same as the
+  # assessment lab-pack - the practice baseline deliberately supplies the secret at deploy, not via
+  # Secrets Manager, to keep it deployable in AWS Academy without creating IAM.
+  - W1011

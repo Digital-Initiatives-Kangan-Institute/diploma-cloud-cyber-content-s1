@@ -42,8 +42,8 @@ TBD — AWS CloudFormation/deploy modules to be pinned.
   source: recorded demo — deploy + change-set
   image: none
 - [EX] Deploy + apply the change-set on the practice engagement
-  - On the practice engagement, deploy the approved baseline, then apply the improvement as a change-set in us-east-1.
-  - Review the diff before executing; confirm the DB tier is unchanged and the app-tier improvement is live.
+  - On the practice engagement (the website), deploy the single-AZ baseline, then apply YOUR OWN improvement as a change-set in us-east-1.
+  - Review the diff before executing; confirm the change-set applies the changes you intended, note which are in-place modifies vs replacements, and check the improvement is live.
   timer: ~35 min
   image: none
 

@@ -59,8 +59,8 @@ TBD — AWS reliability/architecture modules to be pinned.
   - Note it as a scoped slice of the reliability/DR design, not a second architecture.
   image: none
 - [EX] Design the reliability improvements
-  - For the practice vehicle, design the reliability improvements to the Topic-1 goals: app-tier Multi-AZ, DB backup/restore, cross-Region DR.
-  - Argue ONE cost-benefit trade-off explicitly (the Multi-AZ-database rejection is the model) and show how each change meets a named goal.
+  - For the practice vehicle (the website), design the reliability improvements to the Topic-1 goals across the app, data and DR tiers — you decide what each tier needs, to the goals and no further.
+  - Argue ONE cost-benefit trade-off explicitly and show how each change meets a named goal. NB the website runs MySQL with no legacy single-instance constraint, so the data-tier call (e.g. whether to go Multi-AZ) is yours to justify — potentially the OPPOSITE call to Ledgerline's, reached by the same cost-benefit reasoning.
   timer: ~30 min
   image: none
 

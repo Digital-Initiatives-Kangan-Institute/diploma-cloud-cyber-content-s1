@@ -1,0 +1,445 @@
+AWSTemplateFormatVersion: '2010-09-09'
+
+Description: >-
+  YAT public Website - CL3 PRACTICE existing-state baseline (single-AZ). Deploy as the known starting
+  point for the practice improvement exercise, then apply YOUR OWN improvement to the SAME stack as a
+  change-set. Design region ap-southeast-2 (Sydney); deploys to us-east-1 in the Learner Lab. Modelled
+  on the proven Ledgerline AT3 baseline.
+
+  Public internet-facing site: EC2 + Auto Scaling in ONE AZ behind an INTERNET-FACING ALB; RDS for
+  MySQL, SINGLE-AZ, empty + encrypted; S3 for media. 2nd app/data subnets exist only because an ALB and
+  an RDS subnet group each need >= 2 AZs; the ASG is single-AZ on purpose. The improvement is OPEN - the
+  website's MySQL DB has no legacy single-instance constraint, so whether to make the data tier Multi-AZ
+  is the designer's call. PRACTICE artefact (not assessed); troubleshooting a deploy hiccup is good
+  practice. Creates NO IAM; Linux AMI from an SSM parameter.
+
+Parameters:
+  EnvName:
+    Type: String
+    Default: prod
+    AllowedValues: [dev, prod]
+    Description: Environment suffix used in resource names.
+
+  LinuxAmiId:
+    Type: AWS::SSM::Parameter::Value<AWS::EC2::Image::Id>
+    Default: /aws/service/ami-amazon-linux-latest/amzn2-ami-hvm-x86_64-gp2
+    Description: Auto-resolves the latest Amazon Linux 2 AMI (no hardcoded AMI to age).
+
+  InstanceType:
+    Type: String
+    Default: t3.micro
+    Description: Website web/app tier EC2 instance type (AWS Academy may restrict types).
+
+  DBInstanceClass:
+    Type: String
+    Default: db.t3.micro
+    Description: RDS instance class (Academy may restrict; the baseline RDS is Single-AZ).
+
+  DBMasterUsername:
+    Type: String
+    Default: webadmin
+    MinLength: 4
+    Description: RDS master username.
+
+  DBMasterPassword:
+    Type: String
+    NoEcho: true
+    MinLength: 8
+    Description: RDS master password (8+ chars). Supplied at deploy time, not stored.
+
+  InstanceProfileName:
+    Type: String
+    Default: ''
+    Description: >-
+      EC2 instance profile name. LEAVE BLANK (default) to launch with NO instance profile - the
+      baseline instances only serve a placeholder page, so they need no IAM, and this works in any
+      lab. Names vary by lab product; the Learner Lab provides LabRole if a later step needs one.
+
+  AdminCidr:
+    Type: String
+    Default: 10.0.0.0/16
+    Description: CIDR allowed SSH to the web instance (default VPC-internal only).
+
+Conditions:
+  HasInstanceProfile: !Not [!Equals [!Ref InstanceProfileName, '']]
+
+Resources:
+
+  # ---------- Network (2-AZ so the ALB and RDS subnet group can deploy) ----------
+  Vpc:
+    Type: AWS::EC2::VPC
+    Properties:
+      CidrBlock: 10.0.0.0/16
+      EnableDnsHostnames: true
+      EnableDnsSupport: true
+      Tags:
+        - { Key: Name, Value: !Sub 'yat-website-${EnvName}' }
+        - { Key: Project, Value: YAT-Website }
+        - { Key: Environment, Value: !Ref EnvName }
+
+  InternetGateway:
+    Type: AWS::EC2::InternetGateway
+    Properties:
+      Tags:
+        - { Key: Name, Value: !Sub 'yat-website-igw-${EnvName}' }
+
+  IgwAttachment:
+    Type: AWS::EC2::VPCGatewayAttachment
+    Properties:
+      VpcId: !Ref Vpc
+      InternetGatewayId: !Ref InternetGateway
+
+  PublicA:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref Vpc
+      CidrBlock: 10.0.1.0/24
+      AvailabilityZone: !Select [0, !GetAZs '']
+      MapPublicIpOnLaunch: true
+      Tags:
+        - { Key: Name, Value: !Sub 'public-a-${EnvName}' }
+
+  PublicB:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref Vpc
+      CidrBlock: 10.0.2.0/24
+      AvailabilityZone: !Select [1, !GetAZs '']
+      MapPublicIpOnLaunch: true
+      Tags:
+        - { Key: Name, Value: !Sub 'public-b-${EnvName}' }
+
+  PrivateAppA:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref Vpc
+      CidrBlock: 10.0.11.0/24
+      AvailabilityZone: !Select [0, !GetAZs '']
+      Tags:
+        - { Key: Name, Value: !Sub 'private-app-a-${EnvName}' }
+
+  PrivateAppB:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref Vpc
+      CidrBlock: 10.0.12.0/24
+      AvailabilityZone: !Select [1, !GetAZs '']
+      Tags:
+        - { Key: Name, Value: !Sub 'private-app-b-${EnvName}' }
+
+  PrivateDataA:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref Vpc
+      CidrBlock: 10.0.21.0/24
+      AvailabilityZone: !Select [0, !GetAZs '']
+      Tags:
+        - { Key: Name, Value: !Sub 'private-data-a-${EnvName}' }
+
+  PrivateDataB:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref Vpc
+      CidrBlock: 10.0.22.0/24
+      AvailabilityZone: !Select [1, !GetAZs '']
+      Tags:
+        - { Key: Name, Value: !Sub 'private-data-b-${EnvName}' }
+
+  NatEip:
+    Type: AWS::EC2::EIP
+    Properties:
+      Domain: vpc
+
+  NatGateway:
+    Type: AWS::EC2::NatGateway
+    Properties:
+      AllocationId: !GetAtt NatEip.AllocationId
+      SubnetId: !Ref PublicA
+      Tags:
+        - { Key: Name, Value: !Sub 'yat-website-nat-${EnvName}' }
+
+  PublicRouteTable:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      VpcId: !Ref Vpc
+      Tags:
+        - { Key: Name, Value: !Sub 'public-rt-${EnvName}' }
+
+  PublicDefaultRoute:
+    Type: AWS::EC2::Route
+    DependsOn: IgwAttachment
+    Properties:
+      RouteTableId: !Ref PublicRouteTable
+      DestinationCidrBlock: 0.0.0.0/0
+      GatewayId: !Ref InternetGateway
+
+  PublicAAssoc:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      RouteTableId: !Ref PublicRouteTable
+      SubnetId: !Ref PublicA
+
+  PublicBAssoc:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      RouteTableId: !Ref PublicRouteTable
+      SubnetId: !Ref PublicB
+
+  PrivateRouteTable:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      VpcId: !Ref Vpc
+      Tags:
+        - { Key: Name, Value: !Sub 'private-rt-${EnvName}' }
+
+  PrivateDefaultRoute:
+    Type: AWS::EC2::Route
+    Properties:
+      RouteTableId: !Ref PrivateRouteTable
+      DestinationCidrBlock: 0.0.0.0/0
+      NatGatewayId: !Ref NatGateway
+
+  PrivateAppAAssoc:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      RouteTableId: !Ref PrivateRouteTable
+      SubnetId: !Ref PrivateAppA
+
+  # ---------- Security groups ----------
+  AlbSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Internet-facing ALB - HTTP from the public internet
+      VpcId: !Ref Vpc
+      SecurityGroupIngress:
+        - { IpProtocol: tcp, FromPort: 80, ToPort: 80, CidrIp: 0.0.0.0/0, Description: HTTP from the public internet }
+      Tags:
+        - { Key: Name, Value: !Sub 'sg-alb-${EnvName}' }
+
+  AppSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Web/app tier - HTTP from the ALB, SSH from the admin CIDR
+      VpcId: !Ref Vpc
+      SecurityGroupIngress:
+        - { IpProtocol: tcp, FromPort: 80, ToPort: 80, SourceSecurityGroupId: !Ref AlbSecurityGroup, Description: HTTP from ALB }
+        - { IpProtocol: tcp, FromPort: 22, ToPort: 22, CidrIp: !Ref AdminCidr, Description: SSH from admin }
+      Tags:
+        - { Key: Name, Value: !Sub 'sg-app-${EnvName}' }
+
+  DbSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Database - MySQL (3306) from the app tier only
+      VpcId: !Ref Vpc
+      SecurityGroupIngress:
+        - { IpProtocol: tcp, FromPort: 3306, ToPort: 3306, SourceSecurityGroupId: !Ref AppSecurityGroup, Description: MySQL from app }
+      Tags:
+        - { Key: Name, Value: !Sub 'sg-db-${EnvName}' }
+
+  # ---------- Compute (single-AZ - the non-HA state the improvement acts on) ----------
+  AppLaunchTemplate:
+    Type: AWS::EC2::LaunchTemplate
+    Properties:
+      LaunchTemplateName: !Sub 'yat-website-app-${EnvName}'
+      LaunchTemplateData:
+        ImageId: !Ref LinuxAmiId
+        InstanceType: !Ref InstanceType
+        IamInstanceProfile: !If
+          - HasInstanceProfile
+          - Name: !Ref InstanceProfileName
+          - !Ref AWS::NoValue
+        SecurityGroupIds:
+          - !Ref AppSecurityGroup
+        UserData:
+          Fn::Base64: |
+            #!/bin/bash
+            yum install -y httpd
+            echo "YAT website infrastructure ready - awaiting application deployment" > /var/www/html/index.html
+            systemctl enable httpd
+            systemctl start httpd
+        TagSpecifications:
+          - ResourceType: instance
+            Tags:
+              - { Key: Name, Value: !Sub 'yat-website-app-${EnvName}' }
+              - { Key: Project, Value: YAT-Website }
+
+  AppAutoScalingGroup:
+    Type: AWS::AutoScaling::AutoScalingGroup
+    Properties:
+      AutoScalingGroupName: !Sub 'yat-website-app-${EnvName}'
+      MinSize: '1'
+      MaxSize: '2'
+      DesiredCapacity: '1'
+      VPCZoneIdentifier:
+        - !Ref PrivateAppA            # single AZ on purpose - the improvement spreads this across AZs
+      LaunchTemplate:
+        LaunchTemplateId: !Ref AppLaunchTemplate
+        Version: !GetAtt AppLaunchTemplate.LatestVersionNumber
+      TargetGroupARNs:
+        - !Ref AppTargetGroup
+      HealthCheckType: ELB
+      HealthCheckGracePeriod: 300
+      Tags:
+        - { Key: Name, Value: !Sub 'yat-website-app-${EnvName}', PropagateAtLaunch: true }
+
+  AppScalingPolicy:
+    Type: AWS::AutoScaling::ScalingPolicy
+    Properties:
+      AutoScalingGroupName: !Ref AppAutoScalingGroup
+      PolicyType: TargetTrackingScaling
+      TargetTrackingConfiguration:
+        PredefinedMetricSpecification:
+          PredefinedMetricType: ASGAverageCPUUtilization
+        TargetValue: 70
+
+  # ---------- Internet-facing load balancer (2-AZ subnets required; targets are single-AZ) ----------
+  AppLoadBalancer:
+    Type: AWS::ElasticLoadBalancingV2::LoadBalancer
+    Properties:
+      Name: !Sub 'yat-website-${EnvName}'
+      Scheme: internet-facing
+      Type: application
+      Subnets:
+        - !Ref PublicA
+        - !Ref PublicB
+      SecurityGroups:
+        - !Ref AlbSecurityGroup
+
+  AppTargetGroup:
+    Type: AWS::ElasticLoadBalancingV2::TargetGroup
+    Properties:
+      Name: !Sub 'yat-website-${EnvName}'
+      VpcId: !Ref Vpc
+      Port: 80
+      Protocol: HTTP
+      TargetType: instance
+      HealthCheckPath: /
+      HealthCheckProtocol: HTTP
+      Matcher:
+        HttpCode: '200'
+
+  AppListener:
+    Type: AWS::ElasticLoadBalancingV2::Listener
+    Properties:
+      LoadBalancerArn: !Ref AppLoadBalancer
+      Port: 80
+      Protocol: HTTP
+      DefaultActions:
+        - Type: forward
+          TargetGroupArn: !Ref AppTargetGroup
+
+  # ---------- Database (RDS for MySQL, Single-AZ, empty, encrypted) ----------
+  DbSubnetGroup:
+    Type: AWS::RDS::DBSubnetGroup
+    Properties:
+      DBSubnetGroupDescription: Website data subnets (spans 2 AZs - required even for Single-AZ)
+      SubnetIds:
+        - !Ref PrivateDataA
+        - !Ref PrivateDataB
+
+  Database:
+    Type: AWS::RDS::DBInstance
+    DeletionPolicy: Delete
+    UpdateReplacePolicy: Delete
+    Properties:
+      DBInstanceIdentifier: !Sub 'yat-website-${EnvName}'
+      Engine: mysql
+      DBInstanceClass: !Ref DBInstanceClass
+      AllocatedStorage: '20'
+      MultiAZ: false                  # single-AZ baseline; whether to make it Multi-AZ is the improvement's open call
+      StorageEncrypted: true
+      MasterUsername: !Ref DBMasterUsername
+      MasterUserPassword: !Ref DBMasterPassword
+      DBSubnetGroupName: !Ref DbSubnetGroup
+      VPCSecurityGroups:
+        - !Ref DbSecurityGroup
+      BackupRetentionPeriod: 7
+      PubliclyAccessible: false
+      Tags:
+        - { Key: Name, Value: !Sub 'yat-website-${EnvName}' }
+        - { Key: Project, Value: YAT-Website }
+
+  # ---------- Storage (media / content, encrypted, private) ----------
+  MediaBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: !Sub 'yat-website-media-${EnvName}-${AWS::Region}-${AWS::AccountId}'
+      VersioningConfiguration:
+        Status: Enabled
+      BucketEncryption:
+        ServerSideEncryptionConfiguration:
+          - ServerSideEncryptionByDefault:
+              SSEAlgorithm: AES256
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: true
+        BlockPublicPolicy: true
+        IgnorePublicAcls: true
+        RestrictPublicBuckets: true
+
+  LogsBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: !Sub 'yat-website-logs-${EnvName}-${AWS::Region}-${AWS::AccountId}'
+      VersioningConfiguration:
+        Status: Enabled
+      BucketEncryption:
+        ServerSideEncryptionConfiguration:
+          - ServerSideEncryptionByDefault:
+              SSEAlgorithm: AES256
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: true
+        BlockPublicPolicy: true
+        IgnorePublicAcls: true
+        RestrictPublicBuckets: true
+
+  # ---------- Monitoring (baseline alarms) ----------
+  AlarmAppCpuHigh:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmName: !Sub 'yat-website-app-cpu-high-${EnvName}'
+      Namespace: AWS/EC2
+      MetricName: CPUUtilization
+      Dimensions:
+        - Name: AutoScalingGroupName
+          Value: !Ref AppAutoScalingGroup
+      Statistic: Average
+      Period: 300
+      EvaluationPeriods: 2
+      Threshold: 80
+      ComparisonOperator: GreaterThanThreshold
+      TreatMissingData: notBreaching
+
+  AlarmRdsCpuHigh:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmName: !Sub 'yat-website-rds-cpu-high-${EnvName}'
+      Namespace: AWS/RDS
+      MetricName: CPUUtilization
+      Dimensions:
+        - Name: DBInstanceIdentifier
+          Value: !Ref Database
+      Statistic: Average
+      Period: 300
+      EvaluationPeriods: 2
+      Threshold: 80
+      ComparisonOperator: GreaterThanThreshold
+      TreatMissingData: notBreaching
+
+Outputs:
+  SiteUrl:
+    Description: Public URL of the website load balancer (open this in a browser - it is internet-facing).
+    Value: !Sub 'http://${AppLoadBalancer.DNSName}'
+
+  RdsEndpoint:
+    Description: RDS MySQL endpoint address.
+    Value: !GetAtt Database.Endpoint.Address
+
+  MediaBucketName:
+    Value: !Ref MediaBucket
+
+  LogsBucketName:
+    Value: !Ref LogsBucket
+
+  VpcId:
+    Value: !Ref Vpc
