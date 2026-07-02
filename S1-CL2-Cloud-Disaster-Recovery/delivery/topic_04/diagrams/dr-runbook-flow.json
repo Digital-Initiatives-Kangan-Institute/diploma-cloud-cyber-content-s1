@@ -1,0 +1,16 @@
+{
+  "title": "DR runbook flow",
+  "nodes": [
+    {"id": "detect",   "label": "Detect\n(alarm fires)",        "row": 0, "col": 0, "fill": "amber"},
+    {"id": "declare",  "label": "Declare\n(escalate)",          "row": 1, "col": 0, "fill": "blue"},
+    {"id": "recover",  "label": "Recover\n(execute steps)",     "row": 2, "col": 0, "fill": "green"},
+    {"id": "validate", "label": "Validate\n(service restored)", "row": 3, "col": 0, "fill": "blue"},
+    {"id": "comms",    "label": "Communicate\n(stakeholders)",  "row": 4, "col": 0, "fill": "purple"}
+  ],
+  "edges": [
+    {"from": "detect",   "to": "declare",  "label": ""},
+    {"from": "declare",  "to": "recover",  "label": ""},
+    {"from": "recover",  "to": "validate", "label": "meet RTO/RPO"},
+    {"from": "validate", "to": "comms",    "label": ""}
+  ]
+}

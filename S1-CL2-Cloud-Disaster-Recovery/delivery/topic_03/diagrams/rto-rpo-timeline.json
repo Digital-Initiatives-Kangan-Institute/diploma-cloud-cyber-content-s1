@@ -1,0 +1,12 @@
+{
+  "title": "RTO and RPO around a disruption",
+  "nodes": [
+    {"id": "backup",    "label": "Last good\nbackup",     "row": 0, "col": 0, "fill": "green"},
+    {"id": "event",     "label": "Disruption\nevent",     "row": 0, "col": 1, "fill": "amber"},
+    {"id": "recovered", "label": "Service\nrecovered",    "row": 0, "col": 2, "fill": "blue"}
+  ],
+  "edges": [
+    {"from": "backup", "to": "event",     "label": "RPO (data-loss window)"},
+    {"from": "event",  "to": "recovered", "label": "RTO (downtime window)"}
+  ]
+}

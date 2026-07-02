@@ -1,0 +1,14 @@
+{
+  "title": "Deployed microservice (us-east-1, substituted)",
+  "nodes": [
+    {"id": "apigw", "label": "API Gateway\n(HTTPS route)",     "row": 0, "col": 0, "fill": "blue"},
+    {"id": "queue", "label": "SQS queue\n(event source)",      "row": 1, "col": 0, "fill": "purple"},
+    {"id": "fn",    "label": "Lambda\n(LabRole exec role)",    "row": 2, "col": 0, "fill": "green"},
+    {"id": "store", "label": "DynamoDB\n(provided store)",     "row": 3, "col": 0, "fill": "amber"}
+  ],
+  "edges": [
+    {"from": "apigw", "to": "queue", "label": ""},
+    {"from": "queue", "to": "fn",    "label": "triggers"},
+    {"from": "fn",    "to": "store", "label": "write"}
+  ]
+}

@@ -1,0 +1,16 @@
+{
+  "title": "Serverless audit-log microservice",
+  "nodes": [
+    {"id": "web",   "label": "Website\n(event producer)",              "row": 0, "col": 0, "fill": "grey"},
+    {"id": "apigw", "label": "API Gateway\n(webhook ingress)",         "row": 1, "col": 0, "fill": "blue"},
+    {"id": "queue", "label": "SQS queue\n(buffer · decouple)",         "row": 2, "col": 0, "fill": "purple"},
+    {"id": "fn",    "label": "Lambda\n(validate + write)",             "row": 3, "col": 0, "fill": "green"},
+    {"id": "store", "label": "DynamoDB\n(append-only · India ap-south-1)", "row": 4, "col": 0, "fill": "amber"}
+  ],
+  "edges": [
+    {"from": "web",   "to": "apigw", "label": "webhook"},
+    {"from": "apigw", "to": "queue", "label": ""},
+    {"from": "queue", "to": "fn",    "label": "event source"},
+    {"from": "fn",    "to": "store", "label": "put item"}
+  ]
+}

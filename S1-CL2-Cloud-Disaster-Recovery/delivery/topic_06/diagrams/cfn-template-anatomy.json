@@ -1,0 +1,14 @@
+{
+  "title": "CloudFormation template anatomy",
+  "nodes": [
+    {"id": "params",    "label": "Parameters\n(inputs)",             "row": 0, "col": 0, "fill": "blue"},
+    {"id": "resources", "label": "Resources\n(what to create)",      "row": 1, "col": 0, "fill": "green"},
+    {"id": "outputs",   "label": "Outputs\n(what to share)",         "row": 2, "col": 0, "fill": "amber"},
+    {"id": "fns",       "label": "Intrinsic functions\n!Ref !GetAtt !Sub", "row": 1, "col": 1, "fill": "purple"}
+  ],
+  "edges": [
+    {"from": "params",    "to": "resources", "label": "feed"},
+    {"from": "resources", "to": "outputs",   "label": "expose"},
+    {"from": "fns",       "to": "resources", "label": "wire deps"}
+  ]
+}
