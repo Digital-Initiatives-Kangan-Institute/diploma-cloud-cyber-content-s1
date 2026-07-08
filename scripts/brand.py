@@ -21,3 +21,7 @@ FONT = "Source Sans 3"
 # --- Standard strings ---------------------------------------------------------
 DISCLOSURE = "This is a fictional organisation used as a case study in an educational context."
 ADDRESS = "YAT College  ·  175 Cremorne St, Cremorne VIC 3121"
+
+# --- Scenario organisation identity (used by scenario_document letterhead) -----
+ORG_NAME = "YAT College"                 # footer lockup
+ORG_WORDMARK = ("YAT", "  COLLEGE")      # cover-page wordmark: (primary, secondary) runs

@@ -23,7 +23,8 @@ Default: S1-CL2-Cloud-Disaster-Recovery/assessments/AT2/AT2-exemplar-deployment-
 import sys
 from pathlib import Path
 
-sys.path.insert(0, str(next(d for d in Path(__file__).resolve().parents if (d / "helpers" / "__init__.py").exists())))  # noqa: E402
+sys.path.insert(0, str(Path(__file__).resolve().parents[1]))  # content-repo scripts/ (brand + registry)  # noqa: E402
+sys.path.insert(0, str(next(d / "scripts" for d in Path(__file__).resolve().parents if (d / "scripts" / "helpers" / "__init__.py").exists())))  # umbrella scripts/ (engine)  # noqa: E402
 from helpers.docx_body_text import add_body_paragraph, add_bullet_list  # noqa: E402
 from helpers.docx_tables import add_data_table  # noqa: E402
 from helpers.uoc_tags import add_uoc_evidence_tag  # noqa: E402
