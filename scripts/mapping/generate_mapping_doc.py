@@ -31,44 +31,34 @@ from pathlib import Path
 
 from docx import Document  # noqa: E402
 
-REPO = Path(__file__).resolve().parents[2]  # scripts/mapping/ -> content repo root
 W = "{http://schemas.openxmlformats.org/wordprocessingml/2006/main}"
 AT_LABELS = ("AT1", "AT2", "AT3")
 
 
 # ============================================================================
-# Per-cluster registry. Data (benchmarks, FS_MAP, AC_MAP, UNITS, titles, paths) is sourced from the
-# existing modules; only policy lives here.
+# Course registry — the CLUSTERS registry, the qualification metadata, and the unit-code prefixes come
+# from the CONTENT REPO's mapping_registry.py (this engine is generic and course-agnostic). Resolve it
+# via --registry <dir|file>; otherwise the engine's sibling scripts/ (works when the engine sits inside
+# the content repo). REPO (the content repo root) is derived from the registry's own location, so the
+# engine works wherever it lives.
 # ============================================================================
 
-CLUSTERS = {
-    "cl1": dict(
-        # Legacy cluster: no invertible assessor benchmark — the mapping comes from the hand-authored
-        # DATA_* dicts (synthesised into a direct inversion). Titles are reproduced from the committed
-        # docs so regeneration only fixes the structural artefacts (401 AC block-row; 517 PE split).
-        pkg="s1_cl1", cluster_dir="S1-CL1-Cloud-Design-Build", n_ats=3,
-        build_mod="build_s1_cl1_mapping_docs", source="data",
-        fs_source="benchmark_then_map", ac_source="benchmark_then_map",
-        at_titles=["AT1 – Business Case", "AT2 - Deployment", "AT3 – High Availability"],
-        unit_titles={
-            "ICTCLD401": "Configure cloud services",
-            "ICTCLD502": "Design and implement highly-available cloud infrastructure",
-            "ICTICT517": "Match ICT needs with the strategic direction of the organisation",
-        },
-    ),
-    "cl2": dict(
-        pkg="s1_cl2", cluster_dir="S1-CL2-Cloud-Disaster-Recovery", n_ats=2,
-        assessors=["build_s1_cl2_at1_assessor", "build_s1_cl2_at2_assessor"],
-        build_mod="build_s1_cl2_mapping_docs",
-        fs_source="map_only", ac_source="map_only",
-    ),
-    "cl3": dict(
-        pkg="s1_cl3", cluster_dir="S1-CL3-Cloud-Infrastructure-Improvement", n_ats=3,
-        assessors=["build_s1_cl3_at1_assessor", "build_s1_cl3_at2_assessor", "build_s1_cl3_at3_assessor"],
-        build_mod="build_s1_cl3_mapping_docs",
-        fs_source="benchmark_then_map", ac_source="benchmark_then_map",
-    ),
-}
+def _registry_dir(argv):
+    for i, a in enumerate(argv):
+        if a == "--registry" and i + 1 < len(argv):
+            p = Path(argv[i + 1]).resolve()
+            return p.parent if p.is_file() else p
+    return Path(__file__).resolve().parents[1]  # scripts/ (sibling of mapping/)
+
+
+sys.path.insert(0, str(_registry_dir(sys.argv)))
+import mapping_registry as _reg  # noqa: E402
+
+CLUSTERS = _reg.CLUSTERS
+QUALIFICATION = _reg.QUALIFICATION
+UNIT_PREFIXES = _reg.UNIT_PREFIXES
+REPO = Path(_reg.__file__).resolve().parents[1]  # content repo root (registry at <repo>/scripts/)
+_UNIT_RE = r"((?:" + "|".join(UNIT_PREFIXES) + r")\d{3})\s+(.*)"
 
 
 def load_config(key):
@@ -247,7 +237,7 @@ def _parse_tags(s):
     cur_unit = None
     for m in re.finditer(r"\[([^\]]+)\]", s):
         inner = m.group(1).strip()
-        um = re.match(r"((?:ICTCLD|ICTICT|BSBXTW)\d{3})\s+(.*)", inner)
+        um = re.match(_UNIT_RE, inner)
         if um:
             cur_unit, rest = um.group(1), um.group(2)
         else:
@@ -358,8 +348,8 @@ def build_unit(cfg, unit, out_path):
     _put(det.rows[1].cells[1], code)
     _put(det.rows[1].cells[3], unit["title"])
     _put(det.rows[1].cells[5], "1")
-    _put(det.rows[2].cells[1], "ICT50220")
-    _put(det.rows[2].cells[3], "Diploma of Information Technology")
+    _put(det.rows[2].cells[1], QUALIFICATION["code"])
+    _put(det.rows[2].cells[3], QUALIFICATION["title"])
 
     desc = doc.tables[T_DESC]
     for i, title in enumerate(cfg["at_titles"]):
@@ -479,6 +469,8 @@ def main():
     ap = argparse.ArgumentParser(description="General Assessment Mapping document generator.")
     ap.add_argument("--check", metavar="CLUSTER", help="cl2 | cl3 | all")
     ap.add_argument("--build", metavar="CLUSTER", help="cl2 | cl3 | all")
+    ap.add_argument("--registry", metavar="PATH",
+                    help="course mapping_registry.py (dir or file); default: the engine's sibling scripts/")
     args = ap.parse_args()
     mode = "check" if args.check else "build"
     target = args.check or args.build
