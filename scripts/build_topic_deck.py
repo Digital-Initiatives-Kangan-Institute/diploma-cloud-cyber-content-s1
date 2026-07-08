@@ -43,6 +43,7 @@ import sys
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent / "helpers"))
+sys.path.insert(0, str(Path(__file__).resolve().parent))   # scripts/ — for the course brand pack (brand.py)
 import kangan_deck as k          # noqa: E402
 from deck_images import resolve_image   # noqa: E402
 

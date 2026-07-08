@@ -27,8 +27,8 @@ from helpers.docx_body_text import add_guidance_text, add_response_placeholder  
 from helpers.docx_callouts import add_applicability_note, add_convention_box  # noqa: E402
 from helpers.docx_styling import add_field, paragraph_bottom_rule, set_cell_borders, shade_cell  # noqa: E402
 from helpers.docx_tables import add_template_table  # noqa: E402
-from helpers.yat_brand import ADDRESS, CREAM, GREY, TEAL  # noqa: E402
-from helpers.yat_docx_document import build_header_footer, configure_styles, wordmark  # noqa: E402
+from brand import ADDRESS, CREAM, GREY, TEAL  # noqa: E402
+from helpers.scenario_document import build_header_footer, configure_styles, wordmark  # noqa: E402
 
 from docx import Document  # noqa: E402
 from docx.enum.section import WD_SECTION  # noqa: E402
@@ -326,6 +326,6 @@ def build(path, web_scale=False):
 
 
 if __name__ == "__main__":
-    base_dir = Path("../diploma-cloud-cyber-website/public/templates")
+    base_dir = Path("../diploma-cloud-cyber-website-s1/public/templates")
     build(base_dir / "YAT-Solution-Design-Template.docx", web_scale=False)
     build(base_dir / "YAT-Solution-Design-Template-Webscale.docx", web_scale=True)

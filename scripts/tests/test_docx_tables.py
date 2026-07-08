@@ -15,7 +15,7 @@ from helpers.docx_tables import (  # noqa: E402
     add_template_table, add_data_table, set_cell_content, find_instruction_row, clear_table_rows,
     add_section_row, add_criterion_row,
 )
-from helpers.yat_brand import GREY  # noqa: E402
+from brand import GREY  # noqa: E402
 
 
 def test_add_section_row_bolds_label_and_blanks_col1():

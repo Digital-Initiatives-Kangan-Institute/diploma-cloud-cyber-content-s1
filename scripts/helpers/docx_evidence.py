@@ -6,7 +6,7 @@ Two helpers used in worked exemplars / instruments: one marks a section deferred
 """
 from docx.shared import Pt, RGBColor
 
-from helpers.yat_brand import TERRACOTTA, TEAL, GREY
+from brand import TERRACOTTA, TEAL, GREY
 
 #: Run size (points) for the "Not applicable" marker.
 NOT_APPLICABLE_FONT_SIZE_PT = 10.5

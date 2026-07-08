@@ -11,7 +11,7 @@ from docx import Document  # noqa: E402
 from docx.oxml.ns import qn  # noqa: E402
 
 from helpers.docx_callouts import add_applicability_note, add_convention_box  # noqa: E402
-from helpers.yat_brand import TERRACOTTA, CREAM, TEAL  # noqa: E402
+from brand import TERRACOTTA, CREAM, TEAL  # noqa: E402
 
 
 def test_applicability_note_text_and_colour():

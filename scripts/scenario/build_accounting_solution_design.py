@@ -11,7 +11,7 @@ marked "Not applicable" per the convention. In-world artefact (no UoC tags).
 Output to the website documents folder for printing to PDF, then wiring into the AT2/AT3 intranet states.
 
 Usage:  python scripts/scenario/build_accounting_solution_design.py [output.docx]
-Default: ../diploma-cloud-cyber-website/public/documents/YAT-Accounting-Baseline-Solution-Design.docx
+Default: ../diploma-cloud-cyber-website-s1/public/documents/YAT-Accounting-Baseline-Solution-Design.docx
 """
 import sys
 from pathlib import Path
@@ -20,8 +20,8 @@ sys.path.insert(0, str(next(d for d in Path(__file__).resolve().parents if (d / 
 from helpers.docx_body_text import add_body_paragraph, add_bullet_list  # noqa: E402
 from helpers.docx_tables import add_data_table  # noqa: E402
 from helpers.docx_styling import add_field, paragraph_bottom_rule, set_cell_borders, shade_cell  # noqa: E402
-from helpers.yat_brand import ADDRESS, CREAM, GREY, TEAL, TERRACOTTA  # noqa: E402
-from helpers.yat_docx_document import build_header_footer, configure_styles, wordmark  # noqa: E402
+from brand import ADDRESS, CREAM, GREY, TEAL, TERRACOTTA  # noqa: E402
+from helpers.scenario_document import build_header_footer, configure_styles, wordmark  # noqa: E402
 
 from docx import Document  # noqa: E402
 from docx.enum.section import WD_SECTION  # noqa: E402
@@ -346,6 +346,6 @@ def build(path):
 
 
 if __name__ == "__main__":
-    default = "../diploma-cloud-cyber-website/public/documents/YAT-Accounting-Baseline-Solution-Design.docx"
+    default = "../diploma-cloud-cyber-website-s1/public/documents/YAT-Accounting-Baseline-Solution-Design.docx"
     out = sys.argv[1] if len(sys.argv) > 1 else default
     build(out)

@@ -32,8 +32,8 @@ from helpers.docx_body_text import add_body_paragraph  # noqa: E402
 from helpers.docx_tables import add_data_table  # noqa: E402
 from helpers.uoc_tags import add_uoc_evidence_tag  # noqa: E402
 from helpers.docx_styling import add_field, paragraph_bottom_rule, set_cell_borders, shade_cell  # noqa: E402
-from helpers.yat_brand import ADDRESS, CREAM, GREY, TEAL, TERRACOTTA  # noqa: E402
-from helpers.yat_docx_document import build_header_footer, configure_styles, wordmark  # noqa: E402
+from brand import ADDRESS, CREAM, GREY, TEAL, TERRACOTTA  # noqa: E402
+from helpers.scenario_document import build_header_footer, configure_styles, wordmark  # noqa: E402
 from docx import Document  # noqa: E402
 from docx.enum.section import WD_SECTION  # noqa: E402
 from docx.shared import Pt, Cm, RGBColor  # noqa: E402

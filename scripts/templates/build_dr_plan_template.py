@@ -8,7 +8,7 @@ and swapping in guidance + response space and empty tables. Sections a particula
 doesn't need carry the "Not applicable — reason" convention rather than being deleted.
 
 Usage:  python scripts/build_dr_plan_template.py [output.docx]
-Default: ../diploma-cloud-cyber-website/public/templates/YAT-DR-Plan-Template.docx
+Default: ../diploma-cloud-cyber-website-s1/public/templates/YAT-DR-Plan-Template.docx
 """
 import sys
 from pathlib import Path
@@ -18,8 +18,8 @@ from helpers.docx_body_text import add_guidance_text, add_response_placeholder  
 from helpers.docx_callouts import add_convention_box  # noqa: E402
 from helpers.docx_styling import add_field, paragraph_bottom_rule, set_cell_borders, shade_cell  # noqa: E402
 from helpers.docx_tables import add_template_table  # noqa: E402
-from helpers.yat_brand import ADDRESS, CHARCOAL, CREAM, GREY, OCHRE, TEAL  # noqa: E402
-from helpers.yat_docx_document import build_header_footer, configure_styles, wordmark  # noqa: E402
+from brand import ADDRESS, CHARCOAL, CREAM, GREY, OCHRE, TEAL  # noqa: E402
+from helpers.scenario_document import build_header_footer, configure_styles, wordmark  # noqa: E402
 
 from docx import Document  # noqa: E402
 from docx.enum.section import WD_SECTION  # noqa: E402
@@ -266,6 +266,6 @@ def build(path):
 
 
 if __name__ == "__main__":
-    default = "../diploma-cloud-cyber-website/public/templates/YAT-DR-Plan-Template.docx"
+    default = "../diploma-cloud-cyber-website-s1/public/templates/YAT-DR-Plan-Template.docx"
     out = sys.argv[1] if len(sys.argv) > 1 else default
     build(out)

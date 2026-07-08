@@ -7,7 +7,7 @@ cost → benefits → risks → plan → decision → close. Each content slide 
 greyed guidance the presenter replaces. Branding via pptx_brand (brand-pack §4/§5.3).
 
 Usage:  python scripts/build_bc_deck_template.py [output.pptx]
-Default: ../diploma-cloud-cyber-website/public/templates/YAT-Business-Case-Deck-Template.pptx
+Default: ../diploma-cloud-cyber-website-s1/public/templates/YAT-Business-Case-Deck-Template.pptx
 """
 import sys
 from pathlib import Path
@@ -98,6 +98,6 @@ def build(path):
 
 
 if __name__ == "__main__":
-    default = "../diploma-cloud-cyber-website/public/templates/YAT-Business-Case-Deck-Template.pptx"
+    default = "../diploma-cloud-cyber-website-s1/public/templates/YAT-Business-Case-Deck-Template.pptx"
     out = sys.argv[1] if len(sys.argv) > 1 else default
     build(out)

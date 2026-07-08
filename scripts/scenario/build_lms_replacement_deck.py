@@ -6,7 +6,7 @@ Case (GrayBoard -> DOODLE, on-prem). Student-facing example of a finished board 
 pairs with the LMS Replacement Business Case PDF on the same project. In-world only.
 
 Usage:  python scripts/build_lms_replacement_deck.py [output.pptx]
-Default: ../diploma-cloud-cyber-website/public/documents/YAT-LMS-Replacement-Business-Case-Presentation.pptx
+Default: ../diploma-cloud-cyber-website-s1/public/documents/YAT-LMS-Replacement-Business-Case-Presentation.pptx
 """
 import sys
 from pathlib import Path
@@ -111,6 +111,6 @@ def build(path):
 
 
 if __name__ == "__main__":
-    default = "../diploma-cloud-cyber-website/public/documents/YAT-LMS-Replacement-Business-Case-Presentation.pptx"
+    default = "../diploma-cloud-cyber-website-s1/public/documents/YAT-LMS-Replacement-Business-Case-Presentation.pptx"
     out = sys.argv[1] if len(sys.argv) > 1 else default
     build(out)

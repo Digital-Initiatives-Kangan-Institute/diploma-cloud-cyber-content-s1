@@ -1,4 +1,4 @@
-"""Tests for helpers.yat_brand — the brand constants."""
+"""Tests for the course brand pack (scripts/brand.py) — the brand constants."""
 import pathlib
 import re
 import sys
@@ -8,7 +8,7 @@ sys.path.insert(0, str(next(
     if (d / "helpers" / "__init__.py").exists()
 )))
 
-from helpers import yat_brand  # noqa: E402
+import brand as yat_brand  # noqa: E402
 
 HEX = ("TEAL", "TERRACOTTA", "OCHRE", "CREAM", "CHARCOAL", "GREY", "STONE", "WHITE")
 

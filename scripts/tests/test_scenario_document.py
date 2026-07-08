@@ -1,4 +1,4 @@
-"""Tests for helpers.yat_docx_document."""
+"""Tests for helpers.scenario_document."""
 import pathlib
 import sys
 
@@ -10,8 +10,8 @@ sys.path.insert(0, str(next(
 from docx import Document  # noqa: E402
 from docx.shared import Pt  # noqa: E402
 
-from helpers.yat_docx_document import configure_styles, build_header_footer, wordmark  # noqa: E402
-from helpers.yat_brand import FONT, TEAL, TERRACOTTA, DISCLOSURE  # noqa: E402
+from helpers.scenario_document import configure_styles, build_header_footer, wordmark  # noqa: E402
+from brand import FONT, TEAL, TERRACOTTA, DISCLOSURE  # noqa: E402
 
 
 def test_configure_styles_sets_normal_and_title():

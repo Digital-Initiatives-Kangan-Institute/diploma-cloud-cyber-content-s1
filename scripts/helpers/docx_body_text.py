@@ -5,7 +5,7 @@ python-docx: no dependency on a brand palette or on any end-product builder.
 """
 from docx.shared import Pt, RGBColor
 
-from helpers.yat_brand import GREY
+from brand import GREY
 
 #: Standard body-text run size (points) used across YAT/MTS documents.
 BODY_FONT_SIZE_PT = 10.5

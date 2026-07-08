@@ -9,7 +9,7 @@ from docx.enum.text import WD_ALIGN_PARAGRAPH
 from docx.shared import Pt, Cm, RGBColor
 
 from helpers.docx_styling import shade_cell, set_cell_borders
-from helpers.yat_brand import TEAL, WHITE, GREY
+from brand import TEAL, WHITE, GREY
 
 
 def add_template_table(doc, headers, rows, widths=None):

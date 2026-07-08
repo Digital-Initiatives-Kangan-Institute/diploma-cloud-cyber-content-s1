@@ -26,11 +26,11 @@ from docx.oxml.ns import qn
 from docx.shared import Pt, Cm, RGBColor
 
 sys.path.insert(0, str(next(d for d in Path(__file__).resolve().parents if (d / "helpers" / "__init__.py").exists())))  # noqa: E402
-from helpers.yat_brand import ADDRESS, CHARCOAL, CREAM, DISCLOSURE, FONT, GREY, OCHRE, STONE, TEAL, TERRACOTTA, WHITE  # noqa: E402
+from brand import ADDRESS, CHARCOAL, CREAM, DISCLOSURE, FONT, GREY, OCHRE, STONE, TEAL, TERRACOTTA, WHITE  # noqa: E402
 from helpers.docx_styling import add_field, paragraph_bottom_rule, set_cell_borders, shade_cell, shade_paragraph  # noqa: E402
 from helpers.docx_body_text import add_guidance_text, add_response_placeholder  # noqa: E402
 from helpers.docx_tables import add_template_table  # noqa: E402
-from helpers.yat_docx_document import build_header_footer, configure_styles, wordmark  # noqa: E402
+from helpers.scenario_document import build_header_footer, configure_styles, wordmark  # noqa: E402
 
 
 def build(path):
@@ -294,6 +294,6 @@ def build(path):
 
 
 if __name__ == "__main__":
-    default = "../diploma-cloud-cyber-website/public/templates/YAT-Business-Case-Template.docx"
+    default = "../diploma-cloud-cyber-website-s1/public/templates/YAT-Business-Case-Template.docx"
     out = sys.argv[1] if len(sys.argv) > 1 else default
     build(out)

@@ -12,7 +12,7 @@ Pass deprecated=True (or `--deprecated`) to stamp the superseded banner for the 
 states (CL1 AT3, CL2 AT1), where the LMS has migrated and this plan no longer applies.
 
 Usage:  python scripts/scenario/build_lms_dr_plan_onprem.py [output.docx] [--deprecated]
-Default: ../diploma-cloud-cyber-website/public/documents/YAT-LMS-DR-Plan-OnPrem.docx
+Default: ../diploma-cloud-cyber-website-s1/public/documents/YAT-LMS-DR-Plan-OnPrem.docx
 """
 import sys
 from pathlib import Path
@@ -21,8 +21,8 @@ sys.path.insert(0, str(next(d for d in Path(__file__).resolve().parents if (d / 
 from helpers.docx_body_text import add_body_paragraph  # noqa: E402
 from helpers.docx_tables import add_data_table  # noqa: E402
 from helpers.docx_styling import add_field, paragraph_bottom_rule, set_cell_borders, shade_cell  # noqa: E402
-from helpers.yat_brand import ADDRESS, CHARCOAL, CREAM, GREY, TEAL, TERRACOTTA  # noqa: E402
-from helpers.yat_docx_document import build_header_footer, configure_styles, wordmark  # noqa: E402
+from brand import ADDRESS, CHARCOAL, CREAM, GREY, TEAL, TERRACOTTA  # noqa: E402
+from helpers.scenario_document import build_header_footer, configure_styles, wordmark  # noqa: E402
 
 from docx import Document  # noqa: E402
 from docx.enum.section import WD_SECTION  # noqa: E402
@@ -225,6 +225,6 @@ def build(path, deprecated=False):
 if __name__ == "__main__":
     args = [a for a in sys.argv[1:] if a != "--deprecated"]
     dep = "--deprecated" in sys.argv[1:]
-    default = "../diploma-cloud-cyber-website/public/documents/YAT-LMS-DR-Plan-OnPrem.docx"
+    default = "../diploma-cloud-cyber-website-s1/public/documents/YAT-LMS-DR-Plan-OnPrem.docx"
     out = args[0] if args else default
     build(out, deprecated=dep)

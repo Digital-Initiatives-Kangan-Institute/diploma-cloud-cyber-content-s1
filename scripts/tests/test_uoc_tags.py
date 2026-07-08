@@ -11,7 +11,7 @@ from docx import Document  # noqa: E402
 from docx.shared import Pt  # noqa: E402
 
 from helpers.uoc_tags import add_uoc_evidence_tag, UOC_TAG_FONT_SIZE_PT  # noqa: E402
-from helpers.yat_brand import TEAL  # noqa: E402
+from brand import TEAL  # noqa: E402
 
 
 def test_evidence_tag_prefixes_text():

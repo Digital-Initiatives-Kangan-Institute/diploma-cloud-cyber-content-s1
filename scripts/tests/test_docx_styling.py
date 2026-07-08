@@ -13,7 +13,7 @@ from docx.oxml.ns import qn  # noqa: E402
 from helpers.docx_styling import (  # noqa: E402
     shade_paragraph, shade_cell, set_cell_borders, paragraph_bottom_rule, add_field,
 )
-from helpers.yat_brand import TEAL, STONE  # noqa: E402
+from brand import TEAL, STONE  # noqa: E402
 
 
 def _cell():

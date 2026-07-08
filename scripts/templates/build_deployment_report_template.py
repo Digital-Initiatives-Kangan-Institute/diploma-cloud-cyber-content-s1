@@ -28,8 +28,8 @@ from helpers.docx_body_text import add_guidance_text, add_response_placeholder  
 from helpers.docx_callouts import add_applicability_note, add_convention_box  # noqa: E402
 from helpers.docx_styling import add_field, paragraph_bottom_rule, set_cell_borders, shade_cell  # noqa: E402
 from helpers.docx_tables import add_template_table  # noqa: E402
-from helpers.yat_brand import ADDRESS, CHARCOAL, CREAM, GREY, OCHRE, TEAL, TERRACOTTA  # noqa: E402
-from helpers.yat_docx_document import build_header_footer, configure_styles, wordmark  # noqa: E402
+from brand import ADDRESS, CHARCOAL, CREAM, GREY, OCHRE, TEAL, TERRACOTTA  # noqa: E402
+from helpers.scenario_document import build_header_footer, configure_styles, wordmark  # noqa: E402
 
 from docx import Document  # noqa: E402
 from docx.enum.section import WD_SECTION  # noqa: E402
@@ -409,6 +409,6 @@ def _serverless_body(doc, h1, h3):
 
 
 if __name__ == "__main__":
-    base_dir = Path("../diploma-cloud-cyber-website/public/templates")
+    base_dir = Path("../diploma-cloud-cyber-website-s1/public/templates")
     build(base_dir / "YAT-Deployment-Report-Template.docx", serverless=False)
     build(base_dir / "YAT-Deployment-Report-Template-Serverless.docx", serverless=True)

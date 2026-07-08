@@ -6,7 +6,7 @@ artefacts only — never used in in-world / student-facing documents.
 """
 from docx.shared import Pt, RGBColor
 
-from helpers.yat_brand import TEAL
+from brand import TEAL
 
 #: Run size (points) for the UoC evidence tag.
 UOC_TAG_FONT_SIZE_PT = 8.5

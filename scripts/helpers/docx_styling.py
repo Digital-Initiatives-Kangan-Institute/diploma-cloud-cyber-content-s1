@@ -8,7 +8,7 @@ from docx.oxml import OxmlElement
 from docx.oxml.ns import qn
 from docx.shared import RGBColor
 
-from helpers.yat_brand import STONE, TEAL, GREY
+from brand import STONE, TEAL, GREY
 
 
 def _shade(element_pr, hex_fill):

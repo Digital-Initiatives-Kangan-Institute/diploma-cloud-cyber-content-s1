@@ -14,7 +14,7 @@ from helpers.docx_evidence import (  # noqa: E402
     add_not_applicable, add_described_evidence,
     NOT_APPLICABLE_FONT_SIZE_PT, EVIDENCE_FONT_SIZE_PT,
 )
-from helpers.yat_brand import TERRACOTTA, TEAL, GREY  # noqa: E402
+from brand import TERRACOTTA, TEAL, GREY  # noqa: E402
 
 
 def test_not_applicable_text_bold_terracotta():

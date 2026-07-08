@@ -5,7 +5,7 @@ for ...") and to render shaded convention/instruction boxes.
 """
 from docx.shared import Pt, RGBColor
 
-from helpers.yat_brand import TERRACOTTA, CREAM, OCHRE, TEAL, CHARCOAL
+from brand import TERRACOTTA, CREAM, OCHRE, TEAL, CHARCOAL
 from helpers.docx_styling import shade_cell, set_cell_borders
 
 #: Run size (points) for the applicability marker.

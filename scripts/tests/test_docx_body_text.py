@@ -19,7 +19,7 @@ from helpers.docx_body_text import (  # noqa: E402
     BODY_FONT_SIZE_PT,
     GUIDANCE_FONT_SIZE_PT,
 )
-from helpers.yat_brand import GREY  # noqa: E402
+from brand import GREY  # noqa: E402
 
 
 def test_guidance_text_is_italic_grey_at_guidance_size():

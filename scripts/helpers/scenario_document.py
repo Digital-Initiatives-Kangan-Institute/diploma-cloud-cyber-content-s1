@@ -8,7 +8,7 @@ from docx.enum.text import WD_ALIGN_PARAGRAPH, WD_TAB_ALIGNMENT
 from docx.oxml.ns import qn
 from docx.shared import Pt, Cm, RGBColor
 
-from helpers.yat_brand import (
+from brand import (
     FONT, CHARCOAL, TEAL, TERRACOTTA, OCHRE, GREY, DISCLOSURE,
 )
 from helpers.docx_styling import shade_paragraph, paragraph_bottom_rule, add_field

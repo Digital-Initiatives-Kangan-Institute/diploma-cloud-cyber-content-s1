@@ -10,7 +10,7 @@ as an approved past deliverable. Reuses the YAT brand template helpers (build_bc
 and the filled-table/prose helpers (build_s1_cl1_at1_bc_exemplar) so it matches the house style exactly.
 
 Usage:  python scripts/scenario/build_lms_replacement_bc.py [output.docx]
-Default: ../diploma-cloud-cyber-website/public/documents/YAT-LMS-Replacement-Business-Case.docx
+Default: ../diploma-cloud-cyber-website-s1/public/documents/YAT-LMS-Replacement-Business-Case.docx
 """
 import sys
 from pathlib import Path
@@ -19,8 +19,8 @@ sys.path.insert(0, str(next(d for d in Path(__file__).resolve().parents if (d / 
 from helpers.docx_body_text import add_body_paragraph, add_bullet_list  # noqa: E402
 from helpers.docx_tables import add_data_table  # noqa: E402
 from helpers.docx_styling import add_field, paragraph_bottom_rule, set_cell_borders, shade_cell  # noqa: E402
-from helpers.yat_brand import ADDRESS, CREAM, GREY, TEAL, TERRACOTTA  # noqa: E402
-from helpers.yat_docx_document import build_header_footer, configure_styles, wordmark  # noqa: E402
+from brand import ADDRESS, CREAM, GREY, TEAL, TERRACOTTA  # noqa: E402
+from helpers.scenario_document import build_header_footer, configure_styles, wordmark  # noqa: E402
 
 from docx import Document            # noqa: E402
 from docx.enum.section import WD_SECTION  # noqa: E402
@@ -358,6 +358,6 @@ def build(path):
 
 
 if __name__ == "__main__":
-    default = "../diploma-cloud-cyber-website/public/documents/YAT-LMS-Replacement-Business-Case.docx"
+    default = "../diploma-cloud-cyber-website-s1/public/documents/YAT-LMS-Replacement-Business-Case.docx"
     out = sys.argv[1] if len(sys.argv) > 1 else default
     build(out)
