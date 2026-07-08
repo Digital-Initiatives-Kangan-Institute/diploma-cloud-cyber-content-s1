@@ -50,7 +50,7 @@ As pinned in the build (AWS refs carried on each slide's type tag where applicab
 - [AWS ACA M10] The cloud HA toolkit
   image: none
 - [AWS ACA M10] Multi-AZ in action
-  image: reuse Multi-AZ RDS — primary + synchronous standby (ICTCLD502 · HA requirements S13; alt: ACA M10 S44)
+  image: diagram multi-az-rds
 - [EX] Match the mechanism to the SPOF
   image: none
 - [TAKEAWAYS] Section 3 · Cloud HA

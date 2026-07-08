@@ -24,6 +24,10 @@ from helpers.kangan_deck import *  # noqa: F401,F403
 
 OUT_DEFAULT = "S1-CL1-Cloud-Design-Build/delivery/topic_12/Topic_12_Slides.pptx"
 
+# Committed image assets (Path A: place real images instead of placeholder labels).
+TOPIC = Path(__file__).resolve().parents[2] / "S1-CL1-Cloud-Design-Build" / "delivery" / "topic_12"
+def _img(rel): return {"path": str(TOPIC / rel)}
+
 A1, A2, A3 = MAGENTA, SKY, GREEN
 
 
@@ -56,7 +60,7 @@ def build(path):
         (0, "In a single-AZ cloud build that's the AZ itself, the one database, the one running instance, the one NAT.",
             {"bold": True, "color": A1, "mark_color": A1}),
         (0, "A network diagram makes the SPOFs visible — find them before you design the fix."),
-    ], ["Identify-SPoFs network diagram (ICTCLD502 · Design HA S10)"], A1)
+    ], [_img("diagrams/identify-spofs.png")], A1)
     content_slide(prs, pg(), "Estimate the recovery objectives", "ICTCLD502 · Evaluating availability S8", [
         (0, "Estimate the baseline's RPO from the backup interval, and its RTO from recovery-per-tier + testing."),
         (0, "Worked example: 15-min backups → RPO 15 min; 30 min × 3 tiers + 1 h test → RTO 2.5 h."),
@@ -91,7 +95,7 @@ def build(path):
         (0, "The load balancer routes only to healthy targets; the ASG keeps capacity in each AZ; the database fails over automatically.",
             {"bold": True, "color": A2, "mark_color": A2}),
         (0, "Redundant egress (a NAT per AZ) keeps outbound working if an AZ is lost."),
-    ], ["Cross-AZ HA architecture — ALB + ASG + Multi-AZ RDS (ACA M10 S41)"], A2)
+    ], [_img("diagrams/cross-az-ha-architecture.png")], A2)
     content_slide(prs, pg(), "Remove each SPOF — the mapping", "design method", [
         (0, "Single Availability Zone → a second AZ with mirrored subnets."),
         (0, "Single running instance → an Auto Scaling group spread across both AZs."),

@@ -1,0 +1,10 @@
+{
+  "title": "Cloud deployment models",
+  "nodes": [
+    {"id": "pub", "label": "Public cloud\n(AWS · shared · on-demand)", "row": 0, "col": 0, "fill": "blue"},
+    {"id": "hyb", "label": "Hybrid cloud\n(links public + private)", "row": 0, "col": 1, "fill": "amber"},
+    {"id": "priv", "label": "Private cloud\n(single org · dedicated)", "row": 1, "col": 0, "fill": "green"},
+    {"id": "comm", "label": "Community cloud\n(shared by related orgs)", "row": 1, "col": 1, "fill": "purple"}
+  ],
+  "edges": []
+}

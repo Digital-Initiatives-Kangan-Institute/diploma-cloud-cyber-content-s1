@@ -1,0 +1,19 @@
+{
+  "title": "Cross-AZ HA — ALB + Auto Scaling across AZs + Multi-AZ RDS",
+  "nodes": [
+    {"id": "users", "label": "Users", "row": 0, "col": 1, "fill": "grey"},
+    {"id": "alb", "label": "Application Load Balancer\n(multi-AZ)", "row": 1, "col": 1, "fill": "blue"},
+    {"id": "appa", "label": "App / ASG\nAZ-a", "row": 2, "col": 0, "fill": "green"},
+    {"id": "appb", "label": "App / ASG\nAZ-b", "row": 2, "col": 2, "fill": "green"},
+    {"id": "rdsp", "label": "RDS primary\nAZ-a", "row": 3, "col": 1, "fill": "amber"},
+    {"id": "rdss", "label": "RDS standby\nAZ-b", "row": 4, "col": 1, "fill": "amber"}
+  ],
+  "edges": [
+    {"from": "users", "to": "alb", "label": ""},
+    {"from": "alb", "to": "appa", "label": ""},
+    {"from": "alb", "to": "appb", "label": ""},
+    {"from": "appa", "to": "rdsp", "label": ""},
+    {"from": "appb", "to": "rdsp", "label": ""},
+    {"from": "rdsp", "to": "rdss", "label": "sync"}
+  ]
+}

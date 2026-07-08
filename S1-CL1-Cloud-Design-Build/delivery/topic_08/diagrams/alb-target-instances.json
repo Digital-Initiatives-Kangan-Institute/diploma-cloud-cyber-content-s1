@@ -1,0 +1,16 @@
+{
+  "title": "Load balancer → target group → healthy instances across AZs",
+  "nodes": [
+    {"id": "users", "label": "Users", "row": 0, "col": 1, "fill": "grey"},
+    {"id": "alb", "label": "Application\nLoad Balancer", "row": 1, "col": 1, "fill": "blue"},
+    {"id": "tg", "label": "Target group\n(health-checked)", "row": 2, "col": 1, "fill": "green"},
+    {"id": "ec2a", "label": "EC2 instance\n(AZ-a)", "row": 3, "col": 0, "fill": "amber"},
+    {"id": "ec2b", "label": "EC2 instance\n(AZ-b)", "row": 3, "col": 2, "fill": "amber"}
+  ],
+  "edges": [
+    {"from": "users", "to": "alb", "label": ""},
+    {"from": "alb", "to": "tg", "label": ""},
+    {"from": "tg", "to": "ec2a", "label": "route to healthy"},
+    {"from": "tg", "to": "ec2b", "label": ""}
+  ]
+}

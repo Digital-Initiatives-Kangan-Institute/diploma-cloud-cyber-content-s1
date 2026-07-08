@@ -23,6 +23,10 @@ from helpers.kangan_deck import *  # noqa: F401,F403
 
 OUT_DEFAULT = "S1-CL1-Cloud-Design-Build/delivery/topic_11/Topic_11_Slides.pptx"
 
+# Committed image assets (Path A: place real images instead of placeholder labels).
+TOPIC = Path(__file__).resolve().parents[2] / "S1-CL1-Cloud-Design-Build" / "delivery" / "topic_11"
+def _img(rel): return {"path": str(TOPIC / rel)}
+
 A1, A2, A3 = MAGENTA, SKY, GREEN
 
 
@@ -128,7 +132,7 @@ def build(path):
         (0, "If the primary (or its AZ) fails, the standby is promoted automatically — service continues with seconds of downtime."),
         (0, "The application reaches the database by name, so nothing needs reconfiguring.",
             {"bold": True, "color": A3, "mark_color": A3}),
-    ], ["Multi-AZ RDS — primary + synchronous standby (ICTCLD502 · HA requirements S13; alt: ACA M10 S44)"], A3)
+    ], [_img("diagrams/multi-az-rds.png")], A3)
     activity_slide(prs, pg(), "Match the mechanism to the SPOF", [
         (0, "For each SPOF you found in the baseline, name the cloud mechanism that removes it:", {"bold": True}),
         (1, "single AZ → ?  ·  single database → ?  ·  single running instance → ?  ·  single NAT gateway → ?"),

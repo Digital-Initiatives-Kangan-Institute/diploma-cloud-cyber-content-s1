@@ -41,9 +41,9 @@ As pinned in the build (AWS refs carried on each slide's type tag where applicab
 - [AWS ACA M10 S19] Load balancing & scaling
   image: none
 - [AWS ACA M07 / M10] The Application Load Balancer
-  image: reuse AWS — load balancer → target group → instances
+  image: diagram alb-target-instances
 - [AWS ACA M10 S20–S24] Auto Scaling groups
-  image: reuse AWS — horizontal scaling with an ASG (ACA M10 S22)
+  image: reuse 08-asg-horizontal-scaling
 - [BESPOKE] The elasticity you'll build
   image: none
 - [DEMO] Create an Auto Scaling policy

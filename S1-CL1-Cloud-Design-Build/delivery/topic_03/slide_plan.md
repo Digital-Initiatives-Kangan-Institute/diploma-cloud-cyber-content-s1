@@ -43,7 +43,7 @@ As pinned in the build (AWS refs carried on each slide's type tag where applicab
 - [BESPOKE] Costing the on-prem option (Option A)
   image: none
 - [BESPOKE] AWS Pricing Calculator
-  image: reuse AWS Pricing Calculator — screenshot
+  image: reuse 03-pricing-calculator
 - [EX] Build a cost estimate
   image: none
 - [BESPOKE] Assembling the CBA — compare & test it

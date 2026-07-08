@@ -1,0 +1,16 @@
+{
+  "title": "VPC anatomy — public subnet (via IGW) · private subnet (outbound via NAT)",
+  "nodes": [
+    {"id": "internet", "label": "Internet", "row": 0, "col": 1, "fill": "grey"},
+    {"id": "igw", "label": "Internet Gateway", "row": 1, "col": 1, "fill": "blue"},
+    {"id": "pubsub", "label": "Public subnet\n10.0.1.0/24\n(ALB · NAT GW)", "row": 2, "col": 0, "fill": "green"},
+    {"id": "privsub", "label": "Private subnet\n10.0.2.0/24\n(app · RDS)", "row": 2, "col": 2, "fill": "amber"},
+    {"id": "nat", "label": "NAT Gateway", "row": 3, "col": 1, "fill": "purple"}
+  ],
+  "edges": [
+    {"from": "internet", "to": "igw", "label": "inbound"},
+    {"from": "igw", "to": "pubsub", "label": "public route"},
+    {"from": "privsub", "to": "nat", "label": "outbound"},
+    {"from": "nat", "to": "igw", "label": ""}
+  ]
+}

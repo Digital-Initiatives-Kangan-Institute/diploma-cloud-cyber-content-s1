@@ -1,0 +1,16 @@
+{
+  "title": "Traditional model — you own & manage all the hardware (capex, fixed capacity)",
+  "nodes": [
+    {"id": "org", "label": "Your organisation", "row": 0, "col": 1, "fill": "grey"},
+    {"id": "dc", "label": "On-premises\ndata centre", "row": 1, "col": 1, "fill": "blue"},
+    {"id": "servers", "label": "Physical servers\n(buy · rack · patch)", "row": 2, "col": 0, "fill": "amber"},
+    {"id": "storage", "label": "Storage arrays\n(provision upfront)", "row": 2, "col": 1, "fill": "amber"},
+    {"id": "net", "label": "Network & firewall\n(own & maintain)", "row": 2, "col": 2, "fill": "amber"}
+  ],
+  "edges": [
+    {"from": "org", "to": "dc", "label": ""},
+    {"from": "dc", "to": "servers", "label": ""},
+    {"from": "dc", "to": "storage", "label": ""},
+    {"from": "dc", "to": "net", "label": ""}
+  ]
+}

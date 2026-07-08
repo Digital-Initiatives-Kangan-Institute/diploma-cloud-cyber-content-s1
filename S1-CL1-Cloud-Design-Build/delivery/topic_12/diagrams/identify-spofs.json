@@ -1,0 +1,14 @@
+{
+  "title": "Single points of failure — every tier single-instance, single-AZ (red = SPoF)",
+  "nodes": [
+    {"id": "users", "label": "Users", "row": 0, "col": 1, "fill": "grey"},
+    {"id": "alb", "label": "Load Balancer\n(single-AZ)", "row": 1, "col": 1, "fill": "red"},
+    {"id": "app", "label": "App server\n(single EC2)", "row": 2, "col": 1, "fill": "red"},
+    {"id": "db", "label": "Database\n(single instance)", "row": 3, "col": 1, "fill": "red"}
+  ],
+  "edges": [
+    {"from": "users", "to": "alb", "label": ""},
+    {"from": "alb", "to": "app", "label": "SPoF"},
+    {"from": "app", "to": "db", "label": "SPoF"}
+  ]
+}

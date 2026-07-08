@@ -22,7 +22,7 @@ As pinned in the build (AWS refs carried on each slide's type tag where applicab
 - [BESPOKE] What monitoring is
   image: none
 - [AWS ACA M10 S9–S12] Amazon CloudWatch
-  image: reuse AWS — CloudWatch metrics / alarms / dashboards (ACA M10 S9–S12)
+  image: reuse 09-cloudwatch
 - [TABLE] The monitoring you'll build
   image: none
 - [DEMO] Create a CloudWatch alarm

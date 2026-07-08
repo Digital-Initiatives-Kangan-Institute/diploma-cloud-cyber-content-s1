@@ -22,7 +22,7 @@ As pinned in the build (AWS refs carried on each slide's type tag where applicab
 - [BESPOKE] Review the architecture
   image: none
 - [BESPOKE] Identify the single points of failure
-  image: reuse Identify-SPoFs network diagram (ICTCLD502 · Design HA S10)
+  image: diagram identify-spofs
 - [BESPOKE] Estimate the recovery objectives
   image: none
 - [EX] Review the Accounting baseline
@@ -35,7 +35,7 @@ As pinned in the build (AWS refs carried on each slide's type tag where applicab
 - [BESPOKE] Design redundancy — remove the SPoFs
   image: none
 - [AWS ACA M10 S41] The cross-AZ HA architecture
-  image: reuse Cross-AZ HA architecture — ALB + ASG + Multi-AZ RDS (ACA M10 S41)
+  image: diagram cross-az-ha-architecture
 - [BESPOKE] Remove each SPOF — the mapping
   image: none
 - [BESPOKE] Re-estimate the recovery objectives

@@ -1,0 +1,12 @@
+{
+  "title": "Multi-AZ RDS — synchronous standby, automatic failover",
+  "nodes": [
+    {"id": "app", "label": "App tier", "row": 0, "col": 0, "fill": "green"},
+    {"id": "primary", "label": "RDS primary\n(AZ-a)", "row": 1, "col": 0, "fill": "amber"},
+    {"id": "standby", "label": "RDS standby\n(AZ-b)", "row": 2, "col": 0, "fill": "amber"}
+  ],
+  "edges": [
+    {"from": "app", "to": "primary", "label": "reads / writes"},
+    {"from": "primary", "to": "standby", "label": "synchronous replication"}
+  ]
+}

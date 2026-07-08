@@ -1,0 +1,18 @@
+{
+  "title": "Cloud model — rent virtual resources on demand (opex, elastic capacity)",
+  "nodes": [
+    {"id": "org", "label": "Your organisation", "row": 0, "col": 1, "fill": "grey"},
+    {"id": "internet", "label": "Internet", "row": 1, "col": 1, "fill": "grey"},
+    {"id": "provider", "label": "Cloud provider (AWS)\npay-as-you-go", "row": 2, "col": 1, "fill": "blue"},
+    {"id": "compute", "label": "Compute\n(rent on demand)", "row": 3, "col": 0, "fill": "green"},
+    {"id": "storage", "label": "Storage\n(elastic)", "row": 3, "col": 1, "fill": "purple"},
+    {"id": "net", "label": "Networking\n(software-defined)", "row": 3, "col": 2, "fill": "amber"}
+  ],
+  "edges": [
+    {"from": "org", "to": "internet", "label": ""},
+    {"from": "internet", "to": "provider", "label": ""},
+    {"from": "provider", "to": "compute", "label": ""},
+    {"from": "provider", "to": "storage", "label": ""},
+    {"from": "provider", "to": "net", "label": ""}
+  ]
+}

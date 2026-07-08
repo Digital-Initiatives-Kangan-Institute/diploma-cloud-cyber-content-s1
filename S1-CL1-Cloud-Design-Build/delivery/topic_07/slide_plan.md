@@ -20,11 +20,11 @@ As pinned in the build (AWS refs carried on each slide's type tag where applicab
 ### C1 — Virtual network & subnets (VPC)
 - Teaches: [ICTCLD401 PC 2.2] · [ICTCLD401 KE 5] · [ICTCLD401 PE 1]
 - [AWS ACF M05 S5–S9] Networking, the essentials
-  image: reuse AWS — IP address / CIDR (ACF M05 S6 / S8)
+  image: reuse 07-ip-cidr
 - [AWS ACF M05 S11] The VPC — your private network in AWS
   image: none
 - [AWS ACA M07 S12–S16] Routing: gateways & route tables
-  image: reuse AWS — VPC anatomy: subnets · IGW · NAT · route tables (ACA M07 S16)
+  image: diagram vpc-anatomy
 - [EX] Public or private?
   image: none
 - [BESPOKE] The network you'll build
@@ -48,7 +48,7 @@ As pinned in the build (AWS refs carried on each slide's type tag where applicab
 ### C3 — Name resolution & connectivity (DNS + testing)
 - Teaches: [ICTCLD401 PC 2.6] · [ICTCLD401 KE 10] · [ICTCLD401 PE 3]
 - [AWS ACF M05 S49–S50] How DNS works — and Route 53
-  image: reuse AWS — Route 53 DNS resolution flow (ACF M05 S50)
+  image: reuse 07-route53-dns-flow
 - [BESPOKE] The design's name & certificate
   image: none
 - [AWS ACA M07 S45, S41] Prove it works — test connectivity

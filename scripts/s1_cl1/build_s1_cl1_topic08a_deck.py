@@ -21,6 +21,10 @@ from helpers.kangan_deck import *  # noqa: F401,F403
 
 OUT_DEFAULT = "S1-CL1-Cloud-Design-Build/delivery/topic_08/Topic_08a_Slides.pptx"
 
+# Committed image assets (Path A: place real images instead of placeholder labels).
+TOPIC = Path(__file__).resolve().parents[2] / "S1-CL1-Cloud-Design-Build" / "delivery" / "topic_08"
+def _img(rel): return {"path": str(TOPIC / rel)}
+
 A1, A2, A3 = MAGENTA, SKY, GREEN
 
 
@@ -108,14 +112,14 @@ def build(path):
         (0, "It forwards them to a target group and routes only to healthy targets (health checks)."),
         (0, "It can be internet-facing or internal (this design is internal — staff over the VPN).",
             {"bold": True, "color": A2, "mark_color": A2}),
-    ], ["AWS — load balancer → target group → instances"], A2)
+    ], [_img("diagrams/alb-target-instances.png")], A2)
     visual_slide(prs, pg(), "Auto Scaling groups", "AWS · ACA M10 S20–S24", [
         (0, "An Auto Scaling group (ASG) manages a fleet of instances from a launch template."),
         (0, "Capacity settings: minimum / desired / maximum; it replaces unhealthy instances automatically."),
         (0, "Scaling policies — scheduled, dynamic (target-tracking), or step — adjust capacity."),
         (0, "It integrates with the ALB's health checks across Availability Zones.",
             {"bold": True, "color": A2, "mark_color": A2}),
-    ], ["AWS — horizontal scaling with an ASG (ACA M10 S22)"], A2)
+    ], [_img("images/08-asg-horizontal-scaling.png")], A2)
     content_slide(prs, pg(), "The elasticity you'll build", "the supplied design", [
         (0, "Internal ALB, HTTPS:443 listener → a target group of the Ledgerline instances."),
         (0, "Auto Scaling Group: min 1 / desired 1 / max 2; target-tracking on CPU at 70%; 300 s cooldown."),

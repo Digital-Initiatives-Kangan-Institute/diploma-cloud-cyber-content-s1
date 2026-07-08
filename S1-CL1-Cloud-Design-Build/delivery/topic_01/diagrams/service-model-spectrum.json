@@ -1,0 +1,14 @@
+{
+  "title": "Service models — you manage less, top to bottom",
+  "nodes": [
+    {"id": "onprem", "label": "On-premises\nyou manage everything", "row": 0, "col": 0, "fill": "red"},
+    {"id": "iaas", "label": "IaaS\nyou: OS, runtime, apps, data", "row": 1, "col": 0, "fill": "amber"},
+    {"id": "paas", "label": "PaaS\nyou: apps, data", "row": 2, "col": 0, "fill": "green"},
+    {"id": "saas", "label": "SaaS\nyou: just use it", "row": 3, "col": 0, "fill": "blue"}
+  ],
+  "edges": [
+    {"from": "onprem", "to": "iaas", "label": ""},
+    {"from": "iaas", "to": "paas", "label": ""},
+    {"from": "paas", "to": "saas", "label": ""}
+  ]
+}

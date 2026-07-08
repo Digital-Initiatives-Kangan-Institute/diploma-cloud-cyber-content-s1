@@ -21,6 +21,10 @@ from helpers.kangan_deck import visual_slide    # noqa: E402  used bare in build
 
 OUT_DEFAULT = "S1-CL1-Cloud-Design-Build/delivery/topic_03/Topic_03_Slides.pptx"
 
+# Committed image assets (Path A: place real images instead of placeholder labels).
+TOPIC = Path(__file__).resolve().parents[2] / "S1-CL1-Cloud-Design-Build" / "delivery" / "topic_03"
+def _img(rel): return {"path": str(TOPIC / rel)}
+
 A1, A2, A3 = k.MAGENTA, k.SKY, k.GREEN   # section accents (match Topic 2)
 
 
@@ -123,7 +127,7 @@ def build(out_path):
         (1, "model a solution before building it"),
         (1, "find instance types & contract terms; group services into an estimate"),
         (0, "calculator.aws", {"italic": True, "color": k.GREY1}),
-    ], ["AWS Pricing Calculator — screenshot"], A2)
+    ], [_img("images/03-pricing-calculator.png")], A2)
     # --- AWS ACF M02 S22 — hands-on estimate activity ---
     k.activity_slide(prs, pg(), "Build a cost estimate", [
         (0, "In groups, use the AWS Pricing Calculator + the supplied specifications to build a cost estimate for the cloud option.", {"bold": True}),

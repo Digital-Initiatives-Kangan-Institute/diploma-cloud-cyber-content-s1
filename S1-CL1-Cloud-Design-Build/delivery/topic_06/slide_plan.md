@@ -20,7 +20,7 @@ As pinned in the build (AWS refs carried on each slide's type tag where applicab
 ### C1 — Working to a supplied design (+ account/region + evidence discipline)
 - Teaches: [ICTCLD401 PC 1.4] · [ICTCLD401 PE 1 · PE 2]
 - [AWS ACA M02] Cloud architecture: requirements → design → build
-  image: reuse AWS — cloud architecture: requirements→design→structure (ACA M02 S08)
+  image: reuse 06-aws-arch-reqs-design-build
 - [BESPOKE] Working to a supplied design
   image: none
 - [BESPOKE] Choose your Region — data residency first
@@ -37,7 +37,7 @@ As pinned in the build (AWS refs carried on each slide's type tag where applicab
 ### C2 — Identity & access management (IAM)
 - Teaches: [ICTCLD401 PC 1.5] · [ICTCLD401 PC 1.6] · [ICTCLD401 PC 1.7] · [ICTCLD401 PC 2.1] · [ICTCLD401 KE 8]
 - [AWS ACF M04] IAM — the essential components
-  image: reuse AWS — IAM components: user / group / role / policy (ACF M04 S18)
+  image: reuse 06-iam-components
 - [AWS ACF M04] Securing access — the best practices
   image: none
 - [BESPOKE] The design's IAM model
@@ -52,7 +52,7 @@ As pinned in the build (AWS refs carried on each slide's type tag where applicab
 ### C3 — Shared security responsibility
 - Teaches: [ICTCLD401 PC 1.2] · [ICTCLD502 PC 1.3] · [ICTCLD401 PC 1.7] · [ICTCLD401 KE 7]
 - [AWS ACF M04] The shared responsibility model
-  image: reuse AWS — shared responsibility model (ACF M04 S05)
+  image: reuse 06-shared-responsibility
 - [AWS ACF M04] The line shifts with the service
   image: none
 - [BESPOKE] Assigning responsibility on this build

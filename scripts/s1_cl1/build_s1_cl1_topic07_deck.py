@@ -29,6 +29,10 @@ from helpers.kangan_deck import *  # noqa: F401,F403
 
 OUT_DEFAULT = "S1-CL1-Cloud-Design-Build/delivery/topic_07/Topic_07_Slides.pptx"
 
+# Committed image assets (Path A: place real images instead of placeholder labels).
+TOPIC = Path(__file__).resolve().parents[2] / "S1-CL1-Cloud-Design-Build" / "delivery" / "topic_07"
+def _img(rel): return {"path": str(TOPIC / rel)}
+
 A1, A2, A3 = MAGENTA, SKY, GREEN
 
 
@@ -58,7 +62,7 @@ def build(path):
         (0, "A CIDR block describes a range of addresses: 10.0.0.0/16 — the /number says how many bits are fixed.",
             {"bold": True, "color": A1, "mark_color": A1}),
         (0, "Traffic moves between networks through routers / gateways."),
-    ], ["AWS — IP address / CIDR (ACF M05 S6 / S8)"], A1)
+    ], [_img("images/07-ip-cidr.png")], A1)
     content_slide(prs, pg(), "The VPC — your private network in AWS", "AWS · ACF M05 S11 · ACA M07 S10", [
         (0, "A VPC is a logically isolated section of AWS that you define — your own virtual network."),
         (0, "It belongs to one Region and can span Availability Zones; you size it with a CIDR block (largest /16, smallest /28; you can't change it later)."),
@@ -71,7 +75,7 @@ def build(path):
         (0, "Private subnet → no direct internet path."),
         (0, "A NAT gateway lets private resources reach OUT (e.g. patching) without being reachable from the internet.",
             {"bold": True, "color": A1, "mark_color": A1}),
-    ], ["AWS — VPC anatomy: subnets · IGW · NAT · route tables (ACA M07 S16)"], A1)
+    ], [_img("diagrams/vpc-anatomy.png")], A1)
     activity_slide(prs, pg(), "Public or private?", [
         (0, "For each resource, decide which subnet it belongs in — public or private:", {"bold": True}),
         (1, "the database · a batch-processing job · the web/app server · a NAT gateway"),
@@ -144,7 +148,7 @@ def build(path):
         (0, "Amazon Route 53 is AWS's highly available DNS service.",
             {"bold": True, "color": A3, "mark_color": A3}),
         (0, "Public hosted zone = internet-facing names; private hosted zone = names that resolve only inside your VPC."),
-    ], ["AWS — Route 53 DNS resolution flow (ACF M05 S50)"], A3)
+    ], [_img("images/07-route53-dns-flow.png")], A3)
     content_slide(prs, pg(), "The design's name & certificate", "the supplied design · decision C8", [
         (0, "Ledgerline gets an internal hostname in a private hosted zone — staff-only, over the VPN; no public internet name."),
         (0, "An ACM TLS certificate secures HTTPS to that name."),

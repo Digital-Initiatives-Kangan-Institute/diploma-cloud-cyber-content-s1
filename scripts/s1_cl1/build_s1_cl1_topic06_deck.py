@@ -23,6 +23,10 @@ from helpers.kangan_deck import *  # noqa: F401,F403
 
 OUT_DEFAULT = "S1-CL1-Cloud-Design-Build/delivery/topic_06/Topic_06_Slides.pptx"
 
+# Committed image assets (Path A: place real images instead of placeholder labels).
+TOPIC = Path(__file__).resolve().parents[2] / "S1-CL1-Cloud-Design-Build" / "delivery" / "topic_06"
+def _img(rel): return {"path": str(TOPIC / rel)}
+
 A1, A2, A3 = MAGENTA, SKY, GREEN
 
 
@@ -51,7 +55,7 @@ def build(path):
         (1, "the customer sets the requirements · the architect produces the design · the delivery crew builds it"),
         (0, "In AT2 you're the delivery crew — the design is already done.",
             {"bold": True, "color": A1, "mark_color": A1}),
-    ], ["AWS — cloud architecture: requirements→design→structure (ACA M02 S08)"], A1)
+    ], [_img("images/06-aws-arch-reqs-design-build.png")], A1)
     content_slide(prs, pg(), "Working to a supplied design", "faithful implementation, not redesign", [
         (0, "Read the design end to end before you touch the console."),
         (0, "Build what it specifies; make and justify only the decisions it leaves open (C1–C8)."),
@@ -99,7 +103,7 @@ def build(path):
         (0, "IAM group — a collection of users granted identical permissions."),
         (0, "IAM role — temporary permissions, assumable by a person, application or service (e.g. an EC2 instance)."),
         (0, "IAM policy — a JSON document defining which resources can be accessed, and how."),
-    ], ["AWS — IAM components: user / group / role / policy (ACF M04 S18)"], A2)
+    ], [_img("images/06-iam-components.png")], A2)
     content_slide(prs, pg(), "Securing access — the best practices", "ACF M04", [
         (0, "Attach policies to groups; assign users to groups (don't attach policies to individuals)."),
         (0, "Least privilege — grant only the permissions the task needs; all access is denied by default."),
@@ -140,7 +144,7 @@ def build(path):
         (0, "You — security IN the cloud: the EC2 OS (patching), applications, security-group config, IAM, account management, and your data."),
         (0, "Knowing the line tells you what you must configure — and what you can rely on.",
             {"bold": True, "color": A3, "mark_color": A3}),
-    ], ["AWS — shared responsibility model (ACF M04 S05)"], A3)
+    ], [_img("images/06-shared-responsibility.png")], A3)
     content_slide(prs, pg(), "The line shifts with the service", "ACF M04", [
         (0, "IaaS (EC2) — you manage more: the OS, patching, security groups, access controls."),
         (0, "PaaS (RDS) — AWS handles the OS, database patching, firewall, DR; you manage your data + access."),

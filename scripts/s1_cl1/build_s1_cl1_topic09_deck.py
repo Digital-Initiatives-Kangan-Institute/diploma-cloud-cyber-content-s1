@@ -23,6 +23,10 @@ from helpers.kangan_deck import *  # noqa: F401,F403
 
 OUT_DEFAULT = "S1-CL1-Cloud-Design-Build/delivery/topic_09/Topic_09_Slides.pptx"
 
+# Committed image assets (Path A: place real images instead of placeholder labels).
+TOPIC = Path(__file__).resolve().parents[2] / "S1-CL1-Cloud-Design-Build" / "delivery" / "topic_09"
+def _img(rel): return {"path": str(TOPIC / rel)}
+
 A1, A2, A3 = MAGENTA, SKY, GREEN
 
 
@@ -56,7 +60,7 @@ def build(path):
         (0, "Alarms send notifications (e.g. to SNS) or trigger actions (e.g. Auto Scaling)."),
         (0, "Dashboards visualise metrics and alarms; CloudWatch Logs centralises log files.",
             {"bold": True, "color": A1, "mark_color": A1}),
-    ], ["AWS — CloudWatch metrics / alarms / dashboards (ACA M10 S9–S12)"], A1)
+    ], [_img("images/09-cloudwatch.png")], A1)
     table_slide(prs, pg(), "The monitoring you'll build", "the design · §4.10",
                 ["Baseline alarm", "Threshold"],
                 [["EC2 CPU high", "≥ 80% over 10 min"],

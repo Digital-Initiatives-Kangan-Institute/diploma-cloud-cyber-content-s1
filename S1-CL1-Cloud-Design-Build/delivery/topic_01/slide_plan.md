@@ -24,17 +24,17 @@ As pinned in the build (AWS refs carried on each slide's type tag where applicab
 - [EX] Get to know your client — YAT
   image: none
 - [BESPOKE] What is cloud computing?
-  image: reuse opening illustration — what does ‘cloud’ mean to you?
+  image: gen flat vector conceptual illustration — a person at a laptop looking up at a friendly stylised cloud formed from small app and data icons; warm, modern, educational; no text
 - [BESPOKE] Cloud computing defined
-  image: reuse cloud / data-centre illustration
+  image: gen flat vector illustration of a cloud connected to a rack of data-centre servers, conveying "the cloud is someone else's computers"; clean, modern, educational; no text
 - [BESPOKE] Infrastructure as software
-  image: reuse infrastructure AS HARDWARE
+  image: gen photographic illustration of physical server racks in a data centre with cool blue lighting, representing traditional owned hardware; no text
 - [BESPOKE] Traditional computing model
-  image: reuse traditional (on-prem hardware) model diagram
+  image: diagram traditional-computing-model
 - [BESPOKE] Cloud computing model
-  image: reuse cloud computing model diagram
+  image: diagram cloud-computing-model
 - [BESPOKE] Cloud computing deployment models
-  image: reuse Cloud
+  image: diagram deployment-models
 - [BESPOKE] Deployment models — YAT's situation
   image: none
 - [EX] Which deployment model?
@@ -45,7 +45,7 @@ As pinned in the build (AWS refs carried on each slide's type tag where applicab
 ### C2 — Service models: IaaS / PaaS / SaaS
 - Teaches: [ICTCLD401 KE 3]
 - [BESPOKE] Cloud service models
-  image: reuse service-model spectrum (control vs effort)
+  image: diagram service-model-spectrum
 - [BESPOKE] Service models — who manages what
   image: none
 - [EX] Classify the service models
@@ -60,21 +60,21 @@ As pinned in the build (AWS refs carried on each slide's type tag where applicab
 - [BESPOKE] Selecting a Region
   image: none
 - [BESPOKE] Availability Zones
-  image: reuse Availability Zones diagram (AWS)
+  image: diagram availability-zones
 - [BESPOKE] AWS categories of services
-  image: reuse AWS service categories graphic (AWS)
+  image: reuse 01-aws-service-categories
 - [BESPOKE] Compute
-  image: reuse compute illustration / icon
+  image: gen simple flat icon representing cloud compute — a stylised processor chip, single accent colour, minimal, on a white background; no text
 - [BESPOKE] Storage
-  image: reuse storage illustration / icon
+  image: gen simple flat icon representing cloud storage — stacked storage disks, single accent colour, minimal, on a white background; no text
 - [BESPOKE] Database
-  image: reuse database illustration / icon
+  image: gen simple flat icon representing a database — the classic cylinder database symbol, single accent colour, minimal, on a white background; no text
 - [BESPOKE] Networking & content delivery
-  image: reuse networking illustration / icon
+  image: gen simple flat icon representing networking and content delivery — connected nodes around a globe with network lines, single accent colour, minimal, on a white background; no text
 - [BESPOKE] How the pieces fit — the web-app pattern
   image: none
 - [BESPOKE] Activity: AWS Management Console
-  image: reuse AWS Management Console illustration
+  image: reuse 01-aws-console
 - [BESPOKE] Hands-on: Console clickthrough
   image: none
 - [BESPOKE] Activity answer key
@@ -85,7 +85,7 @@ As pinned in the build (AWS refs carried on each slide's type tag where applicab
 ### C4 — Industry technology standards
 - Teaches: [ICTCLD401 KE 1] · [ICTCLD502 KE 1]
 - [BESPOKE] The AWS Well-Architected Framework
-  image: reuse Well-Architected — the six pillars (AWS)
+  image: reuse 01-well-architected-pillars
 - [TABLE] Standards that inform a migration
   image: none
 - [EX] Which standard informs the decision?
@@ -98,11 +98,11 @@ As pinned in the build (AWS refs carried on each slide's type tag where applicab
 - [BESPOKE] AWS pricing model
   image: none
 - [BESPOKE] How do you pay for AWS?
-  image: reuse AWS pricing philosophy graphic (AWS)
+  image: reuse 01-aws-pricing-philosophy
 - [BESPOKE] Pay less when you reserve
-  image: reuse Reserved Instance options graphic (AWS)
+  image: reuse 01-reserved-instance-options
 - [BESPOKE] AWS Pricing Calculator
-  image: reuse AWS Pricing Calculator — screenshot
+  image: reuse 01-pricing-calculator
 - [BESPOKE] Reading an estimate
   image: none
 - [TABLE] Match the pricing model to the workload

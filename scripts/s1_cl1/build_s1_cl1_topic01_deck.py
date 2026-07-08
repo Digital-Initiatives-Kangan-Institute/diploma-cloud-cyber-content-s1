@@ -22,6 +22,10 @@ from helpers.kangan_deck import visual_slide    # noqa: E402  used bare in build
 
 OUT_DEFAULT = "S1-CL1-Cloud-Design-Build/delivery/topic_01/Topic_01_Slides.pptx"
 
+# Committed image assets for this topic (Path A: place real images instead of placeholder labels).
+TOPIC = Path(__file__).resolve().parents[2] / "S1-CL1-Cloud-Design-Build" / "delivery" / "topic_01"
+def _img(rel): return {"path": str(TOPIC / rel)}
+
 # section accents (5 sections)
 A1, A2, A3, A4, A5 = k.MAGENTA, k.SKY, k.GREEN, k.NAVY, k.GOLD_DK
 
@@ -64,34 +68,34 @@ def build(out_path):
         (1, "What does the business expect of it — e.g. when must it be available?"),
     ], "~10 min, then we'll share what we found", accent=A1)
 
-    visual_slide(prs, pg(), "What is cloud computing?", "", [], ["opening illustration — what does ‘cloud’ mean to you?"], A1)
+    visual_slide(prs, pg(), "What is cloud computing?", "", [], [_img("images/gen-7cdc0110.png")], A1)
 
     visual_slide(prs, pg(), "Cloud computing defined", "", [
         (0, "Cloud computing is the on-demand delivery of compute power, database, storage, applications and other IT resources via the internet, with pay-as-you-go pricing.", {"bold": True}),
         (0, "Those resources run on servers in large data centres around the world."),
         (0, "You provision what you need, when you need it, and pay only for what you use."),
-    ], ["cloud / data-centre illustration"], A1)
+    ], [_img("images/gen-5637d754.png")], A1)
 
     visual_slide(prs, pg(), "Infrastructure as software", "", [
         (0, "Cloud computing lets you stop thinking of infrastructure as hardware — and instead think of (and use) it as software."),
-    ], ["infrastructure AS HARDWARE", "infrastructure AS SOFTWARE"], A1)
+    ], [_img("images/gen-fc3c904b.png")], A1)
 
     visual_slide(prs, pg(), "Traditional computing model", "infrastructure as hardware", [
         (0, "Hardware solutions:"),
         (1, "require space, staff, physical security, planning, capital expenditure"),
         (1, "have a long hardware procurement cycle"),
         (1, "make you provision capacity by guessing the theoretical maximum peak"),
-    ], ["traditional (on-prem hardware) model diagram"], A1)
+    ], [_img("diagrams/traditional-computing-model.png")], A1)
 
     visual_slide(prs, pg(), "Cloud computing model", "infrastructure as software", [
         (0, "Software solutions:"),
         (1, "are flexible"),
         (1, "change more quickly, easily and cost-effectively than hardware"),
         (1, "eliminate the undifferentiated heavy lifting"),
-    ], ["cloud computing model diagram"], A1)
+    ], [_img("diagrams/cloud-computing-model.png")], A1)
 
     visual_slide(prs, pg(), "Cloud computing deployment models", "where an application runs", [],
-                 ["Cloud", "Hybrid", "On-premises (private cloud)"], A1)
+                 [_img("diagrams/deployment-models.png")], A1)
 
     visual_slide(prs, pg(), "Deployment models — YAT's situation", "", [
         (0, "YAT today is hybrid: on-prem servers in the comms room + Office 365 (SaaS) already in the cloud."),
@@ -121,7 +125,7 @@ def build(out_path):
         (0, "SaaS — software as a service", {"bold": True}),
         (0, "IaaS → SaaS = more control / more work  →  less control / less work.",
             {"bold": True, "color": A2, "mark_color": A2}),
-    ], ["service-model spectrum (control vs effort)"], A2)
+    ], [_img("diagrams/service-model-spectrum.png")], A2)
     visual_slide(prs, pg(), "Service models — who manages what", "", [
         (0, "IaaS (e.g. EC2) — you manage the OS and the app; the provider handles the hardware → most control, most work. Preserve an existing stack."),
         (0, "PaaS (e.g. RDS, ALB) — the provider runs the platform; you run your app/data → less control, far less ops. Offload work when cloud skills are thin."),
@@ -164,31 +168,31 @@ def build(out_path):
         (1, "discrete data centres, designed for fault isolation"),
         (1, "interconnected by high-speed private networking"),
         (1, "you choose your AZs; replicate across them for resiliency"),
-    ], ["Availability Zones diagram (AWS)"], A3)
-    visual_slide(prs, pg(), "AWS categories of services", "", [], ["AWS service categories graphic (AWS)"], A3)
+    ], [_img("diagrams/availability-zones.png")], A3)
+    visual_slide(prs, pg(), "AWS categories of services", "", [], [_img("images/01-aws-service-categories.png")], A3)
     visual_slide(prs, pg(), "Compute", "service category", [
         (0, "Amazon EC2 · EC2 Auto Scaling"),
         (0, "Amazon ECS · EKS · ECR · Fargate"),
         (0, "AWS Elastic Beanstalk · AWS Lambda"),
-    ], ["compute illustration / icon"], A3)
+    ], [_img("images/gen-34a664bb.png")], A3)
     visual_slide(prs, pg(), "Storage", "service category", [
         (0, "Amazon EBS — block storage for EC2"),
         (0, "Amazon EFS — managed file system"),
         (0, "Amazon S3 — object storage"),
         (0, "Amazon S3 Glacier — archive / long-term backup"),
-    ], ["storage illustration / icon"], A3)
+    ], [_img("images/gen-a635ad7f.png")], A3)
     visual_slide(prs, pg(), "Database", "service category", [
         (0, "Amazon RDS — managed relational database"),
         (0, "Amazon Aurora — MySQL/PostgreSQL-compatible"),
         (0, "Amazon DynamoDB — key-value / document"),
         (0, "Amazon Redshift — analytics / data warehouse"),
-    ], ["database illustration / icon"], A3)
+    ], [_img("images/gen-90cedd2d.png")], A3)
     visual_slide(prs, pg(), "Networking & content delivery", "service category", [
         (0, "Amazon VPC — isolated virtual network"),
         (0, "Elastic Load Balancing · Route 53 (DNS)"),
         (0, "Amazon CloudFront — content delivery"),
         (0, "AWS Direct Connect · Transit Gateway · VPN"),
-    ], ["networking illustration / icon"], A3)
+    ], [_img("images/gen-0312fdbb.png")], A3)
     visual_slide(prs, pg(), "How the pieces fit — the web-app pattern", "the Ledgerline sketch wasn't random", [
         (0, "Internet → ALB → EC2 / Auto Scaling Group → RDS  (+ S3, CloudWatch)",
             {"bold": True, "color": A3, "mark_color": A3}),
@@ -201,7 +205,7 @@ def build(out_path):
     visual_slide(prs, pg(), "Activity: AWS Management Console", "educator-led clickthrough", [
         (0, "We'll log in to the AWS Management Console together."),
         (0, "You'll answer five questions as we navigate; we discuss and reveal each answer."),
-    ], ["AWS Management Console illustration"], A3)
+    ], [_img("images/01-aws-console.png")], A3)
     visual_slide(prs, pg(), "Hands-on: Console clickthrough", "", [
         (0, "Launch the AWS Academy Learner Lab and connect to the AWS Management Console."),
         (0, "Open the Services menu — notice services are grouped into categories (EC2 → Compute)."),
@@ -235,7 +239,7 @@ def build(out_path):
         (1, "secure · high-performing · resilient · efficient"),
         (0, "A consistent way to evaluate and improve cloud architectures."),
         (0, "Best practices drawn from reviewing thousands of customer architectures."),
-    ], ["Well-Architected — the six pillars (AWS)"], A4)
+    ], [_img("images/01-well-architected-pillars.png")], A4)
     k.table_slide(prs, pg(), "Standards that inform a migration", "each guides a different decision",
                   ["Standard", "What it is", "Informs…"],
                   [["NIST SP 800-145", "The definition of IaaS / PaaS / SaaS", "service-model choices"],
@@ -271,19 +275,19 @@ def build(out_path):
         (0, "Pay for what you use."),
         (0, "Pay less when you reserve."),
         (0, "Pay less when you use more, and as AWS grows."),
-    ], ["AWS pricing philosophy graphic (AWS)"], A5)
+    ], [_img("images/01-aws-pricing-philosophy.png")], A5)
     visual_slide(prs, pg(), "Pay less when you reserve", "Reserved Instances (RIs)", [
         (0, "Invest in Reserved Instances — save up to 75%."),
         (0, "Options (more upfront = bigger discount):"),
         (1, "All Upfront (AURI) — largest discount"),
         (1, "Partial Upfront (PURI) — lower discount"),
         (1, "No Upfront (NURI) — smallest discount"),
-    ], ["Reserved Instance options graphic (AWS)"], A5)
+    ], [_img("images/01-reserved-instance-options.png")], A5)
     visual_slide(prs, pg(), "AWS Pricing Calculator", "model the cost before you build", [
         (0, "Estimate monthly costs and find ways to reduce them."),
         (0, "Model solutions before building them; explore the calculations behind an estimate."),
         (0, "Find instance types & contract terms; group services to organise an estimate."),
-    ], ["AWS Pricing Calculator — screenshot"], A5)
+    ], [_img("images/01-pricing-calculator.png")], A5)
     visual_slide(prs, pg(), "Reading an estimate", "", [
         (0, "An estimate is broken into three figures:"),
         (1, "First 12 months total"),

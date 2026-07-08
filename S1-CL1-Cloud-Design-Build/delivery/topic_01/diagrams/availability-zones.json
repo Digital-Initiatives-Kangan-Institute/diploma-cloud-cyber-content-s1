@@ -1,0 +1,14 @@
+{
+  "title": "One Region = multiple isolated Availability Zones",
+  "nodes": [
+    {"id": "region", "label": "AWS Region\n(e.g. ap-southeast-2)", "row": 0, "col": 1, "fill": "blue"},
+    {"id": "az1", "label": "Availability Zone A\n(1+ data centres)", "row": 1, "col": 0, "fill": "green"},
+    {"id": "az2", "label": "Availability Zone B\n(isolated power/network)", "row": 1, "col": 1, "fill": "green"},
+    {"id": "az3", "label": "Availability Zone C", "row": 1, "col": 2, "fill": "green"}
+  ],
+  "edges": [
+    {"from": "region", "to": "az1", "label": ""},
+    {"from": "region", "to": "az2", "label": ""},
+    {"from": "region", "to": "az3", "label": ""}
+  ]
+}
