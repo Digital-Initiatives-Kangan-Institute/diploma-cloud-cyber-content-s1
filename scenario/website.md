@@ -240,7 +240,7 @@ If a stable document later needs versioning (e.g. the org structure when YAT exp
 
 ## 7. Hosting and build
 
-- **Hosting (TBD):** Cloudflare Pages (per Tim's earlier suggestion) or similar free static-site hosting. Alternative candidates: GitHub Pages, Netlify, Vercel, an internal-Kangan-hosted equivalent.
+- **Hosting:** Cloudflare Pages — auto-deploys on push to `main` (site live at `yat.timbaird.com`).
 - **Build pipeline:** **Astro** (locked 2026-05-26). Component-based SSG, handles the dual public/intranet layout + the SSO page well, native content collections for markdown source files with frontmatter validation, idiomatic support for the state-versioned URL scheme.
 - **Version surfacing implementation:** the build process needs to detect AT-suffixed source files, group them by topic, render each as its own URL, and (a) feed the grouped list into the linking index page and (b) inject the "other versions" breadcrumb at the top of each version page (see §4.2). No global state, no client-side JS required for this.
 - **Domain:** `yat.timbaird.com` (deployed) — a personal domain hosting the fictional YAT College; not a real organisation's own domain.
