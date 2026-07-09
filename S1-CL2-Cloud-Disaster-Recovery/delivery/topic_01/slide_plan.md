@@ -21,6 +21,15 @@ TBD — AWS web-scale modules (edge/CDN, ELB + auto scaling, managed data tiers)
   - This Topic is the web-scale half of the Solution Design; the microservice half is Topic 2.
   - Design only, to the supplied requirements — the build is AT2.
   image: gen flat vector hero illustration of global web traffic reaching a scalable cloud data centre, blue and gold accents, minimal, no text
+  notes:
+    Frame the whole strand here — this is the first slide of AT1 and of the cluster's design work. Set the job and the boundary; don't teach web-scale yet.
+    • Open with the mission: they design the changes that ready YAT's public website for the global (India + AU) expansion. This design IS AT1 Part A — everything in Topic 1 feeds it.
+    • Characterise the audience deliberately (second bullet): anonymous, global, read-heavy, and a hostile public surface. Each adjective drives a design response later — reach, caching, availability, security.
+    • Locate this Topic: it's the web-scale HALF of the Solution Design; the serverless audit-log microservice is Topic 2. Tell them the two halves plug together into one design.
+    • Hold the line hard (last bullet): DESIGN ONLY, to the supplied requirements — the build is AT2. No implementation, no over-engineering.
+    Misconception to pre-empt: "web-scale means make it as big and powerful as possible." No — it means elastic scaling to demand against the stated requirements; gold-plating loses marks, not gains them.
+    Question to pose: "The site is about to serve anonymous users in India and Australia — name one thing that has to change about how it's delivered." (draws out edge/latency, availability, or public-surface security).
+    UoC/AT1 tie: this Topic develops [ICTCLD503 PC 1.1]–[ICTCLD503 PC 1.6] plus [ICTCLD503 PE 1]/[ICTCLD503 PE 5] and [ICTCLD503 KE 3]/[ICTCLD503 KE 6], formally evidenced in AT1 Part A (Solution Design, web-scale sections) and the Part A KE appendix.
 
 ### C1 — Web-scaling needs & architecture review
 - Teaches: [ICTCLD503 PC 1.1] · [ICTCLD503 PC 1.2]
@@ -30,21 +39,56 @@ TBD — AWS web-scale modules (edge/CDN, ELB + auto scaling, managed data tiers)
   - Scale elastically: add capacity as load rises, release it as load falls — pay for what you use.
   - The three things that scale: network, compute, storage.
   image: none
+  notes:
+    Install the core vocabulary for the whole Topic — vendor-neutral, no AWS yet. Keep it tight; it's a definition slide, not the design.
+    • Read the definition (first bullet): web-scale = serving LARGE, VARIABLE, GLOBAL demand WITHOUT manual intervention. Stress "without manual intervention" — that's what separates web-scale from just buying a bigger server.
+    • Elasticity (second bullet): add capacity as load rises, RELEASE it as load falls — and pay only for what you use. Both directions matter; scaling back DOWN is where the cost saving lives.
+    • The three things that scale (third bullet): network, compute, storage. This triple is the spine of C2 — every design change they make will scale one of these three.
+    Misconception to pre-empt: "scaling means one big powerful server (scaling up)." Web-scale is horizontal — many small units added and removed automatically — not a single vertical monster.
+    Question to pose: "Traffic spikes at midnight and is gone by morning — what does 'without manual intervention' have to do for you?" (auto-add capacity, then auto-release it).
+    UoC/AT1 tie: [ICTCLD503 PC 1.1] — this is the language they use to "determine and confirm web-scaling needs" in AT1 Part A.
 - [BESPOKE] Confirm the scaling needs
   - Read the engagement brief and requirements: who uses the site, from where, how much, how variable.
   - The expansion adds a global (India + AU), anonymous, read-heavy audience.
   - Confirm the non-functionals: availability target, latency expectation, data residency as an input constraint.
   image: none
+  notes:
+    Move from definition to THIS engagement — teach the discipline of confirming needs from the brief before designing anything.
+    • First bullet: the inputs come from the engagement brief and requirements — who uses the site, from where, how much, how variable. A consultant reads the brief; they don't invent the numbers.
+    • Second bullet: name the change — the expansion adds a GLOBAL (India + AU), ANONYMOUS, READ-HEAVY audience. Anonymous + read-heavy is exactly what makes edge caching viable later.
+    • Third bullet: confirm the NON-FUNCTIONALS — availability target, latency expectation, and data residency as an INPUT CONSTRAINT (not a design choice). Flag residency now; it's a cluster-wide through-line, assessed as a given, not something they get to relax.
+    Misconception to pre-empt: "gathering requirements means listing features." Here the load-bearing requirements are non-functional (availability, latency, residency) — those size the architecture; a feature list doesn't.
+    Question to pose: "Which of these needs would you get in writing from the client before you draw a single box?" (availability target + residency — the ones you can't design around).
+    UoC/AT1 tie: [ICTCLD503 PC 1.1] (determine and confirm web-scaling needs) — AT1 Part A A1/A2 (purpose, inputs). Residency is an input constraint they must carry through the whole design.
 - [BESPOKE] Review the current architecture
   - Review the existing website baseline against the new requirements.
   - Name the gaps: single-region reach, no edge caching, fixed compute, single-AZ data.
   - The gaps you name are exactly what the design must close.
   image: none
+  notes:
+    Teach the gap analysis — reviewing the CURRENT architecture against the CONFIRMED needs. This is the pivot from "what we need" to "what's missing."
+    • First bullet: review the existing website baseline against the new requirements — you can only see gaps once you know the needs (previous slide).
+    • Second bullet: name the four gaps concretely — single-region reach, no edge caching, fixed compute, single-AZ data. Map each gap to the need it fails: single-region → global reach; no edge → latency; fixed compute → variable load; single-AZ → availability.
+    • Third bullet is the hinge (accent it): the gaps you name are EXACTLY what the design must close. Name the gaps well and the design half-writes itself.
+    Misconception to pre-empt: "review means describe the current system." No — a review is a COMPARISON against requirements that yields gaps; a description with no gaps does no work.
+    Question to pose: "The current site runs in one AZ in one region — which requirement does each of those two facts break?" (single region → global reach/latency; single AZ → availability).
+    UoC/AT1 tie: [ICTCLD503 PC 1.2] (review architecture against business needs) — AT1 Part A A3 (review the existing architecture for gaps).
 - [EX] Confirm needs & find the gaps
   - From the supplied requirements for the practice scenario, list the web-scaling needs.
   - Review its current architecture and name the gaps the design must close.
   timer: ~20 min
   image: none
+  notes:
+    Facilitation — the C1 practice: needs-and-gaps on the PRACTICE scenario. Rehearses AT1 Part A A1–A3 in miniature.
+    Tell students: "You've had the theory — now do it on the practice engagement. From its supplied requirements, list the web-scaling needs, then review its current architecture and name the gaps your design will have to close."
+    Steps (put on the board):
+    1. List the web-scaling needs from the practice scenario's supplied requirements (who / where / how much / how variable, plus the non-functionals: availability, latency, residency).
+    2. Review its current architecture and name the gaps — tie each gap to the need it fails.
+    Must produce: a short written needs list plus a gap list, each gap linked to a requirement.
+    Timing: ~20 min. Where they get stuck: they list generic "make it faster" needs instead of reading the scenario's actual requirements — circulate and point them back to the supplied brief; and they describe the current architecture without naming a gap — push "so what's MISSING?"
+    Share-back prompt: "Name one gap and the exact requirement it breaks" — take two or three, listen for gap→requirement traceability.
+    No-leakage note: this runs on the PRACTICE scenario (comparable, not identical); AT1 assesses the same skill on the assessed website — keep them anchored to the practice brief here.
+    UoC/AT1 tie: [ICTCLD503 PC 1.1] · [ICTCLD503 PC 1.2] — the confirm-needs + review-for-gaps pair that opens AT1 Part A.
 
 ### C2 — Designing the scale-out & global reach
 - Teaches: [ICTCLD503 PC 1.3] · [ICTCLD503 PC 1.4] · [ICTCLD503 PC 1.5] · [ICTCLD503 PE 1] · [ICTCLD503 PE 5] · [ICTCLD503 KE 6]
@@ -54,21 +98,58 @@ TBD — AWS web-scale modules (edge/CDN, ELB + auto scaling, managed data tiers)
   - Compute: a pool that grows and shrinks on demand (auto scaling), not one fixed server.
   - Storage: managed, replicated data services that scale reads.
   image: none
+  notes:
+    Open C2 by turning the network/compute/storage triple from C1 into three concrete scaling MOVES — still vendor-neutral, one layer per line.
+    • NETWORK: load balancing spreads traffic across many units; edge delivery shortens the physical path to the user. Two distinct network moves — distribute, and get closer.
+    • COMPUTE: a POOL that grows and shrinks on demand (auto scaling) — not one fixed server. Callback to C1's "without manual intervention."
+    • STORAGE: managed, replicated data services that scale READS. The read-heavy audience (C1) is why scaling reads is the storage job here.
+    Misconception to pre-empt: "you scale 'the app' as one thing." No — you scale each LAYER independently; the load balancer, the compute pool and the data tier each have their own scaling mechanism.
+    Question to pose: "Our audience is read-heavy — which of the three layers does that put the most pressure on, and how do you relieve it?" (storage reads → replicas/caching, and the network via edge caching).
+    UoC/AT1 tie: [ICTCLD503 KE 6] (web-scaling principles and technologies) and [ICTCLD503 PC 1.3] (identify the services that scale the app) — this slide is the principles half.
 - [BESPOKE] The target web-scale architecture
   - The edge (CDN + WAF) absorbs read-heavy global traffic and the public attack surface.
   - A load balancer fronts an auto-scaling app tier spread across Availability Zones.
   - Managed data tiers (relational + NoSQL) and an in-memory cache scale the reads.
   image: diagram web-scale-arch
+  notes:
+    The keystone slide of the Topic — the target architecture, on the diagram. Assemble it live, tier by tier, mapping each tier back to a gap from C1.
+    • Walk the diagram top-down. The EDGE (CDN + WAF) absorbs read-heavy global traffic AND the public attack surface — one tier doing double duty (reach + security). Closes the "no edge caching" and "single-region reach" gaps.
+    • The LOAD BALANCER fronts an AUTO-SCALING app tier spread across Availability Zones — closes "fixed compute" and "single-AZ" in one move (elastic AND resilient).
+    • The DATA tier: managed relational + NoSQL plus an in-memory cache scale the READS — closes "single-AZ data" and serves the read-heavy audience.
+    • Point out this is a DESIGN artefact — boxes and responsibilities, not a built system. The .drawio is student-editable; they adapt this shape to their practice scenario.
+    Misconception to pre-empt: "more tiers = better." Every tier here answers a NAMED gap; a component that closes no requirement doesn't belong. Guard against cargo-culting the diagram.
+    Question to pose: "Point at one box and tell me which C1 gap it closes." — go around the room; every box should trace to a gap.
+    UoC/AT1 tie: [ICTCLD503 PC 1.4] (design changes that scale network/compute/storage) + [ICTCLD503 PE 1] (design at least one architecture that scales all three for a multi-tier web app) — this diagram is the PE 1 evidence.
 - [BESPOKE] Designing for a global audience
   - Serve static and cacheable content from the edge, close to users in India and AU.
   - Discoverability: DNS and a global entry point route users to the nearest healthy edge.
   - Web-scaling principles: statelessness, caching, horizontal scale, loose coupling.
   image: none
+  notes:
+    The global-reach slice of C2 — how the design reaches users far from the origin. Pairs with the architecture diagram just shown.
+    • First bullet: serve static and cacheable content FROM THE EDGE, close to users in India and AU — the latency answer. The read-heavy audience is why so much is cacheable.
+    • Second bullet — DISCOVERABILITY: DNS and a global entry point route each user to the nearest HEALTHY edge. "Healthy" matters — routing is also an availability mechanism, not just proximity.
+    • Third bullet names the four web-scaling PRINCIPLES they must be able to cite: statelessness, caching, horizontal scale, loose coupling. These are examinable and they underpin every choice on the diagram.
+    Misconception to pre-empt: "global reach means deploy the whole app in every region." No — you push CACHEABLE content to the edge and route smartly; you don't necessarily replicate the origin everywhere (and residency may forbid it).
+    Question to pose: "Why does 'statelessness' make horizontal scaling possible?" (any server can handle any request, so you can add and remove servers freely).
+    UoC/AT1 tie: [ICTCLD503 PC 1.5] (scale for a global user base) + [ICTCLD503 PE 5] (apply web-scaling principles and technologies) — this slide is where PE 5 is developed.
 - [EX] Design the scale-out
   - For the practice scenario, design the changes that scale network, compute and storage.
   - Add global delivery; show how each change meets a named requirement.
   timer: ~30 min
   image: none
+  notes:
+    Facilitation — the biggest activity in the Topic: students draw their OWN scale-out design for the practice scenario. This is the core AT1 Part A rehearsal.
+    Tell students: "Using the target architecture as a model — not a template to copy — design the changes that scale network, compute and storage for the practice scenario, add global delivery, and for EACH change name the requirement it meets."
+    Steps:
+    1. Scale each layer: network (load balancing + edge), compute (auto-scaling pool), storage (managed/replicated reads).
+    2. Add global delivery (edge + smart routing) for the India/AU audience.
+    3. Against each change, write the named requirement it satisfies — the traceability is the mark.
+    Must produce: a labelled architecture sketch (their own .drawio or on paper) with a change→requirement mapping.
+    Timing: ~30 min. Where they get stuck: they redraw the teaching diagram verbatim (push them to adapt it to THEIR scenario's requirements), and they add components with no requirement behind them (every box must trace to a need) — circulate and challenge orphan components.
+    Share-back prompt: "Show one change and the requirement it meets" — spotlight change→requirement traceability, not diagram prettiness.
+    No-leakage note: practice scenario only (comparable, not identical to the assessed website); the same design skill is evidenced in AT1 Part A — keep them on the practice brief.
+    UoC/AT1 tie: [ICTCLD503 PC 1.3] · [ICTCLD503 PC 1.4] · [ICTCLD503 PC 1.5] + [ICTCLD503 PE 1] · [ICTCLD503 PE 5] — the full design core of AT1 Part A.
 
 ### C3 — Availability & security of the public surface
 - Teaches: [ICTCLD503 PC 1.6]
@@ -78,16 +159,44 @@ TBD — AWS web-scale modules (edge/CDN, ELB + auto scaling, managed data tiers)
   - Defend at the edge: a WAF filters malicious requests; the CDN absorbs volumetric load.
   - Multi-AZ deployment plus health checks keep the service available through failures.
   image: gen flat vector illustration of a shield protecting a cloud web server from bots and DDoS arrows, blue and charcoal palette, minimal, no text
+  notes:
+    Open C3 — availability AND security of the PUBLIC surface. The audience is anonymous (C1), so anyone on the internet can hit this site; teach defence-in-depth at the edge.
+    • First bullet: a public site is exposed to the open internet — web EXPLOITS (injection/XSS), BOTS, and DDoS. Name the three threat classes; they map one-to-one to the defences next.
+    • Second bullet: defend AT THE EDGE — a WAF filters malicious requests (exploits/bots); the CDN absorbs volumetric load (DDoS). Callback to C2: the edge tier is doing security work, not just caching.
+    • Third bullet pivots to AVAILABILITY: multi-AZ deployment plus health checks keep the service up THROUGH failures — availability is part of protecting the surface, not a separate topic.
+    Misconception to pre-empt: "security is a firewall you add at the end." Here it's designed into the edge from the start, and it's inseparable from availability (a DDoS is an availability attack). Not a bolt-on.
+    Question to pose: "Anonymous users worldwide can reach this site — name one threat that creates, and one defence that answers it." (e.g. DDoS → CDN absorbs; injection → WAF filters).
+    UoC/AT1 tie: [ICTCLD503 PC 1.6] (check availability and security is maintained with the design changes) — the security half.
 - [BESPOKE] Review the design against requirements
   - Re-check the design: does it scale by layer, reach the globe, stay available and secure?
   - Confirm data residency is respected as an input constraint, not a bolt-on.
   - Revise where a requirement isn't met — the simplest change that satisfies it.
   image: none
+  notes:
+    Teach the REVIEW discipline — the design isn't done until it's checked back against every requirement. This closes C3 and the whole design loop.
+    • First bullet: re-check the design against the four things it had to do — scale by layer, reach the globe, stay available, stay secure. A checklist pass, out loud.
+    • Second bullet: confirm DATA RESIDENCY is respected as an INPUT CONSTRAINT, not a bolt-on — callback to C1. Across this cluster residency is a given they must show they honoured, not something they optimise away.
+    • Third bullet: where a requirement ISN'T met, revise — and pick the SIMPLEST change that satisfies it. Ties back to the opener's "no over-engineering."
+    Misconception to pre-empt: "review means a final polish/format check." No — a review is a REQUIREMENTS check that can send you back to redesign; it's an engineering step, not a proofread.
+    Question to pose: "Your review finds the design serves India from a US edge but residency says data stays onshore — what's the SIMPLEST fix?" (push cacheable/static to the edge, keep the DATA tier onshore — separate content delivery from data residency).
+    UoC/AT1 tie: [ICTCLD503 PC 1.6] (…and review design as required) — the review-and-revise half; this habit is what AT1 Part A's review criteria reward.
 - [EX] Harden & review
   - Add the availability and security measures to your practice-scenario design.
   - Review the whole design against the requirements; note any revision you make.
   timer: ~20 min
   image: none
+  notes:
+    Facilitation — the C3 practice: students harden and then review their OWN design from the C2 activity. Two moves — harden, then review.
+    Tell students: "Take the scale-out design you built last activity. First add the availability and security measures for the public surface. Then review the WHOLE design against the requirements and write down any revision you make."
+    Steps:
+    1. Add edge security (WAF/CDN) for exploits/bots/DDoS, and availability (multi-AZ + health checks).
+    2. Review the whole design against every requirement — scale, reach, availability, security, AND residency.
+    3. Record each revision you make and the requirement that forced it.
+    Must produce: the updated design plus a short revision log (change + the requirement behind it).
+    Timing: ~20 min. Where they get stuck: they add security boxes but skip the review step (the review is where the marks are — make them do the checklist pass), and they forget residency in the review (prompt "did you check where the data lives?").
+    Share-back prompt: "What did your review change, and which requirement drove it?" — surfaces that review is active, not decorative.
+    No-leakage note: practice scenario only (comparable, not identical); AT1 evidences the same harden-and-review skill on the assessed website.
+    UoC/AT1 tie: [ICTCLD503 PC 1.6] — availability + security maintained through the changes, and design reviewed/revised.
 
 ### C4 — Web-scale component choices
 - Teaches: [ICTCLD503 KE 3]
@@ -112,6 +221,14 @@ TBD — AWS web-scale modules (edge/CDN, ELB + auto scaling, managed data tiers)
   - You've designed the web-scale architecture; next you design the serverless audit-log microservice.
   - Bring this design — the microservice plugs into it.
   image: none
+  notes:
+    Close the Topic and hand off to Topic 2 — short, forward-looking; consolidate what they hold now and where it plugs in.
+    • First bullet: name what they've achieved — a web-scale architecture design (scale by layer, global reach, availability + security), the FIRST half of the Solution Design.
+    • Second bullet: preview Topic 2 — the serverless audit-log MICROSERVICE, the second design half.
+    • Third bullet is the connective tissue: they must BRING this design forward — the microservice plugs INTO the web-scale architecture, it isn't a separate exercise. AT1 Part A is one integrated Solution Design, not two disconnected pieces.
+    Misconception to pre-empt: "Topic 1 is finished and set aside." No — this design is a live input to Topic 2 and to the AT2 build; they'll keep referring back to it.
+    Question to pose: "An audit-log microservice records events from this website — where in today's architecture would it sit, and what would it need from the app tier?" (primes Topic 2).
+    UoC/AT1 tie: bridges the web-scale strand (the PC/PE/KE above) into the microservice strand; both are evidenced together in AT1 Part A Solution Design.
 
 ## Build notes
 ~16 slides. Exercises run on the practice scenario (design only). One generated architecture diagram (`diagram web-scale-arch`); two decorative `gen` images (opener hero, public-surface shield).
