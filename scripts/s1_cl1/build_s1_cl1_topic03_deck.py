@@ -19,6 +19,10 @@ sys.path.insert(0, str(next(d / "scripts" for d in Path(__file__).resolve().pare
 from helpers import kangan_deck as k                 # noqa: E402  brand palette + layouts
 from helpers.kangan_deck import visual_slide    # noqa: E402  used bare in build()
 
+from topic03_notes import NOTES  # noqa: E402  teacher speaker notes (keyed by slide title)
+from helpers.kangan_deck import register_notes  # noqa: E402
+register_notes(NOTES)
+
 OUT_DEFAULT = "S1-CL1-Cloud-Design-Build/delivery/topic_03/Topic_03_Slides.pptx"
 
 # Committed image assets (Path A: place real images instead of placeholder labels).

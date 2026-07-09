@@ -21,6 +21,10 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1]))  # content-repo scr
 sys.path.insert(0, str(next(d / "scripts" for d in Path(__file__).resolve().parents if (d / "scripts" / "helpers" / "__init__.py").exists())))  # umbrella scripts/ (engine)  # noqa: E402
 from helpers.kangan_deck import *  # noqa: F401,F403
 
+from topic06_notes import NOTES  # noqa: E402  teacher speaker notes (keyed by slide title)
+from helpers.kangan_deck import register_notes  # noqa: E402
+register_notes(NOTES)
+
 OUT_DEFAULT = "S1-CL1-Cloud-Design-Build/delivery/topic_06/Topic_06_Slides.pptx"
 
 # Committed image assets (Path A: place real images instead of placeholder labels).
@@ -103,27 +107,7 @@ def build(path):
         (0, "IAM group — a collection of users granted identical permissions."),
         (0, "IAM role — temporary permissions, assumable by a person, application or service (e.g. an EC2 instance)."),
         (0, "IAM policy — a JSON document defining which resources can be accessed, and how."),
-    ], [_img("images/06-iam-components.png")], A2, notes="""
-        Teach IAM as the account's "who can do what." Walk the four in order — user → group → role →
-        policy — stressing the split: the first two are about PEOPLE, the last two about PERMISSIONS.
-
-        • IAM user — one identity per person or app. Emphasise: never share a login; each person their
-          own user (that's what gives you accountability and an audit trail).
-        • IAM group — how you manage permissions at scale: set permissions ONCE on the group, not per
-          person. Analogy: a team like "Finance" — add someone to the team and they inherit the access.
-        • IAM role — the one students find hardest. Unlike a user it has NO permanent credentials; it is
-          ASSUMED temporarily. Key example for this build: an EC2 instance assumes a role to reach RDS/S3
-          — no passwords or keys stored on the server.
-        • IAM policy — the JSON that says what's allowed. Everything is DENIED by default; a policy grants.
-          You attach policies to groups/roles, never the JSON straight onto a person.
-
-        Misconception to pre-empt: students conflate authentication (who you are = user) with authorization
-        (what you can do = policy). Say both words out loud.
-        Question to pose: "The web server needs to read from S3 — do we give it a username and password?"
-        (No — a role. This sets up the next two slides.)
-        Why it matters: this identity foundation is what the AT2 build is assessed on (securing the
-        deployment); the specific groups to build come two slides on.
-        """)
+    ], [_img("images/06-iam-components.png")], A2)
     content_slide(prs, pg(), "Securing access — the best practices", "ACF M04", [
         (0, "Attach policies to groups; assign users to groups (don't attach policies to individuals)."),
         (0, "Least privilege — grant only the permissions the task needs; all access is denied by default."),
@@ -144,56 +128,13 @@ def build(path):
         (0, "Create a user; add to the group; enable MFA."),
         (0, "Create the EC2 instance role (Application-Service) and attach its policy."),
         (0, "Capture the IAM evidence screenshot (groups list + a user with MFA)."),
-    ], accent=A2, source="ACF M04 · IAM", notes="""
-        WHERE TO FIND THE RECORDED DEMO: AWS Academy Cloud Foundations → Module 04 (AWS Cloud Security) →
-        slide 31, "Recorded demo: IAM", inside the ACF M04 instructor deck
-        (original-materials/AWS-Instructor Presentations/…). Instructor-facing — screen it in class, don't
-        distribute to students. Preview it before class and cue it to this slide.
-
-        WHAT TO DEMONSTRATE (follow the recorded demo, then relate each step to OUR build):
-        1. Create a group and attach a least-privilege policy.
-        2. Create a user, add them to the group, enable MFA.
-        3. Create the EC2 instance role (Application-Service) and attach its policy.
-        4. Capture the IAM evidence screenshot (groups list + a user showing MFA enabled).
-
-        WHAT TO EMPHASISE:
-        • Permissions go on the GROUP, then the user joins it — not policy-on-user. Show the difference.
-        • MFA — show the "assign MFA device" step explicitly; students routinely skip it and it's an
-          Essential Eight requirement they're assessed on.
-        • The role has NO password — point out there are no long-lived credentials; the instance assumes
-          it. This is the payoff of the "IAM components" teaching slide.
-        • Narrate the evidence capture — students must screenshot as they go for AT2; model it here.
-
-        PREP: clean lab account open, the Accounting Baseline Design handy (for the group names), recorded
-        demo queued. ~8–10 min to screen + narrate before the activity.
-        """)
+    ], accent=A2, source="ACF M04 · IAM")
     activity_slide(prs, pg(), "Build the IAM model", [
         (0, "Per the Accounting Baseline Design, build the IAM foundation in the lab:", {"bold": True}),
         (1, "create the groups + the application-service role, with least-privilege policies"),
         (1, "create at least one user per human group; enforce MFA"),
         (1, "capture the IAM evidence (groups, a user with MFA, the role)"),
-    ], "~30 min", accent=A2, notes="""
-        Tell students, in these words: "Open the lab and the Accounting Baseline Design. Build the IAM
-        foundation for the MTS engagement — exactly the groups and role in the design. Work in the lab
-        account and capture evidence as you go."
-
-        The task, step by step (put on the board / read out):
-        1. Create the four groups from the design: YAT-ICT-Admins, MTS-Consultants, Application-Service
-           (this one is the EC2 ROLE, not a human group), Finance-Auditors.
-        2. Attach a least-privilege policy to each — only what that group needs.
-        3. Create at least one user in each HUMAN group and enable MFA on it.
-        4. Create the Application-Service role for the EC2 instance (RDS + S3 + CloudWatch access).
-        5. Capture the IAM evidence: the groups list, a user with MFA on, and the role.
-
-        MUST PRODUCE (the AT2 evidence): screenshots of the groups list, one user with MFA enabled, and
-        the role with its policy.
-        TIMING: ~30 min. Circulate — the two common sticking points are (a) forgetting MFA and (b) trying
-        to attach a policy straight to a user.
-        SHARE-BACK: ask one student to show their groups list; confirm least-privilege (no
-        AdministratorAccess shortcuts).
-        Remind them: this practice uses the Accounting baseline; the assessed task uses a different system
-        — comparable, not identical.
-        """)
+    ], "~30 min", accent=A2)
     takeaways_slide(prs, pg(), "Section 2 · Identity & access", [
         "IAM = users + groups (people), roles (services, temporary creds), policies (JSON permissions).",
         "Attach policies to groups; least privilege; MFA on humans; roles for services.",

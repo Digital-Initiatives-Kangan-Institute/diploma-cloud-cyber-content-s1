@@ -18,6 +18,10 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1]))  # content-repo scr
 sys.path.insert(0, str(next(d / "scripts" for d in Path(__file__).resolve().parents if (d / "scripts" / "helpers" / "__init__.py").exists())))  # umbrella scripts/ (engine)  # noqa: E402
 from helpers.kangan_deck import *  # noqa: F401,F403
 
+from topic08b_notes import NOTES  # noqa: E402  teacher speaker notes (keyed by slide title)
+from helpers.kangan_deck import register_notes  # noqa: E402
+register_notes(NOTES)
+
 OUT_DEFAULT = "S1-CL1-Cloud-Design-Build/delivery/topic_08/Topic_08b_Slides.pptx"
 
 A1, A2, A3 = MAGENTA, SKY, GREEN
