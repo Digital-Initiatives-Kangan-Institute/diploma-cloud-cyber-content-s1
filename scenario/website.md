@@ -34,7 +34,7 @@ When in doubt about a piece of content, the test is: *would a YAT staff member e
 Locked structure as of 2026-05-26. Stub pages flagged below are TBD content (one-paragraph placeholders sufficient for site-realism — full content not assessment-critical).
 
 ```
-yat-college.example/                              [warm cream background, marketing tone]
+yat.timbaird.com/                                 [warm cream background, marketing tone]
 
 ├── /                                             Homepage — hero, study-areas teaser, why YAT, apply CTA
 │                                                 ↳ content TBD
@@ -72,7 +72,7 @@ yat-college.example/                              [warm cream background, market
 Top-level sections and the policy / reference files listed below are locked as of 2026-05-26. The interior of `/intranet/ict/`, `/intranet/projects/`, and `/intranet/templates/` is worked through document-by-document as content is authored. The structure shown for `/intranet/projects/lms-cloud-migration/` is the *current proposal* for the in-flight cluster, refined as files get reframed (engagement agreement, ICT cost baseline).
 
 ```
-yat-college.example/intranet/                     [neutral light-grey background, denser layout]
+yat.timbaird.com/intranet/                        [neutral light-grey background, denser layout]
 
 ├── /intranet/                                    Intranet home — welcome, featured project banner, quick links
 │                                                 ↳ content TBD
@@ -148,7 +148,7 @@ The boundary between the public site and the intranet is a fake SSO sign-in page
 
 - Page styled to resemble a familiar corporate SSO experience the student would expect at a real RTO (e.g. Microsoft Entra ID / Okta look-and-feel).
 - YAT branding visible: YAT College logo, "Sign in to YAT College Intranet" heading.
-- Email / username field with placeholder text (e.g. "you@yat-college.example").
+- Email / username field with placeholder text (e.g. "you@yat.timbaird.com").
 - Password field with placeholder text.
 - Primary "Sign in" button.
 - Optional secondary link styled as "Forgot password?" (non-functional — clicking either does nothing or shows a benign message).
@@ -243,7 +243,7 @@ If a stable document later needs versioning (e.g. the org structure when YAT exp
 - **Hosting (TBD):** Cloudflare Pages (per Tim's earlier suggestion) or similar free static-site hosting. Alternative candidates: GitHub Pages, Netlify, Vercel, an internal-Kangan-hosted equivalent.
 - **Build pipeline:** **Astro** (locked 2026-05-26). Component-based SSG, handles the dual public/intranet layout + the SSO page well, native content collections for markdown source files with frontmatter validation, idiomatic support for the state-versioned URL scheme.
 - **Version surfacing implementation:** the build process needs to detect AT-suffixed source files, group them by topic, render each as its own URL, and (a) feed the grouped list into the linking index page and (b) inject the "other versions" breadcrumb at the top of each version page (see §4.2). No global state, no client-side JS required for this.
-- **Domain (TBD):** something clearly fictional (e.g. `yat-college.example`, `yatcollege.test`) — must not be a real organisation's domain.
+- **Domain:** `yat.timbaird.com` (deployed) — a personal domain hosting the fictional YAT College; not a real organisation's own domain.
 
 ## 8. What's not in scope for the website
 
