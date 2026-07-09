@@ -19,6 +19,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1]))  # content-repo scr
 sys.path.insert(0, str(next(d / "scripts" for d in Path(__file__).resolve().parents if (d / "scripts" / "helpers" / "__init__.py").exists())))  # umbrella scripts/ (engine)  # noqa: E402
 from helpers import kangan_deck as k  # noqa: E402
 from helpers.kangan_deck import visual_slide    # noqa: E402  used bare in build()
+from topic01_notes import NOTES                 # noqa: E402  teacher speaker notes, keyed by slide title
 
 OUT_DEFAULT = "S1-CL1-Cloud-Design-Build/delivery/topic_01/Topic_01_Slides.pptx"
 
@@ -35,6 +36,7 @@ def build(out_path):
     prs.slide_width = k.EMU_W; prs.slide_height = k.EMU_H
     n = [0]
     def pg(): n[0] += 1; return n[0]
+    k.register_notes(NOTES)   # teacher speaker notes attach by slide title
 
     # ===== Title =====
     k.title_slide(prs, "01", "Intro to Cloud", "Speak ‘cloud’ well enough to write a business case")
