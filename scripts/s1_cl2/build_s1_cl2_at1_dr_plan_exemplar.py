@@ -372,6 +372,10 @@ def build(path):
 
 
 if __name__ == "__main__":
-    default = "S1-CL2-Cloud-Disaster-Recovery/assessments/AT1/AT1-exemplar-dr-plan.docx"
+    # Absolute, so running this from anywhere writes to the real file rather than creating a
+    # phantom S1-CL2-.../assessments/ tree under whatever the current directory happens to be.
+    default = str(Path(__file__).resolve().parents[2] /
+                  "S1-CL2-Cloud-Disaster-Recovery" / "assessments" / "AT1" /
+                  "AT1-exemplar-dr-plan.docx")
     out = sys.argv[1] if len(sys.argv) > 1 else default
     build(out)
