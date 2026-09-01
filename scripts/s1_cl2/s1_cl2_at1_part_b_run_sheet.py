@@ -197,7 +197,7 @@ PLAN = [
     dict(n=24, title="The data you are protecting",
          resources=[
              ("Website Specification — the data the website holds, its volume and its sensitivity",
-              f"{ICT}/website-application-spec"),
+              f"{ICT}/website-application-spec-ha"),
              ("Privacy / Data Handling Policy — the classification and handling obligations",
               f"{POLICY}/privacy"),
          ],

@@ -65,7 +65,7 @@ RESOURCES = [
     ("Website Infrastructure Specifications — the HA-hardened environment you are extending",
      f"{ICT}/website-server-status-ha"),
     ("Website Specification — the workload itself: what the site does, who uses it, and how much",
-     f"{ICT}/website-application-spec"),
+     f"{ICT}/website-application-spec-ha"),
     ("Engagement Role Brief — your role on this engagement and what is in scope for MTS",
      f"{PROJECT}/role-brief"),
 ]
@@ -152,7 +152,7 @@ DESIGN = [
               "signed off on. The figures you need are here",
               f"{PROJECT}/requirements"),
              ("Website Specification — the workload those targets are set against: who visits, how "
-              "many, and when", f"{ICT}/website-application-spec"),
+              "many, and when", f"{ICT}/website-application-spec-ha"),
          ],
          prompt="Before you design anything, establish what the design is held to. Read the "
                 "requirements and the website specification, and record the scaling and performance "
