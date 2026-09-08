@@ -563,8 +563,13 @@ def render_front_matter(doc, h1):
 
 
 def render(doc, h1, h2, mode="student", plan=None, work=None, meeting=None, running=None,
-           review=None, questions=None, notes=False):
-    """Render AT2 into `doc`. mode = student | assessor."""
+           review=None, questions=None, meeting_intro=None, notes=False):
+    """Render AT2 into `doc`. mode = student | assessor.
+
+    The content lists default to AT2's own; the PRACTICE sheet passes its own. `meeting_intro`
+    exists because Part C's standing line names the assessor, and practice is observed by a
+    teacher or a classmate instead.
+    """
     PLAN_ = PLAN if plan is None else plan
     WORK_ = WORK if work is None else work
     MEETING_ = MEETING if meeting is None else meeting
@@ -587,8 +592,8 @@ def render(doc, h1, h2, mode="student", plan=None, work=None, meeting=None, runn
         R.element(doc, h2, el, mode, notes=notes)
 
     h1("Part C — Leading a meeting")
-    R.p(doc, "Arrange this with your assessor early in the project. Bring this worksheet to the "
-             "meeting so it can be signed at the end.",
+    R.p(doc, meeting_intro or "Arrange this with your assessor early in the project. Bring this "
+                              "worksheet to the meeting so it can be signed at the end.",
         italic=True, size=9.5, colour=R.GREY, after=10)
     for el in MEETING_:
         R.element(doc, h2, el, mode, notes=notes)
@@ -605,8 +610,9 @@ def render(doc, h1, h2, mode="student", plan=None, work=None, meeting=None, runn
     for el in REVIEW_:
         R.element(doc, h2, el, mode, notes=notes)
 
-    h1("Knowledge questions")
-    R.p(doc, "Answer these about your own team and your own leadership. Generic answers about "
-             "teamwork will not pass.", italic=True, size=9.5, colour=R.GREY, after=10)
-    for q in QUESTIONS_:
-        R.element(doc, h2, q, mode, label="Question", notes=notes)
+    if QUESTIONS_:
+        h1("Knowledge questions")
+        R.p(doc, "Answer these about your own team and your own leadership. Generic answers about "
+                 "teamwork will not pass.", italic=True, size=9.5, colour=R.GREY, after=10)
+        for q in QUESTIONS_:
+            R.element(doc, h2, q, mode, label="Question", notes=notes)

@@ -413,14 +413,19 @@ def render(doc, h1, h2, mode="student", tasks=None, questions=None, notes=False,
 
     h1("The deployment")
     for task in TASKS_:
-        R.element(doc, h2, task, mode, notes=notes)
+        # The notes box is rendered here rather than by element(), so it stays the LAST thing in
+        # a task — after the evidence box, not wedged between the work and the evidence of it.
+        R.element(doc, h2, task, mode, notes=False)
         if task.get("evidence"):
             R.p(doc, "Evidence", bold=True, size=9.5, after=3)
             images = R.evidence_images(evidence_dir, f"task-{task['n']:02d}")
             R.place_evidence(doc, task["evidence"], mode, images)
+        if notes:
+            R.notes_box(doc)
 
-    h1("Knowledge questions")
-    R.p(doc, "Answer these about your own deployment. Generic answers about cloud infrastructure "
-             "will not pass.", italic=True, size=9.5, colour=R.GREY, after=10)
-    for q in QUESTIONS_:
-        R.element(doc, h2, q, mode, label="Question", notes=notes)
+    if QUESTIONS_:
+        h1("Knowledge questions")
+        R.p(doc, "Answer these about your own deployment. Generic answers about cloud "
+                 "infrastructure will not pass.", italic=True, size=9.5, colour=R.GREY, after=10)
+        for q in QUESTIONS_:
+            R.element(doc, h2, q, mode, label="Question", notes=notes)

@@ -721,8 +721,14 @@ def render_front_matter(doc, h1):
 
 
 def render(doc, h1, h2, mode="student", design=None, approval=None, questions=None,
-           current_arch=None, network_diagram=None, notes=False):
-    """Render AT1 into `doc`. mode = student | assessor."""
+           current_arch=None, network_diagram=None, scope_note=None, sizing_note=None,
+           notes=False):
+    """Render AT1 into `doc`. mode = student | assessor.
+
+    The content lists default to AT1's own. The PRACTICE sheet passes its own — same renderer,
+    same shapes, the website instead of Ledgerline — so the two cannot drift structurally even
+    though every value in them differs.
+    """
     DESIGN_ = DESIGN if design is None else design
     APPROVAL_ = APPROVAL if approval is None else approval
     QUESTIONS_ = QUESTIONS if questions is None else questions
@@ -737,8 +743,8 @@ def render(doc, h1, h2, mode="student", design=None, approval=None, questions=No
     par.paragraph_format.space_after = R.Pt(4)
     par.add_run("•  ").font.size = R.Pt(R.BODY_PT)
     R.add_hyperlink(par, label, url, size_pt=R.BODY_PT)
-    R.p(doc, SCOPE_NOTE, italic=True, size=9.5, colour=R.GREY, after=6)
-    R.note(doc, SIZING_NOTE)
+    R.p(doc, scope_note or SCOPE_NOTE, italic=True, size=9.5, colour=R.GREY, after=6)
+    R.note(doc, sizing_note or SIZING_NOTE)
 
     for el in DESIGN_:
         R.element(doc, h2, el, mode, notes=notes)
@@ -750,8 +756,9 @@ def render(doc, h1, h2, mode="student", design=None, approval=None, questions=No
     for el in APPROVAL_:
         R.element(doc, h2, el, mode, notes=notes)
 
-    h1("Knowledge questions")
-    R.p(doc, "Answer these about your own design. Generic answers about cloud architecture will not "
-             "pass.", italic=True, size=9.5, colour=R.GREY, after=10)
-    for q in QUESTIONS_:
-        R.element(doc, h2, q, mode, label="Question", notes=notes)
+    if QUESTIONS_:
+        h1("Knowledge questions")
+        R.p(doc, "Answer these about your own design. Generic answers about cloud architecture "
+                 "will not pass.", italic=True, size=9.5, colour=R.GREY, after=10)
+        for q in QUESTIONS_:
+            R.element(doc, h2, q, mode, label="Question", notes=notes)
