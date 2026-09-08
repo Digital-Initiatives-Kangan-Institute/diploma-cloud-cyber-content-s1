@@ -7,6 +7,7 @@ sheet changes, this fails until the template follows it.
 
 Run from the practice-lab-pack folder:  python -m pytest
 """
+import re
 from pathlib import Path
 
 from cfnlint.decode import cfn_yaml
@@ -148,3 +149,17 @@ def test_expected_outputs_present():
     outputs = _load()["Outputs"]
     for key in ("AlbDnsName", "RdsEndpoint", "VpcId"):
         assert key in outputs, f"missing output: {key}"
+
+
+# ---------------------------------------------------------------- deploy-time constraints
+
+def test_db_password_parameter_rejects_what_rds_rejects():
+    # RDS refuses a master password holding / @ " or a space, and only says so ~2 minutes into
+    # the build, taking the whole stack down with it. The parameter has to bounce those at the
+    # stack form, where the student can still read the reason.
+    param = _load()["Parameters"]["DBMasterPassword"]
+    assert param.get("ConstraintDescription"), "a rejected password needs a message that explains it"
+    allowed = re.compile(param["AllowedPattern"] + r"\Z")
+    for bad in ("pass/word", "pass@word", 'pass"word', "pass word"):
+        assert not allowed.match(bad), f"{bad!r} would reach RDS and fail the stack"
+    assert allowed.match("Ledgerline2026"), "letters and numbers must still be accepted"

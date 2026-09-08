@@ -24,6 +24,7 @@ UoC **taught / developed** in this Topic:
 
 | UoC item | Descriptor | Component |
 |---|---|---|
+| [ICTCLD401 PC 1.8] | Define workload according to business requirements and needs | C1 |
 | [ICTICT517 PC 2.1] | Evaluate impact of proposed changes to ICT systems and products against strategic objectives of organisation | C1 (impact) · C3 (risk/intangibles) |
 | [ICTICT517 PC 2.2] | Evaluate the difficulty of implementing proposed changes to ICT systems and products | C1 |
 | [ICTICT517 PE 5] | Evaluate the difficulty of implementing proposed changes | C1 |

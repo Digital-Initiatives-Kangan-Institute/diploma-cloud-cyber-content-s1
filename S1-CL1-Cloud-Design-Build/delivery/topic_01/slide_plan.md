@@ -287,7 +287,7 @@
     when cloud skills are thin (very relevant to a small RTO).
     • SaaS (Office 365): provider runs everything, you just use it → least control, least work.
     • The decision (accent bold): control vs operational burden — classify each part, then SAY WHY that
-    level fits the client. The "why" is what earns AT1 marks, not the label.
+    level fits the client. The "why" is what AT1 assesses, not the label.
     Misconception to pre-empt: students think a whole solution is "a SaaS" or "an IaaS." Real
     architectures MIX models — Ledgerline could be IaaS app + PaaS database + SaaS email at once.
     Question to pose: "In our Ledgerline sketch, which piece is IaaS and which is PaaS — and why did

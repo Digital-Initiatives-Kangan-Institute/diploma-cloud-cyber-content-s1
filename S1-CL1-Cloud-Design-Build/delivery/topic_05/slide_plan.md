@@ -21,7 +21,7 @@
     • Stress the assessment framing (last bullet): this is the presentation EVENT — an OBSERVED
     assessment. HOW you present is marked, not just what you built. A brilliant case badly pitched
     still fails Part B.
-    Misconception to pre-empt: "the marks are all in the document." No — Part B assesses the live
+    Misconception to pre-empt: "it is all in the document." No — Part B assesses the live
     delivery and Q&A; a strong writer who can't present loses those criteria.
     Question to pose: "Your business case is written and correct. What could still go wrong in the
     boardroom?" — surfaces that communication is a separate, assessed skill.
@@ -266,7 +266,7 @@
     • The rule (accent bold): defend your case FROM YOUR EVIDENCE — your CBA, your risk register —
     don't bluff. A confident wrong answer is worse than "let me point you to the numbers".
     Misconception to pre-empt: "Q&A is just wrapping up." No — it's a graded part of Part B; the board
-    deliberately tests the reasoning behind your recommendation. Under-preparing for it forfeits marks.
+    deliberately tests the reasoning behind your recommendation. Under-preparing for it puts a satisfactory result at risk.
     Question to pose: "The board asks 'why PaaS for the database and not IaaS?' — is that a hostile
     question or an assessment?" (an assessment — they're checking you understand your own design
     choice).

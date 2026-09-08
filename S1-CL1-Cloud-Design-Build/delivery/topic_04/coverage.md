@@ -24,11 +24,13 @@ UoC **taught / developed** in this Topic:
 
 | UoC item | Descriptor | Component |
 |---|---|---|
+| [ICTCLD502 PC 1.2] | Determine cloud infrastructure according to business needs | C1 |
 | [ICTICT517 PC 2.3] | Prioritise proposed changes to refine opportunities and assist in scheduling implementation | C1 |
 | [ICTICT517 PE 4] | Determine and prioritise proposed changes to meet organisational needs | C1 |
 | [ICTICT517 PC 3.1] | Develop action plan to implement proposed changes including prioritised schedule and consistency with organisational policy and procedures | C2 |
 | [ICTICT517 PC 3.2] | Detail standards, targets and implementation methods in action plan | C2 |
 | [ICTICT517 PE 6] | Develop an action plan for implementation | C2 |
+| [ICTCLD502 PC 5.3] | Obtain final sign off from required personnel | C3 |
 | [ICTICT517 PC 3.3] | Provide action plan to superior for feedback and approval | C3 (the written ask in §10) |
 | [ICTICT517 KE 1] | Key sections of an action plan for ICT implementation projects | C2 |
 

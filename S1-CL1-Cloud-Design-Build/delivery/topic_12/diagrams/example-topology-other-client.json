@@ -1,0 +1,23 @@
+{
+  "title": "Northgate Veterinary — appointments service (worked example)",
+  "nodes": [
+    {"id": "staff", "label": "Clinic staff\n(on site and remote)", "row": 0, "col": 1,
+     "shape": "stadium", "fill": "amber", "w": 200, "h": 70},
+
+    {"id": "web_a", "label": "public-web-a  ·  10.40.1.0/24\nus-east-1a\n\nWeb server",
+     "row": 1, "col": 0, "fill": "blue", "w": 240, "h": 110},
+    {"id": "web_b", "label": "public-web-b  ·  10.40.2.0/24\nus-east-1b\n\nWeb server",
+     "row": 1, "col": 2, "fill": "green", "w": 240, "h": 110},
+
+    {"id": "app_a", "label": "private-app-a  ·  10.40.11.0/24\nus-east-1a\n\nAppointments service",
+     "row": 2, "col": 0, "fill": "blue", "w": 240, "h": 110},
+    {"id": "app_b", "label": "private-app-b  ·  10.40.12.0/24\nus-east-1b\n\nAppointments service",
+     "row": 2, "col": 2, "fill": "green", "w": 240, "h": 110}
+  ],
+  "edges": [
+    {"from": "staff", "to": "web_a", "label": "HTTPS"},
+    {"from": "staff", "to": "web_b", "label": "HTTPS"},
+    {"from": "web_a", "to": "app_a", "label": ""},
+    {"from": "web_b", "to": "app_b", "label": ""}
+  ]
+}

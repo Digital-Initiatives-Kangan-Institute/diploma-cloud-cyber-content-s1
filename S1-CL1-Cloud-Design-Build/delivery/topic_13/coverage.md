@@ -1,28 +1,19 @@
-# Topic 13 — HA implementation & simulation · Coverage
+# Topic 13 — Checking the design, and planning the work · Coverage
 
-**Topic 13 of 14** · **AT3 content Topic** (High Availability — build & prove it) · teaching source: **mixed** — bespoke **ICTCLD502 Topic 4** (implement & finalise: approaches, IaC, testing tiers, monitoring, simulating failures, load/stress testing, improving availability) + **ACA M10** (the recorded "Creating a Highly Available Application" demo, S44) / ACA M11 (IaC, light); bespoke to anchor to the Accounting baseline.
+**Topic 13 of 15** · **AT3 content Topic** — the slides and the AT3 worksheet advance together: each component ends in the worksheet task it prepares.
 
 The coverage spec — what this Topic must cover, in UoC and AT terms. `slide_plan.md` and the deck are built to satisfy it.
 
-> **Build it, then break it.** Topic 12 produced the HA design; Topic 13 **implements** it on the running baseline and **simulates failures/resizes to prove it's fault tolerant** — then compares the findings to the design and improves. This is ICTCLD502 element 4 (+ 5.1). **teach → demonstrate → practice** for the AWS build (recorded demo); **teach → practice** for the simulations (student-driven). AT3 = ICTCLD502 (primary).
-
----
-
-## Teaching-design note
-
-The build is an AWS practical → recorded demo (ACA M10 S44) then practice. The simulations are student-driven lab work (no recorded "simulate a failure" demo exists), so they run **teach → practice**. Reuse-first: the implement/simulate/finalise *method* is the bespoke 502 Topic 4 deck; the worked HA build is ACA M10. Students implement and simulate **their own Topic 12 HA design** on the Accounting baseline.
-
----
+## Depth ceiling
+Check a design against the review that produced it, then plan the change and the proof. Still on paper
+— nothing is built until Topic 14.
 
 ## What this Topic must cover
 
-Implement the HA design, prove it under simulated failure, and finalise — to the student's own design, on the practice baseline. Three components:
-
-- **C1 — Implement the design.** Implementation approaches (big-bang / incremental / parallel — in-place hardening = incremental); IaC; implement the hardening; **demonstrate connectivity at all tiers** (incl. failover). *(ICTCLD502 PC 4.1, 4.2.)*
-- **C2 — Simulate failures & resizes.** **Monitor & measure availability**; **simulate component/AZ failures** and confirm fault tolerance; **simulate resizing** and measure the availability impact; load/stress testing. *(ICTCLD502 PC 4.3, 4.4, 4.5.)*
-- **C3 — Compare, improve & document.** **Compare** the simulation findings against the documented design; **improve** availability where simulations show gaps; **document** the findings. *(ICTCLD502 PC 4.6, 5.1.)*
-
----
+- **C1 — Checking the design against the review.** Culminates in the worksheet: **tasks 13–15**.
+- **C2 — Does it hang together?.** Culminates in the worksheet: **task 16**.
+- **C3 — Ordering a change to a live service.** Culminates in the worksheet: **task 17**.
+- **C4 — Planning the proof.** Culminates in the worksheet: **task 18**.
 
 ## 1. UoC mapping
 
@@ -30,62 +21,12 @@ UoC **taught / developed** in this Topic:
 
 | UoC item | Descriptor | Component |
 |---|---|---|
-| [ICTCLD502 PC 4.1] | Implement architecture design in cloud environment | C1 |
-| [ICTCLD502 PC 4.2] | Demonstrate connectivity between resources at all tiers | C1 |
-| [ICTCLD502 PC 4.3] | Monitor and measure availability of resources | C2 |
-| [ICTCLD502 PC 4.4] | Simulate failures of component and confirm infrastructure is fault tolerant | C2 |
-| [ICTCLD502 PC 4.5] | Simulate resizing components likely to impact performance and measure availability impact | C2 |
-| [ICTCLD502 PC 4.6] | Compare and document simulation findings according to documented design | C3 |
-| [ICTCLD502 PC 5.1] | Adjust and improve availability of architecture according to simulations as required | C3 |
-| [ICTCLD502 PE 1] | Design and implement at least one fault-tolerant cloud infrastructure resilient to networking/compute/storage/database/data-centre failures | C1 · C2 *(the implement + prove portion)* |
-| [ICTCLD401 PC 3.2] | Test automatic scaling and fix errors (applied under load/resize) | C2 *(applied)* |
-| [ICTCLD502 PE 2] | Design and deploy automated infrastructure scaling for a business need | C1 |
-| [ICTCLD502 PE 3] | Simulate failures of a component and demonstrate fault tolerance | C2 |
-| [ICTCLD502 PE 4] | Use cloud management console, SDKs or command-line tools | C1 |
-| [ICTCLD502 PE 5] | Define, monitor and record resource availability | C2 |
-| [ICTCLD502 KE 5, 6, 9] | Testing/debugging techniques, measuring availability impact, and metrics to monitor performance | C2 |
+| [ICTCLD502 PC 3.2] | Identify and remove single points of failure as required | C1 |
+| [ICTCLD502 PC 3.3] | Estimate recovery objectives for each component and overall architecture | C1 |
+| [ICTCLD502 PC 3.4] | Determine components that must scale vertically and the potential impact on system availability | C1 |
+| [ICTCLD502 PC 3.5] | Document architecture design according to business needs | C2 |
+| [ICTCLD401 FS Planning and organising] | Plans and implements routine tasks and workload, making limited decisions on sequencing, timing  | C3 |
+| [ICTCLD502 PC 4.6] | Compare and document simulation findings according to documented design | C4 |
 
-> **AT3 marking home: Part B — implementation + simulation window.** This Topic develops the skills assessed in AT3 Part B (the ~3.5 h maintenance-window implementation + the failure/resize simulations). AT3 build-topic refs **T9–T14** (implement · connectivity · availability measurement · failure sim · resize sim · compare/test).
-
-UoC **applied** here but **taught earlier** (not re-taught):
-
-| What | Where |
-|---|---|
-| The HA design being implemented | Topic 12 (produced there; built here) |
-| HA concepts (SPOF, RTO/RPO, the toolkit) | Topic 11 |
-| Building EC2/ALB/ASG/RDS; CloudWatch monitoring | AT2 / Topics 8–9 (used here at the HA layer) |
-
----
-
-## 2. AT3 equivalence / alignment
-
-| AT3 element | Where assessed | How Topic 13 aligns |
-|---|---|---|
-| **Implement HA** (502 4.1–4.2) | AT3 Part B | C1 — implement the hardening in place; demonstrate connectivity at all tiers. |
-| **Monitor + simulate** (502 4.3–4.5) | AT3 Part B | C2 — measure availability; simulate failures (confirm fault tolerant) + resizes (measure impact). |
-| **Compare + improve** (502 4.6, 5.1) | AT3 Part B → closure | C3 — compare findings to the design; improve and re-test; document. |
-
-**Practice-activity alignment:** students **implement and simulate their own Topic 12 HA design** on the practice baseline (Accounting / Ledgerline) in the AWS Academy lab — mirroring the AT3 Part-B window on the LMS (where the supplied AT2 baseline is deployed to a known start state, then hardened + simulated).
-
----
-
-## Out of scope for this Topic (covered elsewhere)
-
-- **Producing the HA design** → **Topic 12** (implemented here, not designed here).
-- **HA concepts** → **Topic 11**.
-- **Closure — HA Deployment Report, feedback, sign-off** → **Topic 14** (502 Topic 4 S11–S12 / element 5.2–5.3).
-- **Multi-Region / full DR** → CL2 (single-Region HA only).
-
----
-
-## Coverage checklist (for `slide_plan.md` + the deck to satisfy)
-
-- [ ] C1 = teach → **recorded demo (ACA M10 S44)** → practice (implement); C2/C3 = teach → practice (student-driven simulations).
-- [ ] **Implementation approaches** (big-bang/incremental/parallel) taught; in-place hardening framed as **incremental** (no outage).
-- [ ] **Connectivity at all tiers** demonstrated after implementing (client→app, app→db, failover + fail-back) (C1, PC 4.2).
-- [ ] **Simulate failures** (disable assets / network disruption) + **confirm fault tolerant**; **measure availability** throughout (C2, PC 4.3–4.4).
-- [ ] **Simulate a resize** + **measure the availability impact**; load/stress testing (C2, PC 4.5).
-- [ ] **Compare** findings to the documented design's recovery objectives; **improve** where gaps appear; **document** the findings (C3, PC 4.6 / 5.1).
-- [ ] Students implement + simulate **their own Topic 12 design** on the Accounting baseline.
-- [ ] In-world; source-deck refs by title may stay; UoC refs off slides; depth ceiling single-Region HA (cross-AZ).
-- [ ] A student leaving this Topic can implement an HA design, prove it under simulated failure, and document the findings — ready to close out in Topic 14.
+## Changelog
+- 2026-08-28 — rewritten to match the redrafted slide plan; components re-cut so each one ends in an AT3 worksheet task.

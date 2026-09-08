@@ -131,7 +131,7 @@
     • ALIGNMENT AND DIVERGENCE both named (magenta line) — balanced, not cheerleading.
     Misconception to pre-empt: "more is better." No — a padded §2 that recites the plan scores worse than
     a tight one that cites four material objectives and traces them.
-    Question to pose: "If I marked your §2, what's the single fastest way to lose marks?" (uncited claims /
+    Question to pose: "Looking at your §2, what would most quickly make it not yet satisfactory?" (uncited claims /
     reciting everything / no divergence named).
     UoC/AT1 tie: this is the A1 acceptance standard for AT1 §2 — hand them the bar before the activity.
 - [EX] Write a Strategic Alignment section

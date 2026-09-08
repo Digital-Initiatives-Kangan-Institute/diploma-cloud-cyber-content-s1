@@ -21,7 +21,7 @@ SCENARIO = [
     "You are an MTS Consultant on the Ledgerline migration. Senior Architecture has produced the "
     "design and an implementation lead has turned it into the run sheet below. Your job is to build "
     "it.",
-    "This is practice. Nothing here is marked, and nothing you build here is submitted. It is the "
+    "This is practice. Nothing here is assessed, and nothing you build here is submitted. It is the "
     "same shape of work as your assessment, on a different system with different settings, so that "
     "working through it teaches you the moves without handing you the answers.",
 ]
@@ -29,7 +29,7 @@ SCENARIO = [
 INSTRUCTIONS = [
     "Work the tasks in order. Each one tells you what to build, the settings to build it to, and "
     "the clicks to get there.",
-    "Take a screenshot at the end of each task even though nobody is marking them. In the "
+    "Take a screenshot at the end of each task even though this exercise is not assessed. In the "
     "assessment you will need one per task, and building the habit here is the point.",
     "When something does not work, read the error before changing anything. Most of what goes "
     "wrong in this build is a setting in the wrong place rather than something broken.",

@@ -39,7 +39,7 @@ SCENARIO = [
     "It works, and it is fragile. Everything that serves Ledgerline sits in one availability zone, "
     "there is one application server, and the database has no standby. Finance have asked what "
     "happens if something breaks, and nobody has a good answer.",
-    "This is practice. Nothing here is marked and nothing is submitted. It is the same work the "
+    "This is practice. Nothing here is assessed and nothing is submitted. It is the same work the "
     "assessment will ask for, on a different system — so do it properly, because the moves are the "
     "point.",
 ]

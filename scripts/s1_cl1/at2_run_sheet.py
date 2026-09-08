@@ -70,8 +70,8 @@ INSTRUCTIONS = [
     "Work the tasks in order. Each one tells you what to build and the settings to build it to; "
     "finding your way around the console is left to you.",
     "Take each screenshot as you finish the task, not at the end. Recreating a screen after you "
-    "have moved on is painful and sometimes impossible — this is the single most common way "
-    "students lose marks here.",
+    "have moved on is painful and sometimes impossible. A task you cannot evidence cannot be "
+    "assessed as satisfactory.",
     "Two tasks ask you to choose between two options. Name the one you did not pick as well as the "
     "one you did — a choice with no alternative beside it is not a comparison.",
     "Run the tests yourself and screenshot what actually happened. If a test fails, fix it, run it "

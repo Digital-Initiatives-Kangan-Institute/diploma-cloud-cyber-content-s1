@@ -33,7 +33,8 @@ first — building it by hand is the point of it.
 8. **Template source** → **Upload a template file** → **Choose file** → pick `baseline.yaml`.
    **Next**.
 9. **Stack name:** `ledgerline-practice`.
-10. **DBMasterPassword:** type a password of at least 8 characters and write it down.
+10. **DBMasterPassword:** type a password of at least 8 characters and write it down. **Letters
+    and numbers only** — the database will not accept a slash, an at sign, a quote or a space.
 11. **AlertEmail:** leave blank, or put your own address in if you want the alarm to email you.
 12. Leave everything else as it is. **Next**, **Next**, then **Submit**.
 13. Wait about 15 minutes, until the stack reads **CREATE_COMPLETE**.

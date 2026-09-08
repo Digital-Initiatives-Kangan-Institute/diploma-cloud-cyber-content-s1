@@ -30,7 +30,7 @@
     UoC/AT1 tie: this Topic develops PC 2.1/2.2 and feeds AT1 §5–§7 (Options, CBA, Risk).
 
 ### C1 — Options & evaluation
-- Teaches: [ICTICT517 PC 2.1] · [ICTICT517 PC 2.2] · [ICTICT517 PE 5] · [ICTICT517 KE 2] · [ICTICT517 KE 3]
+- Teaches: [ICTICT517 PC 2.1] · [ICTICT517 PC 2.2] · [ICTICT517 PE 5] · [ICTICT517 KE 2] · [ICTICT517 KE 3] · [ICTCLD401 PC 1.8]
 - Kicker: compare before you choose
 - [BESPOKE] You don't recommend until you've compared
   - A single proposal isn't a case — it's an assertion.

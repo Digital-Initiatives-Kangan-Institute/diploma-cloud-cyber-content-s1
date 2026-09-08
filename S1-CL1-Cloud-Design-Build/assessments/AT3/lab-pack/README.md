@@ -66,8 +66,9 @@ You are now in the AWS console.
 14. Click **Choose file** and select the **`baseline.yaml`** file you saved earlier. Click **Next**.
 15. On the next page:
     - **Stack name:** type `yat-lms-baseline`
-    - Find the box labelled **DBMasterPassword** and type a password (at least 8 characters).
-      **Write this password down** — it's the database admin password.
+    - Find the box labelled **DBMasterPassword** and type a password (at least 8 characters,
+      **letters and numbers only** — the database will not accept a slash, an at sign, a quote
+      or a space). **Write this password down** — it's the database admin password.
     - Leave every other box as it is.
     - Click **Next**.
 16. On the **Configure stack options** page, don't change anything. Scroll to the bottom and

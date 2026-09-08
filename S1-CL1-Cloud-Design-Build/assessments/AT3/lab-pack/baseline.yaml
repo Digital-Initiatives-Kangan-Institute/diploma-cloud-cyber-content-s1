@@ -52,7 +52,11 @@ Parameters:
     Type: String
     NoEcho: true
     MinLength: 8
-    Description: RDS master password (8+ chars). Supplied at deploy time, not stored.
+    AllowedPattern: '[A-Za-z0-9]+'
+    ConstraintDescription: >-
+      Use 8 or more letters and numbers, and nothing else. RDS rejects a password holding a
+      slash, an at sign, a double quote or a space.
+    Description: RDS master password (8+ letters and numbers). Supplied at deploy time, not stored.
 
   InstanceProfileName:
     Type: String

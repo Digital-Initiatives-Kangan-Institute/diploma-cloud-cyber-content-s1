@@ -30,7 +30,7 @@
     Case §8–§10 sections.
 
 ### C1 — Recommendation
-- Teaches: [ICTICT517 PC 2.3] · [ICTICT517 PE 4]
+- Teaches: [ICTICT517 PC 2.3] · [ICTICT517 PE 4] · [ICTCLD502 PC 1.2]
 - Kicker: from analysis to advice
 - [BESPOKE] From analysis to advice
   - Evaluation tells you what the options are worth; a recommendation says what to do.
@@ -112,6 +112,16 @@
     trade-off; get them to commit to including one).
     UoC/AT1 tie: this is the quality bar for AT1 §8; a recommendation hitting all four is what the
     marking grid rewards.
+- [BESPOKE] Name the infrastructure, not just the direction
+  - "Move to the cloud" is a direction. A board cannot approve a direction — it approves a thing.
+  - Say what the business actually needs, in terms it can price and staff:
+    - the tiers the workload needs · roughly how much of each · what is managed for you and what you run
+    - where the data lives · what it is backed up to · what it is monitored by
+  - Tie each one back to the workload you defined — capacity, peaks, recovery, residency. If a component answers nothing on that list, it does not belong in the recommendation.
+  - You are not designing it here. You are determining what shape it has to be.
+  kicker: a thing the board can approve
+  image: none
+
 - [EX] Write the Recommendation
   - In your working copy of the Business Case, add the Recommendation section for the Accounting System (Ledgerline).
   - Remember to:
@@ -286,7 +296,7 @@
   image: none
 
 ### C3 — The decision requested
-- Teaches: [ICTICT517 PC 3.3]
+- Teaches: [ICTICT517 PC 3.3] · [ICTCLD502 PC 5.3]
 - Kicker: make the “yes” easy
 - [BESPOKE] Close with a clear ask
   - A business case that doesn't ask for anything gets “noted”, not approved.
@@ -328,6 +338,15 @@
     Question to pose: "Name the three things you're asking YAT's board to approve." (the option, the
     plan, the budget figure).
     UoC/AT1 tie: PC 3.3 → AT1 §10 Next Steps and Decision Requested.
+- [BESPOKE] Getting the sign-off, and recording it
+  - An approval that nobody wrote down did not happen. The engagement turns on this.
+  - Ask the people who can actually authorise it — the sponsor or whoever they have delegated it to.
+  - Record four things: who approved, what exactly they approved, when, and any condition they attached.
+  - A conditional approval is still an approval, but the condition has to travel with it.
+  - Without this you have a recommendation nobody has agreed to, and no mandate to start.
+  kicker: who, what, when, and any condition
+  image: none
+
 - [EX] Write Next Steps & the Decision Requested
   - In your working copy of the Business Case, add the Next Steps and Decision Requested section for the Accounting System — completing the written business case.
   - Remember to:

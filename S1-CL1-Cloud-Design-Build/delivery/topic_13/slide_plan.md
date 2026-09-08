@@ -1,350 +1,182 @@
-# Topic 13 HA implementation & simulation — Slide plan
+# Topic 13 Checking the design, and planning the work — Slide plan
 > **Covers:** Topic 13 — see coverage.md
-> **Subtitle:** Build your HA design — then break it on purpose to prove it works
+> **STATUS: DRAFT — redrafted 2026-08-28 from the AT3 practice workbook, Part A tasks 13–18. Teacher
+> `notes:` not yet authored. `coverage.md` not yet reconciled.**
+
+## Depth ceiling
+Check a design against the review that produced it, then plan the change and the proof. Still on paper
+— nothing is built until Topic 14.
+
+**Answer discipline:** these tasks check the student's own design against their own review. The slides
+teach how to check; they do not supply the findings.
+
+## Teaching source
+Bespoke — ICTCLD502 (documenting a design) plus change-management and planning practice, which the
+vendor decks do not cover.
+
+## AWS pin table
+None.
 
 ## Slides
 
 ### Opener
-- [BESPOKE] Build it, then break it
-  - In Topic 12 you designed the HA upgrade; now you implement it on the running baseline.
-  - Then you simulate failures and resizes — to prove the design is actually fault tolerant.
-  - Build → demonstrate connectivity → simulate → compare to your design → improve → document.
-  - For the build: watch the recorded demo, then do it. The simulations you drive yourself.
-  kicker: AT3 Part B skills
+- [BESPOKE] Does it actually do what you said?
+  - You have a design. Whether it closes the gap you measured is a separate question, and it is the one your client will ask.
+  - Today: check the design against your own review, check it hangs together, then plan how you will apply it and how you will prove it.
+  - Everything today is on paper. It is also what makes next topic survivable.
+  kicker: check it before you build it
   image: none
-  notes:
-    The map for the whole Topic — set the arc, don't teach content yet. This is AT3 Part B skills.
-    • Frame the two moves: in Topic 12 they DESIGNED the HA upgrade; today they IMPLEMENT it on the
-    running baseline, then SIMULATE failures/resizes to PROVE it's fault tolerant.
-    • Read the pipeline out: build → demonstrate connectivity → simulate → compare to design →
-    improve → document. Each phase maps to a section today (C1/C2/C3).
-    • Stress the mode split (last bullet): for the BUILD they watch the recorded demo then do it;
-    the SIMULATIONS they drive themselves — no recorded "break it" demo exists.
-    Misconception to pre-empt: "designing it is the hard part; building is just clicking." No — the
-    proof is the point: an HA design isn't HA until a simulated failure shows it stays up.
-    Question to pose: "You designed for two AZs — how would you actually PROVE one AZ can fail and
-    Ledgerline keeps serving?" (surfaces the simulate-to-prove logic).
-    UoC/AT3 tie: this Topic develops the skills assessed in AT3 Part B (the implementation window +
-    the failure/resize simulations) — ICTCLD502 element 4 (+ 5.1).
 
-### C1 — Implement the design
-- Teaches: [ICTCLD502 PC 4.1] · [ICTCLD502 PC 4.2] · [ICTCLD502 PE 1] · [ICTCLD502 PE 2] · [ICTCLD502 PE 4]
-- Kicker: harden in place
-- [BESPOKE] Implementation approaches
-  - Big-bang / cutover — switch over all at once: fastest, but high risk.
-  - Incremental — adopt in phases: easier to adapt and troubleshoot; slower.
-  - Parallel — run old and new together: safest fall-back, but highest cost.
-  - In-place HA hardening is incremental — add redundancy without taking the service down.
-  kicker: ICTCLD502 · Implement & finalise
+### C1 — Checking the design against the review
+- Teaches: [ICTCLD502 PC 3.2] · [ICTCLD502 PC 3.3] · [ICTCLD502 PC 3.4]
+- Kicker: every row accounted for
+- [BESPOKE] Close the loop on every weakness
+  - Take the list of weaknesses you produced and account for every one of them — removed by something specific in your design, or knowingly accepted.
+  - Copy the list across before you write anything in the other columns. It stops you quietly dropping the awkward ones.
+  - If your design removes something that was never on your list, the list was incomplete. Go back and fix it rather than leaving the two documents disagreeing.
+  kicker: removed, or accepted — nothing unmentioned
+  image: none
+- [BESPOKE] Redo the numbers against the design
+  - You estimated what the environment achieved. Now estimate what your design achieves, the same way, per component.
+  - The point is the difference between the two tables. If you cannot state it in a sentence, the design has not been shown to do anything.
+  - Then answer the question that was actually asked: does the whole service now meet the targets? An honest gap beats a number you cannot defend.
+  kicker: the difference is the argument
+  image: none
+- [BESPOKE] What is still constrained
+  - Some things your design will not have changed. A component that could only be replaced rather than added to probably still is.
+  - What may have changed is what it costs you — the same event, with something else still serving while it happens.
+  - Say which, and say what the impact is now.
+  kicker: same event, different cost
+  image: none
+- [EX] Check the design against your review
+  - Workbook — tasks 13, 14 and 15.
+  - Account for every weakness you listed, re-estimate the recovery numbers against your design, and record what still cannot simply be added to.
+  timer: ~35 min
   image: none
   notes:
-    Open C1 — the three ways to roll out a change, so they can place in-place HA hardening correctly.
-    • Walk the three: big-bang/cutover (switch all at once — fastest, highest risk); incremental
-    (phase it in — easier to adapt/troubleshoot, slower); parallel (run old + new together — safest
-    fall-back, highest cost).
-    • Land the accent-bold line: in-place HA hardening IS incremental — you add redundancy WITHOUT
-    taking the service down. That's why it fits a live accounting system.
-    Misconception to pre-empt: "adding HA means a maintenance outage / rebuild from scratch." No — you
-    harden in place, service stays up; that's the whole appeal of the incremental approach here.
-    Question to pose: "Ledgerline is used every business day — which approach lets you add a second AZ
-    without an outage, and why not big-bang?" (incremental; big-bang risks the live service).
-    UoC/AT3 tie: ICTCLD502 PC 4.1 (implement the architecture design) — the how-you-roll-it-out choice
-    that AT3 Part B's implementation window assumes.
-- [BESPOKE] Build it well
-  - Deploy with scripts (infrastructure as code) — repeatable, documented, fewer errors.
-  - Right-size with the Auto Scaling group instead of guessing capacity.
-  - Automate security and monitoring (IAM, CloudWatch, alarms).
-  kicker: ICTCLD502 · Implement & finalise
+    Activity = practice workbook tasks 13–15. Watch for weaknesses that quietly vanish between the
+    review and this table — that is the thing this task exists to catch.
+    Finding a contradiction here is a good outcome; make sure they say so rather than hiding it.
+- [TAKEAWAYS] Section 1 · Checking
+  - Every weakness is removed or knowingly accepted — none unmentioned.
+  - Re-estimate the numbers; the difference between the tables is the argument.
+  - Say what is still constrained and what it costs now.
+  image: none
+
+### C2 — Does it hang together?
+- Teaches: [ICTCLD502 PC 3.5]
+- Kicker: read it as one document
+- [BESPOKE] Reading your own design cold
+  - You wrote the tiers one at a time. Nobody will read them that way.
+  - Read the whole thing back in one pass and ask: does every layer have an answer, do the answers agree with each other, and could someone build this without asking you what you meant?
+  - Cross-tier contradictions are the common failure — something designed in one tier that another tier never provides for.
+  - Finding one now is a good outcome. Finding it while the change window is running is not.
+  kicker: could someone else build it?
+  image: none
+- [EX] Check your design is complete
+  - Workbook — task 16.
+  - Read tasks 7 to 15 back as one document, note anything that had to change on the read-through, and record what you changed.
+  timer: ~15 min
   image: none
   notes:
-    Short but load-bearing — the quality bar for the implementation, not just "make it work."
-    • Deploy with scripts (infrastructure as code) — repeatable, documented, fewer manual errors than
-    clicking. Callback to their AT2 build habits.
-    • Right-size with the Auto Scaling group rather than guessing capacity — the ASG sets the size to
-    demand, so you don't over- or under-provision.
-    • Automate security + monitoring (accent-bold): IAM, CloudWatch, alarms — bake it in as you build,
-    not bolted on after.
-    Misconception to pre-empt: "a working build is a good build." A build can function yet be fragile,
-    undocumented and un-monitored — you can't prove availability you never instrumented.
-    Question to pose: "If you had to rebuild this HA layer next week, what makes IaC better than
-    repeating the clicks?" (repeatable, documented, fewer errors).
-    UoC/AT3 tie: ICTCLD502 PE 2 (deploy automated scaling) + PE 4 (use console/SDK/CLI) — the build
-    quality AT3 Part B is evidenced against.
-- [BESPOKE] Demonstrate connectivity at all tiers
-  - After implementing, confirm each tier works — and only talks to what it should:
-    - client → application; application → database; database reachable only from the app tier
-  - Confirm failover works — and that you can fail back to the primary.
-  - This is the evidence that the build is correct, not just present.
-  kicker: ICTCLD502 · Implement & finalise
+    Activity = practice workbook task 16. The workbook's considerations name the specific
+    cross-references worth checking — let them do that work.
+    Pair students and have them try to build from each other's; the questions they have to ask are
+    the gaps.
+- [TAKEAWAYS] Section 2 · Completeness
+  - Read it as one document, not as the tiers you wrote.
+  - Contradictions between tiers are the usual failure.
+  - Something you had to change on the read-through is worth recording.
   image: none
-  notes:
-    The evidence step of C1 — teach that a build isn't done until you've PROVEN each tier talks to the
-    right thing and only the right thing.
-    • Walk the sub-bullet: client → application; application → database; and the database reachable ONLY
-    from the app tier — connectivity AND isolation, both matter.
-    • Land the accent-bold line: confirm failover works AND that you can fail back to the primary — a
-    failover you can't reverse isn't finished.
-    • Last bullet is the teaching point: this is the evidence the build is CORRECT, not merely present.
-    Misconception to pre-empt: "if the app loads, connectivity is fine." No — you must show the DB is
-    NOT reachable from the internet, and that failover/fail-back both work; "it loads" proves neither.
-    Question to pose: "How would you show an assessor the database can't be reached except from the app
-    tier?" (test from the app tier vs from outside; show the SG/route).
-    UoC/AT3 tie: ICTCLD502 PC 4.2 (demonstrate connectivity between resources at all tiers) — captured
-    as AT3 Part B evidence.
-- [DEMO] Build a highly available application
-  - Create an Auto Scaling group spread across two Availability Zones, behind a load balancer.
-  - Add a Multi-AZ database with an automatic-failover standby.
-  - Confirm the load balancer routes only to healthy targets across both AZs.
-  source: ACA M10 · Creating a Highly Available Application (S44)
+
+### C3 — Ordering a change to a live service
+- Teaches: [ICTCLD401 FS Planning and organising]
+- Kicker: the window is finite
+- [BESPOKE] Three ways to put a change in
+  - All at once — switch everything over in one go. Quickest, and when it goes wrong it goes wrong everywhere at the same time.
+  - A bit at a time — add and change in stages, checking after each one. Slower, but problems surface while they are still small and while you still have somewhere to go back to.
+  - Side by side — stand the new one up next to the old one, run both, then switch. Safest fall-back there is, and you pay for two of everything while it lasts.
+  - What you are about to plan is the second one. You are adding to a system that keeps serving the whole time, and never taking it down to do it.
+  kicker: all at once · in stages · side by side
   image: none
-  notes:
-    DEMONSTRATION slide (C1). This is the "demonstrate" step of teach → demonstrate → practice for the
-    HA build — screen the recorded demo, then relate every step to OUR Accounting baseline.
-    
-    WHERE TO FIND THE RECORDED DEMO: AWS Academy Cloud Architecting (ACA) → Module 10 → slide 44,
-    "Demo: Creating a Highly Available Application", inside the ACA M10 instructor deck
-    (original-materials/AWS-Instructor Presentations/…). Instructor-facing — screen it in class, do not
-    distribute to students. Preview it before class and cue it to this slide.
-    
-    WHAT TO DEMONSTRATE (follow the recorded demo, then map to our build):
-    1. Create an Auto Scaling group spread across TWO Availability Zones, behind a load balancer.
-    2. Add a Multi-AZ database with an automatic-failover standby.
-    3. Confirm the load balancer routes only to HEALTHY targets across both AZs.
-    
-    WHAT TO EMPHASISE:
-    • The redundancy is across AZs — two AZs is what survives a data-centre failure (callback Topic 11).
-    • Multi-AZ RDS = automatic failover to a standby; students confuse this with a read replica — it's HA.
-    • Health checks: the ALB only sends traffic to healthy targets — that's what makes failover invisible.
-    • Narrate evidence capture — they screenshot as they build for AT3; model it here.
-    
-    PREP: clean Learner Lab open (deploy us-east-1), their Topic 12 HA design handy, demo queued.
-    ~8–10 min to screen + narrate before the activity.
-- [EX] Implement your HA design
-  - On the running Accounting baseline, implement the hardening from your Topic 12 design:
-    - add the second AZ + mirrored subnets; extend the ASG and ALB across both AZs
-    - convert the database to Multi-AZ; add the second NAT gateway
-  - Demonstrate connectivity at all tiers and capture evidence.
+- [BESPOKE] What a change window is
+  - You do not get to take a live system down whenever you like. You get an agreed window, and it is shorter than you would like.
+  - Organisations have rules for changing a running system — what has to be planned, what has to be approved, and what a rollback plan has to contain. Read them; they are not optional.
+  kicker: agreed, and finite
+  image: none
+- [BESPOKE] Ordering the work
+  - Sort your changes into two piles: the ones that add something new, and the ones that alter something already serving traffic.
+  - Additive changes affect nobody, so they go first. Anything that interrupts a running service goes later, when everything it depends on is already in place.
+  - Anything long-running that proceeds by itself once started should be kicked off early, so it runs while you do something else.
+  kicker: additive first, disruptive later
+  image: none
+- [BESPOKE] What each row of a plan carries
+  - For each change: how long you expect it to take, what a user sees while it happens, how you will confirm it worked, and what you will do if it does not.
+  - "Keep going and hope" is not a rollback. If you cannot finish the sentence "if this fails I will ___", you do not have a plan for that row.
+  - Add the durations up and compare them to the window. If the total is nearly the whole window you have no plan, you have a hope.
+  kicker: time · impact · verification · rollback
+  image: none
+- [EX] Plan the order of work
+  - Workbook — task 17.
+  - Plan the order you will apply your changes in, with a duration, impact, verification and rollback for each, and state the total and the buffer left.
   timer: ~30 min
   image: none
   notes:
-    Facilitation (C1 practice) — students implement THEIR OWN Topic 12 design on the running baseline.
-    Tell students, in these words: "Open the lab and your Topic 12 HA design. On the running Accounting
-    baseline, implement your hardening exactly as your design specifies — then prove connectivity at
-    every tier and capture the evidence as you go."
-    Steps (put on the board):
-    1. Add the second AZ + mirrored subnets; extend the ASG and ALB across both AZs.
-    2. Convert the database to Multi-AZ; add the second NAT gateway.
-    3. Demonstrate connectivity at all tiers (client→app, app→db, DB isolated), and failover/fail-back.
-    4. Capture the named evidence screenshots as you build each piece.
-    Must produce: the hardened baseline running across two AZs, plus connectivity/failover evidence.
-    Timing: ~30 min. Where they get stuck: forgetting the SECOND NAT gateway (breaks HA for the private
-    subnet), and impatience with Multi-AZ conversion (it takes minutes) — circulate and reassure.
-    Share-back: ask one student to show failover working, then failing back.
-    No-leakage note: this practice uses the Accounting/Ledgerline baseline; AT3 assesses the same skill
-    on a DIFFERENT supplied system (the LMS) — comparable, not identical.
-- [TAKEAWAYS] Section 1 · Implement
-  - In-place HA hardening is incremental — no outage.
-  - Deploy with IaC; right-size with the ASG; automate security + monitoring.
-  - Demonstrate connectivity at every tier, including failover and fail-back.
-  - Capture the evidence as you build.
+    Activity = practice workbook task 17. Point them at the organisation's change-management page —
+    the rollback requirement comes from there, not from the task.
+    The two things to press on: a rollback for every row, and actually adding the durations up.
+- [TAKEAWAYS] Section 3 · The plan
+  - Read the organisation's rules for changing a running system.
+  - Additive changes first; disruptive ones later; long-running ones early.
+  - Every row carries a duration, an impact, a verification and a rollback.
+  - Add it up and check the buffer.
   image: none
 
-### C2 — Simulate failures & resizes
-- Teaches: [ICTCLD502 PC 4.3] · [ICTCLD502 PC 4.4] · [ICTCLD502 PC 4.5] · [ICTCLD502 PE 1] · [ICTCLD401 PC 3.2] · [ICTCLD502 PE 3] · [ICTCLD502 PE 5] · [ICTCLD502 KE 5, 6, 9]
-- Kicker: break it on purpose
-- [BESPOKE] Why simulate?
-  - An untested backup plan isn't a plan.
-  - In 2016 Delta Air Lines had an outage when failed equipment exposed a backup that had never been tested — about US$100 million.
-  - You simulate failures to confirm every part of the HA design actually works.
-  kicker: ICTCLD502 · Implement & finalise
+### C4 — Planning the proof
+- Teaches: [ICTCLD502 PC 4.6]
+- Kicker: predict it first
+- [BESPOKE] A design is a claim until something tests it
+  - Redundancy on paper is an assertion. It becomes a fact when a failure happens and the service keeps serving.
+  - You plan at least one failure and one resize — one proves it survives losing something, the other proves growing it does not cost what it used to.
+  kicker: assertion, then fact
   image: none
-  notes:
-    Open C2 — establish WHY you deliberately break a working system. The mindset shift of the section.
-    • The one-liner (say it first): an untested backup plan isn't a plan.
-    • Use the accent-bold Delta 2016 story: failed equipment exposed a backup that had NEVER been tested
-    — about US$100 million. A real, memorable cost of assuming HA works.
-    • Land the point: you simulate failures to CONFIRM every part of the HA design actually works —
-    before a real failure does the testing for you.
-    Misconception to pre-empt: "we built redundancy, so it's fault tolerant." Redundancy on paper isn't
-    proof — until a failure is simulated and the service stays up, HA is a claim, not a fact.
-    Question to pose: "Would you tell YAT's board 'it'll fail over fine' without ever having failed it
-    over?" (draws out that proof, not confidence, is the deliverable).
-    UoC/AT3 tie: sets up ICTCLD502 PC 4.3–4.4 and PE 3 (simulate failures, demonstrate fault tolerance)
-    — the core of AT3 Part B's simulation window.
-- [BESPOKE] Monitor & measure availability
-  - Watch uptime, errors and latency throughout the simulation — you can't prove availability you didn't measure.
-  - Use CloudWatch metrics + alarms and the AWS Health Dashboard.
-  - Record the numbers before, during and after each simulated failure.
-  kicker: ICTCLD502 · Implement & finalise
+- [BESPOKE] Write down what you expect, before you run it
+  - This is the part everyone skips and it is the part that makes the exercise worth anything.
+  - If you have not written down what you expect, then whatever happens will look like what you expected, and you will have learned nothing.
+  - For each simulation: what you will do, what you expect to happen, and how you will know whether it did. "It worked" is not evidence — name what you would capture, and when.
+  - How you will know matters most. Watching the console is not the same as watching the service.
+  kicker: predict, then run
   image: none
-  notes:
-    The measurement discipline for C2 — you can't prove availability you didn't measure.
-    • Walk it: watch uptime, errors and latency THROUGHOUT the simulation — not just a before/after
-    glance.
-    • Name the tools: CloudWatch metrics + alarms, and the AWS Health Dashboard (callback to their AT2
-    monitoring build).
-    • Accent-bold: record the numbers BEFORE, DURING and AFTER each simulated failure — the delta is the
-    evidence of the availability impact.
-    Misconception to pre-empt: "if it stayed up, that's enough." No — AT3 wants the measured impact
-    (how long, how many errors, what latency); "it seemed fine" isn't evidence.
-    Question to pose: "When you terminate an instance, what exactly do you watch to show users weren't
-    affected?" (target health, error rate, latency across the failover).
-    UoC/AT3 tie: ICTCLD502 PC 4.3 + PE 5 (define, monitor and record resource availability) + KE 6/9
-    (measuring availability impact; performance metrics).
-- [BESPOKE] Simulate failures
-  - Disable assets — terminate an instance, or take down an Availability Zone's resources.
-  - Network disruption — block traffic to a subnet.
-  - Confirm the system fails over to the redundant assets and keeps serving — that's fault tolerance proven.
-  kicker: ICTCLD502 · Implement & finalise
-  image: none
-  notes:
-    The heart of C2 — teach the failure injections and what "fault tolerant" looks like when it works.
-    • Disable assets — terminate an instance, or take down an AZ's resources; watch the ASG/Multi-AZ
-    replace or fail over.
-    • Network disruption — block traffic to a subnet, simulating a partition.
-    • Accent-bold: confirm the system fails over to the redundant assets and KEEPS SERVING — that is
-    fault tolerance PROVEN, the exact thing AT3 wants evidenced.
-    Misconception to pre-empt: "simulate = just imagine/describe the failure." No — they actually inject
-    the failure in the lab (terminate, block) and observe the real behaviour; a written thought
-    experiment isn't a simulation.
-    Question to pose: "You kill the instance in AZ-A — walk me through what SHOULD happen, and how you'd
-    see it did?" (ALB drops the unhealthy target, ASG launches a replacement, service continues).
-    UoC/AT3 tie: ICTCLD502 PC 4.4 + PE 1/PE 3 (simulate component failures, confirm fault tolerant,
-    resilient to networking/compute/storage/database/data-centre failures).
-- [BESPOKE] Simulate resizes & load
-  - Load testing — does it work under the expected workload (e.g. month-end peak)?
-  - Stress testing — where's the breaking point, and does it fail gracefully (queued / busy messages, data safe)?
-  - Resize a component and measure the availability impact — vertical resizes often take a brief outage.
-  kicker: ICTCLD502 · Implement & finalise
-  image: none
-  notes:
-    The second half of C2 — resizing and load/stress, and their availability cost.
-    • Load testing — does it hold under the EXPECTED workload (e.g. Ledgerline's month-end peak)?
-    • Stress testing — where's the breaking point, and does it fail GRACEFULLY (queued/busy messages,
-    data kept safe) rather than falling over?
-    • Accent-bold: resize a component and MEASURE the availability impact — vertical resizes often take
-    a brief outage, and that trade-off must be recorded.
-    Misconception to pre-empt: "scaling up is free and instant." A vertical resize (bigger instance /
-    DB class) usually needs a restart or failover — a short availability hit; horizontal (ASG) avoids
-    it. Knowing which is which is the point.
-    Question to pose: "Month-end doubles the load — do you scale UP the instance or OUT with the ASG,
-    and what does each cost you in availability?" (out = no outage; up = a brief one).
-    UoC/AT3 tie: ICTCLD502 PC 4.5 (simulate resizing, measure availability impact) + ICTCLD401 PC 3.2
-    (test automatic scaling and fix errors, applied under load/resize) + KE 5 (testing/debugging).
-- [EX] Run the simulations
-  - Per your simulation plan, with monitoring on:
-    - fail an instance / an AZ — confirm the service stays up (fault tolerant)
-    - trigger a database failover, then fail back
-    - resize under load and measure the availability impact
-  - Record the availability impact of each, with evidence.
-  timer: ~30 min
-  image: none
-  notes:
-    Facilitation (C2 practice) — students run their own simulation plan against their hardened baseline.
-    Tell students, in these words: "With your monitoring on, work through your simulation plan. Break
-    the system on purpose, watch what happens, and record the availability impact of each with
-    evidence."
-    Steps (put on the board):
-    1. Fail an instance / an AZ — confirm the service stays up (fault tolerant).
-    2. Trigger a database failover, then fail back to the primary.
-    3. Resize a component under load and measure the availability impact.
-    Must produce: for each simulation, the measured availability impact (uptime/errors/latency before,
-    during, after) with screenshots/metrics as evidence.
-    Timing: ~30 min. Where they get stuck: forgetting to start monitoring BEFORE the failure (no
-    baseline to compare), and panicking when a resize causes a brief outage — that's expected, tell them
-    to record it, not fix it.
-    Share-back: take one measured result and ask "did the design hold?" — bridges into C3.
-    No-leakage note: simulations run on the Accounting baseline (practice); AT3 assesses the same on the
-    supplied LMS system — comparable, not identical.
-- [TAKEAWAYS] Section 2 · Simulate
-  - Untested HA isn't HA — simulate to prove it.
-  - Measure availability (CloudWatch) throughout each simulation.
-  - Simulate failures (disable assets / block a subnet) and confirm failover.
-  - Load/stress test and measure the impact of a resize.
-  image: none
-
-### C3 — Compare, improve & document
-- Teaches: [ICTCLD502 PC 4.6] · [ICTCLD502 PC 5.1]
-- Kicker: did it meet the design?
-- [BESPOKE] Compare findings to the design
-  - Measure what the simulations showed against your documented recovery objectives.
-  - Did the build meet its RPO/RTO? Did each SPOF's fix actually hold under failure?
-  - Note any gap between the design's intent and the simulated reality.
-  kicker: your documented design
-  image: none
-  notes:
-    Open C3 — turn the raw simulation results back against what the design PROMISED.
-    • Walk it: measure what the simulations showed against your documented recovery objectives (the
-    RPO/RTO and SPOF fixes from Topic 12).
-    • Accent-bold: did the build meet its RPO/RTO? Did each single point of failure's fix actually hold
-    under a real (simulated) failure?
-    • Last bullet: note any GAP between the design's intent and the simulated reality — that gap is what
-    C3 acts on next.
-    Misconception to pre-empt: "the simulations passed, so we're done." Passing isn't the deliverable —
-    comparing measured behaviour to the stated objectives is; a build can survive yet miss its RTO.
-    Question to pose: "Your design promised recovery in under a minute — what did the simulation
-    actually measure, and did it meet the promise?" (forces objective-vs-reality comparison).
-    UoC/AT3 tie: ICTCLD502 PC 4.6 (compare and document simulation findings according to the documented
-    design) — the compare half of AT3 Part B's closing work.
-- [BESPOKE] Improve availability if needed
-  - If a simulation shows a prolonged outage or poor availability, adjust the design:
-    - more redundancy · Multi-AZ · managed services with built-in HA · monitoring with auto-triggered recovery
-  - Make the change, then re-test to confirm the improvement.
-  kicker: ICTCLD502 · Implement & finalise
-  image: none
-  notes:
-    The improve step of C3 — what to do when a simulation exposes a gap.
-    • The trigger: a simulation shows a prolonged outage or poor availability → adjust the design; don't
-    leave a known weakness in.
-    • Walk the levers (sub-bullet): more redundancy · Multi-AZ · managed services with built-in HA ·
-    monitoring with auto-triggered recovery.
-    • Accent-bold: make the change, then RE-TEST to confirm the improvement — an untested fix is just
-    another claim (callback to "why simulate?").
-    Misconception to pre-empt: "note the gap in the report and move on." No — where a simulation reveals
-    a real weakness you adjust and re-simulate; the improvement only counts once re-tested.
-    Question to pose: "Your single NAT gateway took the private tier down when its AZ failed — what's
-    the fix, and how do you prove it worked this time?" (second NAT per AZ; re-run the AZ failure).
-    UoC/AT3 tie: ICTCLD502 PC 5.1 (adjust and improve availability according to simulations as
-    required).
-- [EX] Compare, adjust & document
-  - Finalise the implementation:
-    - compare your simulation findings against your documented design
-    - make any improvements the simulations call for, and re-test
-  - Document the simulation findings against the design — this feeds the HA Deployment Report.
+- [EX] Plan how you will prove it
+  - Workbook — task 18.
+  - Plan your simulations — at least one failure and one resize — with what you will do, what you expect, and how you will know.
   timer: ~20 min
   image: none
   notes:
-    Facilitation (C3 practice) — finalise the implementation and produce the documented findings.
-    Tell students, in these words: "Finalise your HA implementation. Compare your simulation findings
-    against your documented design, make any improvements the simulations call for and re-test, then
-    document the findings against the design — this is what feeds your HA Deployment Report."
-    Steps (put on the board):
-    1. Compare your simulation findings against your documented design's recovery objectives.
-    2. Make any improvements the simulations call for, and RE-TEST them.
-    3. Document the findings against the design (what met the objective, what you changed and why).
-    Must produce: a written findings-vs-design comparison plus any re-tested improvements — the raw
-    material for the Topic 14 HA Deployment Report.
-    Timing: ~20 min. Where they get stuck: documenting only what passed and hiding the gaps — remind
-    them the gaps + fixes are the strongest evidence, not a weakness to bury.
-    Share-back: ask one student for a gap they found and the improvement they made.
-    No-leakage note: this finalises the Accounting-baseline practice; AT3 assesses the same on the
-    supplied LMS system — comparable, not identical. Closure (the report, feedback, sign-off) is Topic 14.
-- [TAKEAWAYS] Section 3 · Compare & improve
-  - Compare simulation findings to the documented recovery objectives.
-  - Improve where the simulations show gaps — then re-test.
-  - Document the findings against the design.
-  - What you record here becomes the HA Deployment Report.
-  image: none
+    Activity = practice workbook task 18. These plans are executed in Topic 15 and compared against
+    what actually happened, so vague predictions cost them later — say so now.
+    Press "how will you know" hardest; that is where the measurement discipline starts.
 - [TAKEAWAYS] Topic 13 · Key takeaways
-  - Implement incrementally — harden in place with no outage.
-  - Demonstrate connectivity at all tiers, including failover.
-  - Simulate failures and resizes to *prove* fault tolerance; measure availability.
-  - Compare to the design, improve where needed, and document the findings.
-  - You implemented and proved your own design.
+  - Account for every weakness; re-estimate and state the difference.
+  - Read the design back as one document before anyone builds from it.
+  - Order the work additive-first, with a rollback on every row and a real buffer.
+  - Write down what you expect before you run anything.
   image: none
 
 ### Close
-- [BESPOKE] Next: Topic 14 — Closure & documentation
-  - Write the HA Deployment Report from your evidence and findings, seek and respond to feedback, and obtain final sign-off — closing the engagement.
-  - Bring your simulation findings.
+- [BESPOKE] Next — building it
+  - The design is checked and the work is planned.
+  - Next you deploy the environment and apply your own design to it, in your own order.
   image: none
+
+## Build notes
+~18 slides. Four activities, mapping to practice workbook tasks 13–15 · 16 · 17 · 18.
+Carries one slide on rollout approaches — not assessed by any task, kept because it names the
+reasoning task 17 requires. Load and stress testing is deliberately not taught: nothing asks for it,
+and the practice environment serves a placeholder page, so there is no real load to test against.
+New topic content — the previous Topic 13 (implementation and simulation) moves to Topics 14 and 15.
+No images used yet; the change-window planning section may warrant a diagram. `coverage.md` needs
+reconciling — this Topic previously covered AT3 Part B.
+
+## Changelog
+- 2026-08-28 — new plan; carries workbook tasks 13–18, which previously had one bullet between them.
