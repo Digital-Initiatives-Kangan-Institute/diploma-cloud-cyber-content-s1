@@ -203,16 +203,21 @@ APPROVAL = [
 # ---------------------------------------------------------------- rendering
 
 
-def render(doc, h1, h2, mode="student", approval=None, notes=False):
-    """Render Part C into `doc`. mode = student | assessor."""
+def render(doc, h1, h2, mode="student", approval=None, intro=None, event=None, resources=None,
+           notes=False):
+    """Render Part C into `doc`. mode = student | assessor.
+
+    The content defaults to Part C's own. The PRACTICE sheet passes its own — the same
+    approval gate rehearsed on the LMS engagement, with nobody signing anything off.
+    """
     APPROVAL_ = APPROVAL if approval is None else approval
 
     h1("Part C — Presentation and approval")
-    for para in INTRO:
+    for para in (intro or INTRO):
         R.p(doc, para, after=8)
     R.p(doc, "The session", bold=True, size=9.5, after=3)
-    R.settings_table(doc, EVENT)
-    R.resources_block(doc, RESOURCES)
+    R.settings_table(doc, event or EVENT)
+    R.resources_block(doc, resources or RESOURCES)
 
     for el in APPROVAL_:
         R.element(doc, h2, el, mode, notes=notes)

@@ -768,23 +768,30 @@ def render_front_matter(doc, h1):
     R.note(doc, REGION_NOTE)
 
 
-def render_supplied(doc, h1, h2):
+def render_supplied(doc, h1, h2, intro=None, datastore=None, handler=None, contract=None,
+                    names=("datastore.yaml", "handler.py"), producer="website"):
+    """The two provided files, reproduced in full.
+
+    The content defaults to AT2's own. The PRACTICE sheet passes its own — the LMS
+    activity-audit store and writer, whose planted fault and field names both differ — through
+    this same renderer, so the two sheets present their supplied material identically.
+    """
     h1("What you are given")
-    for para in SUPPLIED_INTRO:
+    for para in (intro or SUPPLIED_INTRO):
         R.p(doc, para, after=8)
-    h2("The data-store template — datastore.yaml")
+    h2(f"The data-store template — {names[0]}")
     R.p(doc, "PROVIDED. You operate this template; you do not author it. It may not deploy as "
              "supplied.", italic=True, size=9.5, colour=R.GREY, after=6)
-    R.code(doc, DATASTORE_YAML)
-    h2("The microservice code — handler.py")
+    R.code(doc, datastore or DATASTORE_YAML)
+    h2(f"The microservice code — {names[1]}")
     R.p(doc, "PROVIDED in full as a download. You deploy this code; you do not write it. What it "
              "needs from your infrastructure is summarised here and confirmed in task 11.",
         italic=True, size=9.5, colour=R.GREY, after=6)
-    R.settings_table(doc, HANDLER_SUMMARY)
+    R.settings_table(doc, handler or HANDLER_SUMMARY)
     h2("The webhook contract")
-    R.p(doc, "The single integration point between the website and your service.",
+    R.p(doc, f"The single integration point between the {producer} and your service.",
         italic=True, size=9.5, colour=R.GREY, after=6)
-    R.code(doc, WEBHOOK_CONTRACT)
+    R.code(doc, contract or WEBHOOK_CONTRACT)
 
 
 def render(doc, h1, h2, mode="student", tasks=None, questions=None, notes=False,
@@ -795,14 +802,19 @@ def render(doc, h1, h2, mode="student", tasks=None, questions=None, notes=False,
 
     h1("The build")
     for task in TASKS_:
-        R.element(doc, h2, task, mode, notes=notes)
+        # The notes box is rendered here rather than by element(), so it stays the LAST thing in
+        # a task — after the evidence box, not wedged between the work and the evidence of it.
+        R.element(doc, h2, task, mode, notes=False)
         if task.get("evidence"):
             R.p(doc, "Evidence", bold=True, size=9.5, after=3)
             images = R.evidence_images(evidence_dir, f"task-{task['n']:02d}")
             R.place_evidence(doc, task["evidence"], mode, images)
+        if notes:
+            R.notes_box(doc)
 
-    h1("Knowledge questions")
-    R.p(doc, "Answer these about your own build. Generic answers about infrastructure as code will "
-             "not pass.", italic=True, size=9.5, colour=R.GREY, after=10)
-    for q in QUESTIONS_:
-        R.element(doc, h2, q, mode, label="Question", notes=notes)
+    if QUESTIONS_:
+        h1("Knowledge questions")
+        R.p(doc, "Answer these about your own build. Generic answers about infrastructure as code "
+                 "will not pass.", italic=True, size=9.5, colour=R.GREY, after=10)
+        for q in QUESTIONS_:
+            R.element(doc, h2, q, mode, label="Question", notes=notes)

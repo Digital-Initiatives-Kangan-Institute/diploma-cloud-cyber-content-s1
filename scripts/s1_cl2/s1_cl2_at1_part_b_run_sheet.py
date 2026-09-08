@@ -642,22 +642,28 @@ QUESTIONS = [
 # ---------------------------------------------------------------- rendering
 
 
-def render(doc, h1, h2, mode="student", plan=None, questions=None, notes=False):
-    """Render Part B into `doc`. mode = student | assessor."""
+def render(doc, h1, h2, mode="student", plan=None, questions=None, intro=None, resources=None,
+           template_note=None, notes=False):
+    """Render Part B into `doc`. mode = student | assessor.
+
+    The content defaults to Part B's own. The PRACTICE sheet passes its own — same renderer,
+    same shapes, the LMS instead of the website.
+    """
     PLAN_ = PLAN if plan is None else plan
     QUESTIONS_ = QUESTIONS if questions is None else questions
 
     h1("Part B — Disaster Recovery Plan")
-    for para in INTRO:
+    for para in (intro or INTRO):
         R.p(doc, para, after=8)
-    R.resources_block(doc, RESOURCES)
-    R.p(doc, TEMPLATE_NOTE, italic=True, size=9.5, colour=R.GREY, after=10)
+    R.resources_block(doc, resources or RESOURCES)
+    R.p(doc, template_note or TEMPLATE_NOTE, italic=True, size=9.5, colour=R.GREY, after=10)
 
     for el in PLAN_:
         R.element(doc, h2, el, mode, notes=notes)
 
-    h1("Knowledge questions")
-    R.p(doc, "Answer these about your own plan. Generic answers about disaster recovery will not "
-             "pass.", italic=True, size=9.5, colour=R.GREY, after=10)
-    for q in QUESTIONS_:
-        R.element(doc, h2, q, mode, label="Question", notes=notes)
+    if QUESTIONS_:
+        h1("Knowledge questions")
+        R.p(doc, "Answer these about your own plan. Generic answers about disaster recovery will "
+                 "not pass.", italic=True, size=9.5, colour=R.GREY, after=10)
+        for q in QUESTIONS_:
+            R.element(doc, h2, q, mode, label="Question", notes=notes)
