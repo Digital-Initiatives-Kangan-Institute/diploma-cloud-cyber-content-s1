@@ -18,8 +18,8 @@ TBD — AWS ACA CloudFormation / IaC modules to be pinned.
 - [BESPOKE] From design to build
   - AT1 is signed off; AT2 begins — you build in the lab, to the approved design.
   - This Topic: what IaC is, and operating a template someone else wrote.
-  - Region substitution starts here: the design targets Sydney/India, but you deploy to us-east-1 — `[scenario: ap-southeast-2 (Sydney) | deploy: us-east-1]`. Same build, only the console Region differs.
-  - `teach → demo → practice`: watch the demo, then do it on the practice scenario.
+  - Region substitution starts here: the design targets Sydney/India, but you deploy to us-east-1 — [scenario: ap-southeast-2 (Sydney) | deploy: us-east-1]. Same build, only the console Region differs.
+  - teach → demo → practice: watch the demo, then do it on the practice scenario.
   image: gen flat vector hero illustration of code turning into cloud infrastructure blocks, blue and gold accents, minimal, no text
   notes:
     Frame Topic 6 as the START of AT2 — the design is signed off; now you build it in the lab. Set the mode
@@ -87,7 +87,7 @@ TBD — AWS ACA CloudFormation / IaC modules to be pinned.
 - Teaches: [ICTCLD505 PC 2.1] · [ICTCLD505 PC 2.2] · [ICTCLD505 KE 5]
 - Kicker: read a template before you run it
 - [PRIMER] Template syntax
-  - The parts: Parameters (inputs), Resources (what to create), Outputs (what to share), intrinsic functions (`!Ref`, `!GetAtt`, `!Sub`).
+  - The parts: Parameters (inputs), Resources (what to create), Outputs (what to share), intrinsic functions (!Ref, !GetAtt, !Sub).
   - Resources declare desired state; the platform works out how to reach it.
   - Learn to read it top-down: inputs → resources → outputs (KE 5).
   image: none
@@ -107,7 +107,7 @@ TBD — AWS ACA CloudFormation / IaC modules to be pinned.
     template before operating it).
 - [BESPOKE] Review a provided template
   - Review a pre-defined template to determine the resources it creates and their dependencies.
-  - Trace `!Ref`/`!GetAtt` to see what depends on what — the build order falls out of the references.
+  - Trace !Ref/!GetAtt to see what depends on what — the build order falls out of the references.
   - Know what a template does before you deploy it (the provided data-store template is your AT2 case).
   image: diagram cfn-template-anatomy
   notes:
@@ -150,7 +150,7 @@ TBD — AWS ACA CloudFormation / IaC modules to be pinned.
     UoC/AT2 tie: ICTCLD505 PC 2.3–2.5 (deploy/update/delete; confirm; remove) + PE 1 + PE 3 + KE 6/10/11 →
     AT2 §4.2 (operate the provided template — D2).
 - [DEMO] Operate the provided template
-  - Deploy the provided template in the lab (Region us-east-1 — `[scenario: ap-southeast-2 (Sydney) | deploy: us-east-1]`).
+  - Deploy the provided template in the lab (Region us-east-1 — [scenario: ap-southeast-2 (Sydney) | deploy: us-east-1]).
   - Update a parameter via a change set; confirm the resource in the console/CLI; then delete the stack.
   source: recorded/live demo
   image: none

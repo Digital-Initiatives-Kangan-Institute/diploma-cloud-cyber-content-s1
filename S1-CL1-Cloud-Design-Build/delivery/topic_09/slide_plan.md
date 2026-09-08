@@ -127,7 +127,7 @@ ACF M08 S6–S29, S22 (recorded demo); ACA M06 S37 (backups demo); ACA M10 S9–
   - The provider secures the cloud: the facilities, the hardware, the network underneath it all.
   - You secure what you put in it: the operating system, the configuration, the access rules, and your data.
   - Knowing exactly where the line falls tells you what you must configure and what you can rely on. That is the whole practical value of it.
-  kicker: security *of* the cloud, security *in* it
+  kicker: security of the cloud, security in it
   image: reuse 06-shared-responsibility.png
 - [BESPOKE] The line moves with the service
   - Run software yourself on a server and you own more of it — the operating system, the patching, the configuration.

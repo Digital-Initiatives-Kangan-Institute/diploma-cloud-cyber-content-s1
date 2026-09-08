@@ -18,7 +18,7 @@ TBD — AWS ACA CloudFormation authoring / parameters modules to be pinned.
 - [BESPOKE] From operating to authoring
   - Topic 6 operated a provided template; now you write your own from scratch.
   - Same tooling and lifecycle — this time you declare the resources and their relationships.
-  - You still deploy to us-east-1 in the lab — `[scenario: ap-southeast-2 (Sydney) | deploy: us-east-1]`.
+  - You still deploy to us-east-1 in the lab — [scenario: ap-southeast-2 (Sydney) | deploy: us-east-1].
   - This is the skill you apply to build the microservice template in Topic 8.
   image: gen flat vector hero illustration of a hand writing a template that assembles cloud resources, blue and gold accents, minimal, no text
   notes:
@@ -237,7 +237,7 @@ TBD — AWS ACA CloudFormation authoring / parameters modules to be pinned.
 - [BESPOKE] Remove cleanly & troubleshoot
   - Remove the deployed resources and delete the template cleanly — no orphaned resources, no lingering cost.
   - Test and troubleshoot errors in your own template: read the event, diagnose, fix, redeploy.
-  - Your own bugs are the best teacher — a bad `!Ref` or property tells you exactly what to fix.
+  - Your own bugs are the best teacher — a bad !Ref or property tells you exactly what to fix.
   image: none
   notes:
     Bespoke — the two C3 skills: clean removal and troubleshooting your OWN template. Close the lifecycle.

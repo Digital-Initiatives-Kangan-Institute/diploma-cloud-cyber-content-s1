@@ -18,7 +18,7 @@ TBD — AWS ICTCLD504/architecture modules to be pinned.
 - [BESPOKE] From analysis to improvement
   - Topic 1 opens AT1: before you improve a cloud system you first understand the one you have.
   - This Topic is the analysis half of the Solution Design — review the baseline, evaluate it, set the goals. The design of the fix is Topics 2–4.
-  - Vehicle: **Ledgerline**, YAT's Accounting system, runs single-AZ in the cloud — the system you analyse and improve.
+  - Vehicle: Ledgerline, YAT's Accounting system, runs single-AZ in the cloud — the system you analyse and improve.
   - Stay at analysis: diagnose and justify, don't design the changes yet.
   image: gen flat vector hero illustration of an analyst reviewing a cloud architecture diagram, magnifying glass over a data centre, blue and gold accents, minimal, no text
   notes:
@@ -86,7 +86,7 @@ TBD — AWS ICTCLD504/architecture modules to be pinned.
     baseline section.
 - [BESPOKE] Evaluate the design decisions & their business impact
   - Evaluate the baseline and name the business impact of its design decisions: single-AZ means single points of failure — one AZ outage takes Accounting down.
-  - A seeded constraint surfaces here: the accounting product is **vendor-certified single-instance only → the database cannot go Multi-AZ**. Record it now — it is the reliability cost-benefit centrepiece in Topic 2.
+  - A seeded constraint surfaces here: the accounting product is vendor-certified single-instance only → the database cannot go Multi-AZ. Record it now — it is the reliability cost-benefit centrepiece in Topic 2.
   - Impact is a business statement, not a technical one: downtime, lost billing, risk to close-of-month — the language the goals in C3 answer.
   image: none
   notes:
@@ -106,7 +106,7 @@ TBD — AWS ICTCLD504/architecture modules to be pinned.
     UoC/AT1 tie: ICTCLD504 PC 1.2 (evaluate architecture & identify business impact of design decisions) →
     AT1 Solution Design baseline analysis.
 - [EX] Review the practice baseline
-  - On the **practice engagement (the website)**, identify and review its current architecture the same way.
+  - On the practice engagement (the website), identify and review its current architecture the same way.
   - Evaluate it and name the business impact of its design decisions — where would an outage or a bottleneck hurt the business?
   timer: ~25 min
   image: none
@@ -154,7 +154,7 @@ TBD — AWS ICTCLD504/architecture modules to be pinned.
     UoC/AT1 tie: ICTCLD504 PC 1.3 (identify design patterns & architectural options) → AT1 Solution Design
     options analysis.
 - [BESPOKE] Assess the options against Ledgerline & confirm decisions
-  - Determine and assess the benefits and differences of cloud/architectural options **against Ledgerline's current business model and needs** — not in the abstract.
+  - Determine and assess the benefits and differences of cloud/architectural options against Ledgerline's current business model and needs — not in the abstract.
   - Weigh what fits: the single-instance DB constraint rules some reliability options out, which sharpens the ones that remain.
   - Confirm the system design decisions to carry forward according to business needs — the shortlist Topics 2–3 will actually design.
   image: none
@@ -267,7 +267,7 @@ TBD — AWS ICTCLD504/architecture modules to be pinned.
     comparable, not identical.
 - [TAKEAWAYS] Topic 1 · Key takeaways
   - Review the baseline against the four pillars before changing anything; name the business impact of each design decision.
-  - Ledgerline is single-AZ with a **vendor-certified single-instance DB that cannot go Multi-AZ** — carry that constraint into Topic 2.
+  - Ledgerline is single-AZ with a vendor-certified single-instance DB that cannot go Multi-AZ — carry that constraint into Topic 2.
   - Assess options against the business model, then confirm the decisions to carry forward.
   - Set goals across security, reliability, performance and cost, and confirm the metrics — that is the yardstick for the whole improvement.
   image: none

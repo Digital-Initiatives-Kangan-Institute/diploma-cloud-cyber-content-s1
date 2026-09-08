@@ -135,7 +135,7 @@ TBD — AWS reliability/architecture modules to be pinned.
     UoC/AT1 tie: ICTCLD504 KE 9 (features/techniques to improve reliability) → AT1 Solution Design + KE
     appendix; the parameterised template is the seam to the AT3 build.
 - [BESPOKE] The India residency slice
-  - A light residency constraint: CERT-In-mandated logs and Companies-Act books-of-account must reside in Mumbai (`ap-south-1`); the main system stays in Sydney.
+  - A light residency constraint: CERT-In-mandated logs and Companies-Act books-of-account must reside in Mumbai (ap-south-1); the main system stays in Sydney.
   - Design keeps the regulated data in-Region — the residency requirement is an input constraint on the design, not a bolt-on.
   - Note it as a scoped slice of the reliability/DR design, not a second architecture.
   image: none

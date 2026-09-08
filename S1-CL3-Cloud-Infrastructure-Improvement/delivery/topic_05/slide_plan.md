@@ -15,9 +15,9 @@ None — leadership (BSBXTW401) topic; bespoke.
 
 ### Opener
 - [BESPOKE] Leading the build team
-  - Topic 5 opens AT2: the approved design is written as CloudFormation by a **team of four**, one IaC component each — network, compute, database, storage.
+  - Topic 5 opens AT2: the approved design is written as CloudFormation by a team of four, one IaC component each — network, compute, database, storage.
   - Dividing the write is the leadership vehicle: you plan the team, set expectations, and allocate the work — the write itself is a 504 concern, not assessed here.
-  - This Topic is the set-up half of AT2 (plan and stand up the team); leading them *through* the write is Topic 6.
+  - This Topic is the set-up half of AT2 (plan and stand up the team); leading them through the write is Topic 6.
   - In-world, the team is YAT ICT staff improving Ledgerline.
   image: gen flat vector hero illustration of a team leader assigning four workstreams to four team members around a table, blue and gold accents, minimal, no text
   notes:
@@ -84,8 +84,8 @@ None — leadership (BSBXTW401) topic; bespoke.
     line with the team objective and relevant policies) → the AT2 team plan.
 - [BESPOKE] Accountability, grounded in organisational & legislative requirements
   - Choose accountability strategies: clear ownership per component, review checkpoints, a shared definition of done.
-  - Ground them in **organisational requirements** — workplace policies, codes of conduct, and YAT's reputation and culture (KE 1).
-  - Respect the **legislative requirements** relevant to the workplace (work health & safety, privacy, anti-discrimination) (KE 2) — accountability operates inside those rules.
+  - Ground them in organisational requirements — workplace policies, codes of conduct, and YAT's reputation and culture (KE 1).
+  - Respect the legislative requirements relevant to the workplace (work health & safety, privacy, anti-discrimination) (KE 2) — accountability operates inside those rules.
   image: none
   notes:
     Section 1's third move — accountability, and crucially the two things it must be GROUNDED in. This is
@@ -154,7 +154,7 @@ None — leadership (BSBXTW401) topic; bespoke.
     UoC/AT2 tie: BSBXTW401 PC 2.1 (communicate common objectives and responsibilities) → the facilitated
     set-up / kick-off evidenced in AT2.
 - [BESPOKE] Allocate the four components
-  - Allocate the four IaC components — **network, compute, database, storage** — one per member, by expertise or development potential (PC 2.2).
+  - Allocate the four IaC components — network, compute, database, storage — one per member, by expertise or development potential (PC 2.2).
   - Give appropriate instruction with each allocation: scope of the component, the interfaces it must expose, and any required contingencies (PE 1).
   - The four allocations integrate into one design — allocate the seams (shared parameters, dependencies), not just the boxes.
   image: diagram component-allocation
@@ -177,8 +177,8 @@ None — leadership (BSBXTW401) topic; bespoke.
     UoC/AT2 tie: BSBXTW401 PC 2.2 + PE 1 (allocate by expertise/development potential, with instruction
     and required contingencies) → the task-allocation records in AT2.
 - [EX] Plan & allocate the practice build team
-  - For the practice engagement, draft the **team plan**: common objective, per-member performance plans, accountability strategies and contingencies.
-  - **Allocate the four components** to four members with clear instruction and any required contingencies.
+  - For the practice engagement, draft the team plan: common objective, per-member performance plans, accountability strategies and contingencies.
+  - Allocate the four components to four members with clear instruction and any required contingencies.
   - Produce the artefact you'll produce for the assessed Ledgerline team — this is the practice run.
   timer: ~30 min
   image: none

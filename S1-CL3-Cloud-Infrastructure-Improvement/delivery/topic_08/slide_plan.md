@@ -18,7 +18,7 @@ None — bespoke topic.
 - [BESPOKE] Closing AT3 — document, refine, sign off
   - Topic 7 deployed, monitored and tested the improvement; Topic 8 writes it up and closes the cluster.
   - Three moves: document the as-deployed system against the approved design, describe the long-term improvement strategy, and obtain the final sign-off.
-  - The deliverable is the **Deployment Report** — the whole system across all four concerns: security, reliability, scalability, cost.
+  - The deliverable is the Deployment Report — the whole system across all four concerns: security, reliability, scalability, cost.
   - No new build — the report is assembled from what you captured live during the Topic 7 deploy and test.
   image: gen flat vector hero illustration of an engineer finalising a deployment report and obtaining sign-off, checklist and signature, blue and gold accents, minimal, no text
   notes:
@@ -64,7 +64,7 @@ None — bespoke topic.
     record on this build" (draws out the DB-tier DR / us-east-1 substitution).
     UoC/AT3 tie: ICTCLD504 PC 4.1 + PE 5 → the as-deployed record and step documentation evidenced in AT3.
 - [BESPOKE] As-deployed vs the approved design — highlight the changes
-  - Document the as-deployed architecture and test results, and **highlight the changes and improvements from the approved design** (PC 4.1).
+  - Document the as-deployed architecture and test results, and highlight the changes and improvements from the approved design (PC 4.1).
   - Every difference is named and justified — e.g. the DB-tier DR stayed at design level because the lab couldn't modify the database; the app-tier Multi-AZ was built and evidenced.
   - Test results cover all four concerns — security, reliability, scalability, cost — each against the goals set in Topic 1.
   image: none
@@ -116,7 +116,7 @@ None — bespoke topic.
 - Teaches: [ICTCLD504 PC 4.2]
 - Kicker: what the next iteration would improve, and why
 - [BESPOKE] Describe the long-term improvement strategy
-  - Describe long-term improvement strategies and their benefits **as applied to the deployed resources** (PC 4.2) — what a next iteration would improve and the benefit it buys.
+  - Describe long-term improvement strategies and their benefits as applied to the deployed resources (PC 4.2) — what a next iteration would improve and the benefit it buys.
   - This is where the DB-tier DR lives: built at design level here, it is the headline long-term strategy — cross-Region database resilience and the availability benefit it delivers.
   - Include other future improvements across the four concerns — tighter cost controls, further scalability headroom, security hardening — each tied to a benefit, not a wish-list.
   image: none
@@ -161,8 +161,8 @@ None — bespoke topic.
     UoC/AT3 tie: ICTCLD504 PC 4.3 (obtain final sign-off from required personnel) → the sign-off record in
     the AT3 report.
 - [BESPOKE] Two approval moments — don't confuse them
-  - This is the cluster's **second** approval: the final sign-off at AT3, on the deployed and tested improvement.
-  - The **first** was the AT1 deploy sign-off — the approval to proceed to deployment, on the design (Topic 4).
+  - This is the cluster's second approval: the final sign-off at AT3, on the deployed and tested improvement.
+  - The first was the AT1 deploy sign-off — the approval to proceed to deployment, on the design (Topic 4).
   - The first gate authorised the build; this gate accepts the result and closes the cluster.
   image: none
   notes:

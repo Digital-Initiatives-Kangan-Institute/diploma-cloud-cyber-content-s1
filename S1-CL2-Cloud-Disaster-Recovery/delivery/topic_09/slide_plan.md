@@ -18,7 +18,7 @@ TBD — AWS ACA CloudWatch metrics/alarms modules to be pinned.
 - [BESPOKE] Make it observable
   - The microservice runs (Topic 8); now you make it observable so you can see trouble coming.
   - This is the practical form of the DR plan's detection step (AT1 Topic 4) — the real CloudWatch config.
-  - `teach → demo → practice`: watch a metric + alarm configured and fired, then do it yourself.
+  - teach → demo → practice: watch a metric + alarm configured and fired, then do it yourself.
   - Configured in the lab (us-east-1); the metrics and alarms are the same anywhere.
   image: gen flat vector hero illustration of a monitoring dashboard with a metric line crossing an alarm threshold, blue and amber accents, minimal, no text
   notes:

@@ -18,8 +18,8 @@ TBD — AWS ACA serverless (Lambda / API Gateway / SQS / DynamoDB) deploy module
 - [BESPOKE] Build the microservice
   - This Topic converges the strands: your template (Topic 7) provisions the microservice, from the provided code, writing to the provided store (Topic 6).
   - It realises the AT1 microservice design (Topic 2): API gateway → queue → function → NoSQL store.
-  - The design places the store in India (ap-south-1); in the lab you deploy to us-east-1 — `[scenario: ap-south-1 (India) | deploy: us-east-1]`.
-  - The lab's `LabRole` serves as both the function's execution role and the API-GW→queue credentials.
+  - The design places the store in India (ap-south-1); in the lab you deploy to us-east-1 — [scenario: ap-south-1 (India) | deploy: us-east-1].
+  - The lab's LabRole serves as both the function's execution role and the API-GW→queue credentials.
   image: gen flat vector hero illustration of a serverless event pipeline from an API into a datastore, blue and gold accents, minimal, no text
   notes:
     Frame this Topic as the convergence point of AT2 — the strands from Topics 6–8 come together into
@@ -92,7 +92,7 @@ TBD — AWS ACA serverless (Lambda / API Gateway / SQS / DynamoDB) deploy module
     UoC/AT2 tie: ICTCLD503 PC 3.2 + PE 3 — the wiring model they must implement; evidenced in AT2 §4.4 (D4).
 - [BESPOKE] Deploy & configure the services
   - Deploy and configure the serverless services to implement the application, from the provided code.
-  - Pass `LabRole` as the execution role; wire the API → queue → function → store.
+  - Pass LabRole as the execution role; wire the API → queue → function → store.
   - Use the console, CLI or SDK to deploy and confirm (PE 4).
   image: diagram microservice-deploy
   notes:
@@ -268,7 +268,7 @@ TBD — AWS ACA serverless (Lambda / API Gateway / SQS / DynamoDB) deploy module
     practice microservice here.
 - [TAKEAWAYS] Topic 8 · Key takeaways
   - Deployment assembles a design: review the design + supplied code before you build.
-  - Wire API → queue (event source) → function → store; `LabRole` is the execution role.
+  - Wire API → queue (event source) → function → store; LabRole is the execution role.
   - Test by the observable outcome — the record is written exactly once; invalid events are rejected.
   - Troubleshoot from the logs: read, diagnose, fix, redeploy, re-test.
   image: none
