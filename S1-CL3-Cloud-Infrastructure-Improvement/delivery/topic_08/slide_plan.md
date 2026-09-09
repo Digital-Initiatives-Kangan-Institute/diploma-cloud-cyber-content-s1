@@ -1,13 +1,20 @@
-# Topic 08 Testing, refining and documenting the whole system; final sign-off — Slide plan
+# Topic 08 Documenting, handover and close — Slide plan
 > **Covers:** Topic 08 — see coverage.md
-> **Subtitle:** Document the as-deployed system against the approved design, describe the long-term strategy, and obtain the final sign-off
-> **STATUS: DRAFT** (authored 2026-07-02).
+> **Subtitle:** Document the as-deployed system, set the long-term strategy, hand over, and take it down
+> **STATUS: DRAFT — redrafted 2026-09-08 from the AT3 practice workbook, tasks 10–13 and the
+> assessment's questions Q1–Q2.**
 
 ## Depth ceiling
-BUILD / FINALISE — the closing AT3 topic. The deploy, monitoring and testing happened in Topic 7; here the deployed-and-tested improvement is written up as-built, the long-term improvement strategy is described, and the final sign-off is obtained. No new build — this closes out AT3 and the cluster.
+CLOSE — the last Topic of the cluster: document the as-deployed architecture and test results,
+describe the long-term strategy, hand over and obtain final sign-off, then remove what was deployed.
+No new build; the material is what was captured live in Topic 7.
+
+**Answer discipline:** activities run on the practice engagement; AT3 assesses the same closeout on
+Ledgerline. The documentation and answers are the student's own.
 
 ## Teaching source
-Bespoke — as-deployed documentation to the YAT templates, the long-term-improvement narrative, and the final review / sign-off discipline; grounded in the Ledgerline improvement, rehearsed on the website practice vehicle.
+Bespoke — technical documentation, handover and sign-off discipline, teardown, and the contextual
+written questions.
 
 ## AWS pin table
 None — bespoke topic.
@@ -15,214 +22,140 @@ None — bespoke topic.
 ## Slides
 
 ### Opener
-- [BESPOKE] Closing AT3 — document, refine, sign off
-  - Topic 7 deployed, monitored and tested the improvement; Topic 8 writes it up and closes the cluster.
-  - Three moves: document the as-deployed system against the approved design, describe the long-term improvement strategy, and obtain the final sign-off.
-  - The deliverable is the Deployment Report — the whole system across all four concerns: security, reliability, scalability, cost.
-  - No new build — the report is assembled from what you captured live during the Topic 7 deploy and test.
-  image: gen flat vector hero illustration of an engineer finalising a deployment report and obtaining sign-off, checklist and signature, blue and gold accents, minimal, no text
+- [BESPOKE] Closing the cluster
+  - Deployed, proven, refined — now it gets written up, handed over, signed off, and taken down.
+  - The material is what you captured live during the deploy and tests; a closeout can't be reconstructed from memory.
+  - Four tasks and two questions, and the cluster is done.
+  image: gen flat vector hero illustration of a technical report and a signed acceptance document beside a dismantled cloud stack, blue and gold accents, minimal, no text
   notes:
-    Frame Topic 8 as the CLOSE of AT3 and the cluster — Topic 7 built and tested; Topic 8 writes it up and
-    signs it off. No new build.
-    • First bullet: Topic 7 deployed, monitored and tested the improvement; Topic 8 writes it up and closes
-    the cluster.
-    • Second bullet: three moves — document the AS-DEPLOYED system against the approved design, describe
-    the LONG-TERM improvement strategy, and obtain the FINAL SIGN-OFF. Those three are C1, C2, C3.
-    • Third bullet: the deliverable is the DEPLOYMENT REPORT — the whole system across all four concerns:
-    security, reliability, scalability, cost.
-    • Fourth bullet: NO new build — the report is assembled from what you captured LIVE during the Topic 7
-    deploy and test. That's why live capture mattered.
-    Misconception to pre-empt: "documentation is where I finally build the missing bits." No — nothing new
-    is built here; if evidence wasn't captured in Topic 7 you can't manufacture it now. The report assembles
-    what exists.
-    Question to pose: "If you didn't screenshot the SPOF test in Topic 7, can you put it in the report now?"
-    (no — capture was live; reinforces why Topic 7 discipline mattered).
-    UoC/AT3 tie: opens the AT3 finalisation arc — ICTCLD504 el 4; everything today produces the as-deployed
-    report, long-term strategy and sign-off evidenced in AT3.
+    Workbook tasks 10 to 13, then the written questions Q1–Q2.
+    Thin evidence here is a Topic 7 capture-habit gap surfacing — say so; it's the recurring lesson.
 
-### C1 — Document as-deployed + test results
+### C1 — Document the as-deployed system
 - Teaches: [ICTCLD504 PC 4.1] · [ICTCLD504 PE 5]
-- Kicker: record what you actually deployed, and prove it works
-- [PRIMER] The as-deployed record & the Deployment Report
-  - An as-deployed record documents the system as it was actually deployed — not the design on paper, the resources actually running.
-  - The Deployment Report assembles it: the as-deployed architecture, the test results, the changes from the approved design, and the deployment/testing steps.
-  - It is complete and readable by someone who wasn't in the room — a reviewer can follow it end to end.
+- Kicker: the system as it actually runs
+- [BESPOKE] As-deployed, against the approved design
+  - An as-deployed record documents what is actually running — not the design on paper.
+  - Highlight every change from the approved design, named and justified — the DB-tier DR held at design level because the lab is create-only; the app-tier redundancy built and evidenced.
+  - Test results across all four concerns, each against the goals set at the start.
   image: none
   notes:
-    Open Section 1 — teach what an AS-DEPLOYED record is and what the Deployment Report assembles. PC 4.1
-    and PE 5 land across C1.
-    • First bullet: an as-deployed record documents the system AS IT WAS ACTUALLY DEPLOYED — not the
-    design on paper, the resources actually running. The distinction is the whole idea.
-    • Second bullet: the Deployment Report assembles it — the as-deployed architecture, the test results,
-    the changes from the approved design, and the deployment/testing steps. Name the four parts.
-    • Third bullet: it's COMPLETE and READABLE by someone who wasn't in the room — a reviewer can follow it
-    end to end. Write for the absent reader.
-    Misconception to pre-empt: "as-deployed = the approved design document." No — the point is documenting
-    what ACTUALLY ran (which differs from the design, e.g. DB-tier DR at design level only); copying the
-    design defeats it.
-    Question to pose: "Name one thing that will differ between the approved design and the as-deployed
-    record on this build" (draws out the DB-tier DR / us-east-1 substitution).
-    UoC/AT3 tie: ICTCLD504 PC 4.1 + PE 5 → the as-deployed record and step documentation evidenced in AT3.
-- [BESPOKE] As-deployed vs the approved design — highlight the changes
-  - Document the as-deployed architecture and test results, and highlight the changes and improvements from the approved design (PC 4.1).
-  - Every difference is named and justified — e.g. the DB-tier DR stayed at design level because the lab couldn't modify the database; the app-tier Multi-AZ was built and evidenced.
-  - Test results cover all four concerns — security, reliability, scalability, cost — each against the goals set in Topic 1.
+    Workbook task 10, first half. The differences are not failures — a named, justified difference is exactly what the record is for.
+- [BESPOKE] Document the steps, repeatably
+  - The deployment and testing steps, written so a reader could repeat them: the stacks and changes applied in order, each test and its outcome.
+  - Assembled from the screenshots, exports and logs captured as you went.
+  - Readable cold by someone who wasn't in the room.
   image: none
   notes:
-    The core of C1 — the report must HIGHLIGHT where reality differed from the approved design. PC 4.1
-    lands here.
-    • First bullet: document the as-deployed architecture and test results, and HIGHLIGHT the changes and
-    improvements from the approved design (PC 4.1). Highlighting the deltas is the assessed act.
-    • Second bullet: every difference is NAMED and JUSTIFIED — e.g. DB-tier DR stayed at design level
-    because the lab couldn't modify the database; app-tier Multi-AZ was built and evidenced. Difference +
-    reason, every time.
-    • Third bullet: test results cover ALL FOUR concerns — security, reliability, scalability, cost — each
-    against the goals set in Topic 1. Close the loop back to the AT1 goals.
-    Misconception to pre-empt: "a difference from the design is a failure to hide." No — a named, justified
-    difference is good engineering documentation; the unnamed difference is the problem. Surface them.
-    Question to pose: "The DB-tier DR is design-level, not deployed — how do you write that up so it reads
-    as a justified decision, not a gap?" (rehearses name + justify).
-    UoC/AT3 tie: ICTCLD504 PC 4.1 → the as-deployed-vs-design section of the AT3 report.
-- [BESPOKE] Document the deployment & testing steps
-  - Create the documentation of the deployment and testing steps (PE 5) — the step-by-step record of how the improvement was deployed and tested.
-  - Written so a reader could repeat it: the stacks/changes applied, in order, and each test run with its outcome.
-  - Assembled from the screenshots, exports and logs you captured as you went in Topic 7 — you can't reconstruct it after the fact.
+    Task 10, second half. The repeatability test is the standard: could a stranger re-run the deploy from this record?
+- [EX] Write the as-deployed record
+  - Workbook — task 10.
+  - Document the as-deployed architecture and test results, highlighting the changes from the approved design, with the deployment and testing steps.
+  timer: ~35 min
   image: none
   notes:
-    The step-documentation slide — PE 5 lands here. Teach it as a repeatable record.
-    • First bullet: create the documentation of the DEPLOYMENT AND TESTING STEPS (PE 5) — the step-by-step
-    record of how the improvement was deployed and tested.
-    • Second bullet: written so a reader could REPEAT it — the stacks/changes applied, in order, and each
-    test run with its outcome. Repeatability is the standard.
-    • Third bullet: assembled from the SCREENSHOTS, EXPORTS and LOGS captured as you went in Topic 7 — you
-    can't reconstruct it after the fact. Live capture again.
-    Misconception to pre-empt: "step documentation is a vague summary." No — the bar is 'a reader could
-    repeat it'; a summary that skips the order or the outcomes fails PE 5.
-    Question to pose: "Hand your step doc to someone who wasn't here — could they redeploy and re-test from
-    it alone? What's missing if not?" (tests the repeatability bar).
-    UoC/AT3 tie: ICTCLD504 PE 5 → the deployment/testing-steps documentation evidenced in AT3.
-- [TABLE] Deployment Report structure
-  | Section | What it contains |
-  | As-deployed architecture | The system as actually deployed to us-east-1 — diagrams and resource inventory across all four concerns |
-  | Changes from approved design | Where the as-deployed differs from the approved design, and why (e.g. DB-tier DR left at design level) |
-  | Test results | The tests run against the deployment and their outcomes — security, reliability, scalability, cost |
-  | Deployment & testing steps | The step-by-step record of how it was deployed and tested (PE 5) — repeatable by a reader |
-  | Long-term improvement strategy | The next-iteration improvements and their benefits (C2) |
-  | Final sign-off record | The approval accepting the deployed system — who, on what, when |
-  note: The four concerns run across the as-deployed record and test results; the sign-off record closes the document.
+    Activity = practice workbook task 10.
+    Every claimed result points at a captured artefact; gaps get noted honestly, not papered over.
+- [TAKEAWAYS] Section 1 · The record
+  - What actually runs, differences named and justified.
+  - Steps a stranger could repeat, from live-captured evidence.
   image: none
 
-### C2 — Long-term improvement strategies
+### C2 — The long-term strategy
 - Teaches: [ICTCLD504 PC 4.2]
-- Kicker: what the next iteration would improve, and why
+- Kicker: what the next iteration buys
 - [BESPOKE] Describe the long-term improvement strategy
-  - Describe long-term improvement strategies and their benefits as applied to the deployed resources (PC 4.2) — what a next iteration would improve and the benefit it buys.
-  - This is where the DB-tier DR lives: built at design level here, it is the headline long-term strategy — cross-Region database resilience and the availability benefit it delivers.
-  - Include other future improvements across the four concerns — tighter cost controls, further scalability headroom, security hardening — each tied to a benefit, not a wish-list.
+  - What a next iteration would improve, and the benefit each item buys — tied to benefits, not a wish-list.
+  - The headline lives here: the database-tier DR designed but not lab-buildable — cross-region resilience and the availability it delivers.
+  - Ideas the tests surfaced that sat outside your approved scope belong here too — that's what the scope boundary was for.
   image: none
   notes:
-    Section 2 — LONG-TERM strategy, described (not built). PC 4.2 lands here; contrast with Topic 7's
-    short-term refinements.
-    • First bullet: describe long-term improvement strategies and their benefits AS APPLIED TO the deployed
-    resources (PC 4.2) — what a next iteration would improve and the BENEFIT it buys. Description + benefit,
-    tied to the actual deploy.
-    • Second bullet (the headline): this is where DB-TIER DR lives — built at design level here, it's the
-    headline long-term strategy: cross-Region database resilience and the availability benefit it delivers.
-    • Third bullet: include other future improvements across the four concerns — tighter cost controls,
-    further scalability headroom, security hardening — each tied to a BENEFIT, not a wish-list.
-    Misconception to pre-empt: "long-term strategy is the same as the short-term refinements." No —
-    short-term was APPLIED now on the running stack (Topic 7, PC 3.4); long-term is DESCRIBED for a future
-    iteration (PC 4.2). Different verb, different topic.
-    Question to pose: "DB-tier DR couldn't be deployed in the lab — why does that make it the perfect
-    LONG-TERM strategy item, and what benefit do you cite?" (ties the constraint to the long-term narrative).
-    UoC/AT3 tie: ICTCLD504 PC 4.2 → the long-term-strategy section of the AT3 report; DB-tier DR is the
-    headline item.
+    Workbook task 11. The short-term/long-term line drawn in Topic 7 pays off: applied then versus described now.
+    The out-of-scope test findings finally get their home.
+- [EX] Describe the strategy
+  - Workbook — task 11.
+  - Describe the long-term improvement strategies for your deployed system and the benefit each delivers.
+  timer: ~20 min
+  image: none
+  notes:
+    Activity = practice workbook task 11.
+    Each strategy carries a benefit; challenge any that are features without one.
+- [TAKEAWAYS] Section 2 · The strategy
+  - Next-iteration improvements, each with its benefit.
+  - The design-level DR is the headline; out-of-scope findings land here.
+  image: none
 
-### C3 — Final sign-off
-- Teaches: [ICTCLD504 PC 4.3]
-- Kicker: get the deployed system accepted
-- [BESPOKE] Obtain the final sign-off
-  - Obtain final sign-off from the required personnel (PC 4.3) — the formal acceptance of the deployed and tested improvement.
-  - Walk the Deployment Report: the as-deployed system, the test results against the goals, and the long-term strategy — confirm requirements met for the audience, not in jargon.
-  - Record it — who approved, on what, when — as the closing section of the report.
+### C3 — Hand over, sign off, take it down
+- Teaches: [ICTCLD504 PC 4.3] · [ICTCLD504 PE 4]
+- Kicker: accepted, recorded, removed
+- [BESPOKE] The final sign-off
+  - Walk the client through the record: the as-deployed system, the results against the goals, the long-term strategy — plain language for the audience.
+  - This is the cluster's second approval: it accepts the deployed and tested result. The first approved the design; different moment, different question.
+  - Record the decision — who accepted, what, when — conditions and all.
   image: none
   notes:
-    Open Section 3 — the FINAL SIGN-OFF, the formal acceptance that closes the cluster. PC 4.3 lands here.
-    • First bullet: obtain final sign-off from the REQUIRED PERSONNEL (PC 4.3) — the formal acceptance of
-    the deployed and tested improvement.
-    • Second bullet: WALK the Deployment Report — the as-deployed system, the test results against the
-    goals, and the long-term strategy — confirm requirements met FOR THE AUDIENCE, not in jargon.
-    • Third bullet: RECORD it — who approved, on what, when — as the closing section of the report. An
-    unrecorded sign-off isn't evidence.
-    Misconception to pre-empt: "sign-off is a rubber stamp at the end." No — you have to demonstrate the
-    goals were met, in the audience's language; the approver accepts on evidence, not assertion.
-    Question to pose: "You're presenting to the YAT sponsor, not an engineer — how do you show 'reliability
-    improved' without the jargon?" (draws out audience-appropriate demonstration).
-    UoC/AT3 tie: ICTCLD504 PC 4.3 (obtain final sign-off from required personnel) → the sign-off record in
-    the AT3 report.
-- [BESPOKE] Two approval moments — don't confuse them
-  - This is the cluster's second approval: the final sign-off at AT3, on the deployed and tested improvement.
-  - The first was the AT1 deploy sign-off — the approval to proceed to deployment, on the design (Topic 4).
-  - The first gate authorised the build; this gate accepts the result and closes the cluster.
+    Workbook task 12. Call back to the Topic 4 sign-off explicitly — authorise versus accept is the distinction students blur.
+    The recorded decision is the evidence, same as every sign-off in the semester.
+- [BESPOKE] Remove what you deployed
+  - Tear down through the tooling, in reverse dependency order — the stack comes down the way it went up.
+  - Confirm the removal; orphans keep billing and block rebuilds.
+  - An engagement ends when the environment is gone and the record survives.
   image: none
   notes:
-    The clarifier slide — students conflate the cluster's TWO approval moments. Teach the distinction
-    explicitly.
-    • First bullet: this is the cluster's SECOND approval — the final sign-off at AT3, on the DEPLOYED and
-    TESTED improvement.
-    • Second bullet: the FIRST was the AT1 deploy sign-off — the approval to PROCEED to deployment, on the
-    DESIGN (Topic 4). Different object, different moment.
-    • Third bullet: the first gate AUTHORISED the build; this gate ACCEPTS the result and closes the
-    cluster. Authorise vs accept — the two verbs.
-    Misconception to pre-empt: "there's one sign-off at the end." No — there are two: AT1 approved the
-    design to proceed; AT3 accepts the deployed result. Naming which one you're doing is the assessable
-    clarity.
-    Question to pose: "Which sign-off approved a DESIGN, and which accepts a RUNNING SYSTEM — and what's the
-    object of each?" (forces the authorise-vs-accept distinction).
-    UoC/AT3 tie: ICTCLD504 PC 4.3 → the final (second) sign-off in AT3; distinct from the AT1 deploy
-    sign-off (Topic 4).
-- [EX] Write the report section & rehearse the final sign-off
-  - For the practice engagement (the website vehicle), write the as-deployed / test-results section of the Deployment Report — highlight the changes from the approved design.
-  - Rehearse the final sign-off conversation to a mock panel: walk the report, confirm the goals met, and obtain acceptance.
-  - Produce it before finalising the assessed Ledgerline report — this is the practice run.
-  timer: ~30 min
+    Workbook task 13. The confirm-after-delete habit from the whole semester closes the loop here.
+- [EX] Hand over, sign off, tear down
+  - Workbook — tasks 12 and 13.
+  - Walk your client through the build in pairs and record the sign-off decision, then remove everything you deployed and confirm nothing remains.
+  timer: ~35 min
   image: none
   notes:
-    Facilitation — the Topic 8 practice; students write the as-deployed report section AND rehearse the
-    sign-off conversation for the PRACTICE engagement (the website vehicle).
-    Tell students, in these words: "For the practice engagement, write the as-deployed / test-results
-    section of the Deployment Report — highlight the changes from the approved design. Then rehearse the
-    final sign-off conversation to a mock panel: walk the report, confirm the goals met, and obtain
-    acceptance."
-    Steps (put on the board):
-    1. Write the as-deployed architecture + test results section; highlight and justify each change from
-    the approved design.
-    2. Prepare to present it to a non-technical panel — goals met, in plain language.
-    3. Rehearse the sign-off conversation; obtain (mock) acceptance and record who/what/when.
-    Must produce: an as-deployed / test-results report section (changes highlighted) plus a rehearsed
-    sign-off with a recorded acceptance — the practice run of the AT3 finalisation.
-    Timing: ~30 min. Where they get stuck: the report reads as the approved DESIGN rather than what was
-    actually deployed — push "what actually ran, and where did it differ?"; and in the sign-off they slip
-    into jargon — make them confirm goals for the AUDIENCE.
-    Share-back prompt: pick one pair, have them run 60 seconds of the sign-off; ask the room whether the
-    goals were shown met in plain language.
-    No-leakage note: the website is the PRACTICE vehicle — AT3 assesses the same finalisation on the
-    Ledgerline implementation (comparable, not identical); keep them on the practice engagement.
+    Activity = practice workbook tasks 12–13, sign-off in pairs with roles swapped.
+    Nobody leaves with a stack still running — the teardown confirmation is part of the exercise.
+- [TAKEAWAYS] Section 3 · The close
+  - Plain-language walkthrough, decision recorded.
+  - Second approval accepts the result.
+  - Removed through the tooling, confirmed gone.
+  image: none
+
+### C4 — The written questions
+- Teaches: [ICTCLD504 KE 7] · [ICTCLD504 KE 10]
+- Kicker: your build, your evidence
+- [BESPOKE] The questions ask about your own build
+  - Two questions: how you tested this environment and avoid regressions, and what you would monitor to know it stays healthy.
+  - Both are answered from your own work — the four demonstrations you ran, the metrics you watched, the refinements you re-measured.
+  - A definition with none of your build in it answers nothing.
+  image: none
+  notes:
+    The assessment carries Q1–Q2; the practice workbook carries none — rehearse with the assessment's, from the practice build.
+    Their task 5–8 test records and task 4 monitoring are the source material.
+- [EX] Answer the questions
+  - The assessment's questions Q1 and Q2, rehearsed from your practice build.
+  - Answer from what you actually did: the testing and the monitoring, cited from your own records.
+  timer: ~20 min
+  image: none
+  notes:
+    Activity = assessment Q1–Q2 rehearsed.
+    Push every answer back to a test they ran or a metric they watched.
 - [TAKEAWAYS] Topic 8 · Key takeaways
-  - Document the as-deployed architecture and test results, highlighting the changes and improvements from the approved design.
-  - Create the deployment and testing step documentation from your live-captured evidence — repeatable by a reader.
-  - Describe the long-term improvement strategy and its benefits — the DB-tier DR and other next-iteration improvements.
-  - Obtain and record the final sign-off — the AT3 gate that accepts the deployed system, distinct from the AT1 deploy sign-off.
+  - The record shows what runs, what changed, and how to repeat it.
+  - Strategy with benefits; sign-off recorded; environment removed.
+  - Written answers cite your own testing and monitoring.
   image: none
 
 ### Close
-- [BESPOKE] Cluster complete
-  - AT3 is documented, refined and signed off — the deployed improvement is accepted against the approved design.
-  - You analysed the baseline (AT1), designed and got the design approved (AT1), led the build (AT2), deployed and tested it (AT3), and closed it with the final sign-off.
+- [BESPOKE] The cluster is done
+  - You analysed a system, designed and justified its improvement, led the team that built it, then deployed, proved, documented and closed it — end to end.
+  - The assessment is the same work on a different system.
   image: none
 
 ## Build notes
-~11 slides. No new build — documentation, long-term strategy and final sign-off on the Topic 7 deployment. One `[EX]` writes the as-deployed report section and rehearses the final sign-off on the website practice vehicle. One `[TABLE]` gives the Deployment Report structure (as-deployed vs approved design, test results, long-term strategy, sign-off record). One decorative `gen` image (opener hero); no technical diagram. The DB-tier DR (design-level here) is the headline long-term-strategy item.
+~21 slides. Four activities, mapping to practice workbook tasks 10 · 11 · 12–13 + the assessment's
+Q1–Q2 (rehearsed on the practice build). One decorative `gen` opener hero (new prompt — the old hero
+lacked the teardown; regenerate). Content carried from the 2026-07-02 plan; new teaching: the
+teardown task and the written-question rehearsal. The old Deployment Report TABLE retired — the
+workbook is the deliverable.
 
 ## Changelog
+- 2026-09-08 — redrafted from the AT3 practice workbook (tasks 10–13 + Q1–Q2): teardown taught with
+  its task; report framing aligned to the workbook deliverable; question rehearsal added.
 - 2026-07-02 — authored to full content.

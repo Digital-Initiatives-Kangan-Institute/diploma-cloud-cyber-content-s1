@@ -25,4 +25,4 @@ UoC **taught / developed** in this Topic:
 | [ICTCLD501 KE 6] | techniques and methods to monitor and create alerts in cloud environments | C2 |
 
 ## Changelog
-- 2026-09-08 — regenerated from the redrafted slide plan; components re-cut so each one ends in a workbook task.
+- regenerated from the slide plan by scripts/generate_topic_coverage.py; components re-cut so each one ends in a workbook task.

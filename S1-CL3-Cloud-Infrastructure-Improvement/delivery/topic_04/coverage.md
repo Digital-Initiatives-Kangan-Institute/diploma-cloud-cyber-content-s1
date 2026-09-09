@@ -1,58 +1,35 @@
-# Topic 4 — Documenting & presenting the Solution Design · Coverage
+# Topic 04 — Drawing, documenting and presenting the design · Coverage
 
-**Topic 4 of 8** · **AT1 content Topic** (Design — Solution Design, document / present / sign-off) · teaching source: bespoke (technical documentation + stakeholder presentation) + AWS architecture-diagramming conventions · *DRAFT 2026-07-02*.
+**Topic 04 of 8** · **AT1 content Topic** — the slides and the AT1 workbook advance together: each component ends in the workbook task it prepares.
 
-This file is the **coverage spec** for the Topic.
+The coverage spec — what this Topic must cover, in UoC and AT terms. `slide_plan.md` and the deck are built to satisfy it.
 
-**Depth ceiling: DESIGN → sign-off.** Assemble the analysis + reliability + scalability strands (Topics 1–3) into one documented Solution Design, present it to the required personnel, and obtain the sign-off to proceed to deployment. No build — this is where the design phase closes.
-
----
+## Depth ceiling
+DESIGN → sign-off — close AT1 on the practice workbook: draw the improved architecture, document and
+justify the proposal, prepare and run the review presentation, and obtain the sign-off to proceed to
+deployment. No build; this gates the AT2/AT3 work.
 
 ## What this Topic must cover
 
-The close of AT1: turn the design work into a reviewable artefact and get it approved. Document the proposed improved architecture (diagrams + rationale + the cost-benefit reasoning), present it to the required personnel for review, and obtain the deploy sign-off that authorises the AT2/AT3 build. Two components:
-
-- **C1 — Documenting & presenting.** Document the proposed architecture (the improved design assembled from Topics 1–3) and present it for review to the required personnel — clear diagrams, decision rationale, metrics and the cost-benefit trade-offs, pitched for a review audience.
-- **C2 — Obtaining sign-off.** Obtain sign-off to proceed to deployment from the required personnel — the first of the cluster's two approval moments (the second is final sign-off at AT3).
-
----
+- **C1 — Draw the improved architecture.** Culminates in the workbook: **task 14**.
+- **C2 — Document and justify the proposal.** Culminates in the workbook: **task 15**.
+- **C3 — Present it, and get the sign-off.** Culminates in the workbook: **tasks 16, 17 and 18**.
+- **C4 — The written questions.** Culminates in the workbook: **The assessment's questions Q1 and Q3, rehearsed from your practice design**.
 
 ## 1. UoC mapping
 
+UoC **taught / developed** in this Topic:
+
 | UoC item | Descriptor | Component |
 |---|---|---|
-| [ICTCLD504 PC 2.4] | Document and present proposed architecture for review to required personnel | C1 |
-| [ICTCLD504 PC 2.5] | Obtain sign off to proceed to deployment with required personnel | C2 |
+| [ICTCLD504 PE 1] | assess, identify and improve cloud architecture on a cloud platform, according to design decisions | C1 |
+| [ICTCLD504 PC 2.4] | Document and present proposed architecture for review to required personnel | C2 |
+| [ICTCLD504 PC 2.4] | Document and present proposed architecture for review to required personnel | C3 |
+| [ICTCLD504 PC 2.5] | Obtain sign off to proceed to deployment with required personnel | C3 |
+| [ICTCLD504 KE 1] | industry technology standards used in cloud computing solutions and services | C4 |
+| [ICTCLD504 KE 2] | industry standard hardware and software products, their general features, capabilities and application | C4 |
+| [ICTCLD504 KE 3] | methods and impacts of cloud adoption as they relate to IT system changes | C4 |
+| [ICTCLD504 KE 5] | migrating principles for cloud applications | C4 |
 
-> Taught here; formally **evidenced** in AT1 (Solution Design document + observed presentation, and the deploy sign-off record).
-
----
-
-## 2. AT alignment
-
-| AT1 element | How Topic 4 aligns |
-|---|---|
-| **Design — element 2 (document & present)** | Direct — document the proposed architecture and present it to required personnel for review (C1). |
-| **Design — deploy sign-off** | Obtain the sign-off to proceed to deployment — the approval that gates AT2/AT3 (C2). |
-
-**Practice-activity alignment:** document and present the **practice vehicle's** Solution Design to a mock review panel and run the sign-off conversation, before the assessed Ledgerline presentation.
-
----
-
-## Out of scope for this Topic (covered elsewhere)
-
-- **The analysis, reliability and scalability design content being documented** → Topics 1–3.
-- **Leading & planning the team that builds the design** → AT2 (Topic 5).
-- **Writing the IaC** → AT2 (Topic 6).
-- **Deploying, testing and the final sign-off** → AT3 (Topics 7–8).
-
----
-
-## Coverage checklist
-
-- [ ] Every UoC item in §1 is taught.
-- [ ] Each of C1–C2 has teaching content (bespoke and/or AWS diagramming).
-- [ ] The exercise documents and presents a Solution Design and runs a sign-off conversation.
-- [ ] The deploy sign-off is distinguished from the AT3 final sign-off.
-- [ ] Depth stays at design/sign-off — no build.
-- [ ] A student leaving this Topic could assemble, present and obtain sign-off on the Solution Design.
+## Changelog
+- regenerated from the slide plan by scripts/generate_topic_coverage.py; components re-cut so each one ends in a workbook task.

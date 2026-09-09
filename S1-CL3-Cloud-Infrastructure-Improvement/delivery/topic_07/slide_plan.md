@@ -1,13 +1,21 @@
-# Topic 07 Deploying the baseline and applying the improvement as a change-set — Slide plan
+# Topic 07 Deploying and proving the improvement — Slide plan
 > **Covers:** Topic 07 — see coverage.md
-> **Subtitle:** Deploy the approved baseline, apply the improvement as a change-set, then monitor, test and refine
-> **STATUS: DRAFT** (authored 2026-07-02).
+> **Subtitle:** Deploy the baseline, apply your approved improvement, then monitor, test and refine
+> **STATUS: DRAFT — redrafted 2026-09-08 from the AT3 practice workbook, tasks 1–9.**
 
 ## Depth ceiling
-BUILD — the first hands-on Topic of AT3 (Implement). Deploy the approved architecture to the Learner Lab, measure it against the AT1 metrics/goals, test and demonstrate the improvements, and refine. Every improvement lands as an **in-place/additive change-set** over the deployed baseline — no resource replacement, no data migration; encryption is baseline and data is out of scope. AWS practicals run `teach → demo → practice`. The as-deployed documentation, long-term strategy and final sign-off are Topic 8 (out of scope here).
+BUILD — the hands-on heart of AT3 on the practice workbook: deploy the approved baseline, record the
+authorised scope, apply the improvement as a change-set, measure against the metrics, test the four
+concerns, and refine. Documentation, strategy and sign-off are Topic 8. Every improvement lands
+in-place/additive over the deployed baseline — the lab DB tier is create-only.
+
+**Answer discipline:** activities run on the practice engagement (the website) with the student's own
+approved design; AT3 assesses the same work on Ledgerline. Teach the method; the improvements applied
+are the student's own.
 
 ## Teaching source
-AWS ACA CloudFormation deploy / change-sets + CloudWatch monitoring decks pinned at Step 4 (TBD); bespoke for the apply-as-update discipline, the lab DB-tier constraint, and the test-and-refine loop against the AT1 metrics.
+AWS ACA CloudFormation deploy / change-sets + CloudWatch monitoring decks pinned at Step 4 (TBD);
+bespoke for the apply-as-update discipline, the lab DB-tier constraint, and the test-and-refine loop.
 
 ## AWS pin table
 TBD — AWS CloudFormation/deploy modules to be pinned.
@@ -16,265 +24,193 @@ TBD — AWS CloudFormation/deploy modules to be pinned.
 
 ### Opener
 - [BESPOKE] From approved design to running system
-  - AT2 wrote the IaC; AT3 begins — you deploy it, prove it, and refine it in the lab.
-  - This Topic: stand up the approved Ledgerline baseline, apply the improvement as a change-set, then monitor, test and refine.
-  - Region substitution applies to every deploy: the design targets Sydney (DR Melbourne), but you build in [scenario: ap-southeast-2 (Sydney) | deploy: us-east-1]. Same build, only the console Region differs.
-  - teach → demo → practice: watch the deploy + change-set demo, then do it on the practice engagement.
+  - The design is approved and the team's IaC is written; now you individually deploy it, prove it, and refine it.
+  - Today's arc: baseline up, scope recorded, improvement applied, measured, tested four ways, refined.
+  - Region substitution applies to every deploy: the design names its real regions; you build in us-east-1.
+  - teach, demo, practice — watch the deploy and change-set, then run your own.
   image: gen flat vector hero illustration of a cloud engineer applying a change-set to upgrade a running system, before and after states, blue and gold accents, minimal, no text
   notes:
-    Frame Topic 7 as the START of AT3 — AT2 wrote the IaC; now you DEPLOY, PROVE and REFINE it in the
-    lab. Set the deploy discipline; don't teach change-sets yet.
-    • First bullet: AT2 wrote the IaC; AT3 begins — deploy it, prove it, refine it.
-    • Second bullet: today's arc — stand up the approved Ledgerline baseline, apply the improvement as a
-    CHANGE-SET, then monitor, test and refine.
-    • Third bullet (say it explicitly): Region substitution applies to EVERY deploy — the design targets
-    Sydney (DR Melbourne) but you build in [scenario: ap-southeast-2 (Sydney) | deploy: us-east-1]. Same
-    build; only the console Region differs.
-    • Fourth bullet: the rhythm — teach → demo → practice: watch the deploy + change-set demo, then do it
-    on the practice engagement.
-    Misconception to pre-empt: "AT3 is a fresh build from scratch." No — you deploy the APPROVED baseline
-    first, then apply the improvement OVER it as a change-set. That apply-as-update discipline is the whole
-    Topic.
-    Question to pose: "Why deploy the baseline first and change-set the improvement, instead of just
-    deploying the improved stack directly?" (draws out the reviewable-diff, in-place, no-data-migration
-    reasoning).
-    UoC/AT3 tie: opens the AT3 deploy arc — ICTCLD504 el 3; everything today feeds the AT3 implementation
-    record (deploy, monitoring, test results, refinements).
+    Workbook tasks 1 to 9 today, in order. Not a fresh build — the baseline first, the improvement over it.
+    Say the substitution out loud at every deploy.
 
-### C1 — Deploy the approved architecture
-- Teaches: [ICTCLD504 PC 3.1] · [ICTCLD504 PE 4]
-- Kicker: deploy the baseline, then apply the improvement as an update
+### C1 — The baseline up, the scope recorded
+- Teaches: [ICTCLD504 PE 4]
+- Kicker: a known start, an honest boundary
 - [PRIMER] Apply-as-update: the change-set discipline
   - Deploy the approved baseline first, then apply the improvement as a change-set over it — not a fresh, replacing stack.
-  - A change-set is a reviewable diff: you see exactly what will be added or modified before it runs (in-place/additive — no resource replacement, no data migration).
-  - The improvement adds app-tier Multi-AZ and scaling; encryption is already baseline, so it is not part of this change.
+  - A change-set is a reviewable diff: what will be added or modified, seen before it runs.
+  - In-place and additive: no resource replacement, no data migration.
   image: none
   notes:
-    The primer for C1 — teach what a change-set IS and why the improvement lands as one. This is the
-    conceptual core of AT3.
-    • First bullet: deploy the approved BASELINE first, then apply the improvement AS A CHANGE-SET over it
-    — not a fresh, replacing stack. Two steps, in order.
-    • Second bullet: a change-set is a REVIEWABLE DIFF — you see exactly what will be added or modified
-    before it runs (in-place/additive — no resource replacement, no data migration). "Review before
-    execute" is the discipline.
-    • Third bullet: the improvement adds app-tier Multi-AZ and scaling; ENCRYPTION is already baseline, so
-    it is NOT part of this change. Scope the change precisely.
-    Misconception to pre-empt: "a change-set replaces the old resources with new ones." No — here it's
-    in-place/additive; replacement would mean data migration, which we explicitly avoid. Review the diff to
-    confirm modifies, not replaces.
-    Question to pose: "Before you execute a change-set, what should you check in the diff — and what would
-    a REPLACE on the database mean?" (draws out review-before-execute + why replace is dangerous).
-    UoC/AT3 tie: ICTCLD504 PC 3.1 (deploy approved architecture) + PE 4 (console/SDK/CLI) → the deploy
-    evidence in AT3; sets up the lab DB constraint next.
+    The conceptual core of AT3. Review-before-execute is the discipline the whole Topic runs on.
+    Question to pose: why baseline-then-change-set instead of deploying the improved stack directly?
 - [BESPOKE] The lab constraint: the database is create-only
-  - The change-set must not modify the database — the Learner Lab role denies rds:ModifyDBInstance, so the DB tier is create-only.
-  - DB-tier DR (backup / cross-region) therefore stays design-level (per AT1), demonstrated on the app tier.
-  - Deploy with the console, an SDK, or the CLI — whichever the platform exposes (PE 4); the change-set targets the app tier only.
+  - The change-set must not modify the database — the lab role denies rds:ModifyDBInstance.
+  - Database-tier DR therefore stays design-level, as designed; the live demonstration lands on the app tier.
+  - Nothing is dropped, only relocated — the constraint is honest and it is documented.
   image: diagram change-set-flow
   notes:
-    The lab reality that shapes the whole deploy — use the change-set-flow diagram (baseline → change-set
-    adds app-tier Multi-AZ + scaling, DB untouched → improved stack).
-    • First bullet: the change-set must NOT modify the database — the Learner Lab role denies
-    rds:ModifyDBInstance, so the DB tier is CREATE-ONLY. State the technical constraint plainly.
-    • Second bullet: therefore DB-tier DR (backup / cross-region) stays DESIGN-LEVEL (per AT1), and the
-    reliability demonstration lands on the APP tier. The constraint is honest, not a gap.
-    • Third bullet: deploy with the console, an SDK, or the CLI — whichever the platform exposes (PE 4);
-    the change-set targets the APP TIER only.
-    Misconception to pre-empt: "create-only means the database DR isn't assessed." No — it's designed and
-    evidenced at design level (AT1); the lab just can't apply it live, so the built demonstration moves to
-    the app tier. Nothing is dropped, only relocated.
-    Question to pose: "The lab denies rds:ModifyDBInstance — so where do you DEMONSTRATE reliability, and
-    where does DB-tier DR get evidenced instead?" (app tier live; DB tier at design level).
-    UoC/AT3 tie: ICTCLD504 PC 3.1 + PE 4 → the deploy is scoped to what the lab allows; the substitution
-    keeps the assessment honest (documented in the AT3 record).
-- [DEMO] Deploy the baseline, then apply the change-set
-  - Deploy the approved baseline stack in the lab to CREATE_COMPLETE ([scenario: ap-southeast-2 (Sydney) | deploy: us-east-1]).
-  - Create a change-set for the improvement, review the diff (app-tier Multi-AZ + scaling added; DB untouched), then execute it.
-  - Confirm the improved resources in the console/CLI.
-  source: recorded demo — deploy + change-set
+    The lab reality, on the diagram: baseline, change-set adds app-tier redundancy and scaling, database untouched.
+    Misconception: create-only means DB DR isn't assessed. It's evidenced at design level; the built proof moves tiers.
+- [BESPOKE] Record what you are authorised to build
+  - Before deploying anything else, write down the approved scope — copied from your design sign-off, not remembered.
+  - The scope is the boundary for everything that follows: improvements inside it land; ideas outside it wait.
+  - An implementer who can show their authorisation is demonstrating governance, not bureaucracy.
   image: none
   notes:
-    DEMONSTRATION (educator-led, LIVE) — demonstrate the course's OWN deploy on the lab-pack in front of
-    the class, then students replicate on the practice engagement next slide. There is no recorded
-    substitute; screen your own live console/CLI.
-
-    WHAT TO DEMONSTRATE (step by step, narrating as you go):
-    1. Deploy the approved BASELINE stack in the lab to CREATE_COMPLETE — set the console Region to
-    us-east-1 first ([scenario: ap-southeast-2 (Sydney) | deploy: us-east-1]); say the substitution out loud.
-    2. Create a CHANGE-SET for the improvement; open the diff and read it WITH the class — app-tier
-    Multi-AZ + scaling added; database untouched.
-    3. Execute the change-set; watch it to UPDATE_COMPLETE.
-    4. Confirm the improved resources in the console/CLI (the new app-tier instances, the scaling config).
-
-    WHAT TO EMPHASISE:
-    • REVIEW THE DIFF BEFORE EXECUTING — pause on it; this is the discipline, not a formality. Point out
-    modifies vs any replaces.
-    • The DB tier shows NO changes in the diff — tie it back to the create-only constraint
-    (rds:ModifyDBInstance denied).
-    • Region visible before anything is created — model setting it first.
-    • Narrate the evidence capture — screenshot the diff and the CREATE_COMPLETE / UPDATE_COMPLETE states
-    as you go; students must mirror this in AT3.
-
-    PREP: a clean Learner Lab open, the approved baseline template + the improvement change ready to load,
-    Region set to us-east-1. ~10–12 min to deploy + change-set + narrate before the activity. If a deploy is
-    slow, have a pre-deployed baseline stack ready so the change-set step isn't rushed.
-- [EX] Deploy + apply the change-set on the practice engagement
-  - On the practice engagement (the website), deploy the single-AZ baseline, then apply YOUR OWN improvement as a change-set in us-east-1.
-  - Review the diff before executing; confirm the change-set applies the changes you intended, note which are in-place modifies vs replacements, and check the improvement is live.
-  timer: ~35 min
+    Workbook task 2 — new discipline, taught with its task. The sign-off from the design exercise is the source.
+    If a test later suggests something outside the scope, it goes to the long-term strategy, not the change-set.
+- [DEMO] Deploy the baseline
+  - Deploy the approved baseline stack in the lab to CREATE_COMPLETE — region set first, substitution said aloud.
+  - Confirm the resources, and capture the evidence as you go.
+  source: recorded/live demo
   image: none
   notes:
-    Facilitation — the C1 practice; students do what you just demoed, on the PRACTICE engagement (the
-    website), in us-east-1.
-    Tell students, in these words: "On the practice engagement, deploy the single-AZ baseline, then apply
-    YOUR OWN improvement as a change-set in us-east-1. Review the diff before you execute, confirm it
-    applies the changes you intended, and check the improvement is live."
-    Steps (put on the board):
-    1. Deploy the single-AZ baseline to CREATE_COMPLETE (Region us-east-1 — [scenario: ap-southeast-2
-    (Sydney) | deploy: us-east-1]).
-    2. Create a change-set for your improvement; REVIEW the diff.
-    3. Note which changes are in-place MODIFIES vs REPLACEMENTS; confirm the DB isn't being modified.
-    4. Execute; confirm the improvement is live.
-    Must produce: a deployed baseline, a reviewed change-set, and evidence the improvement applied (diff
-    screenshot + the live improved resources) — the practice version of the AT3 deploy.
-    Timing: ~35 min. Where they get stuck: the baseline deploy is slow (have them start it, then read the
-    diff of a prepared change-set while it runs); they execute WITHOUT reading the diff (stop them —
-    reviewing it is the point); and a change that would REPLACE a resource surprises them — make them notice
-    it in the diff.
-    Share-back prompt: ask one student which line of their diff was a modify and which (if any) was a
-    replace, and what that means for data.
-    No-leakage note: the website is the PRACTICE vehicle — AT3 assesses the same deploy on the Ledgerline
-    system (comparable, not identical); keep them on the practice engagement here.
+    Live demonstration, educator-led. Narrate the evidence capture — the screenshots taken now are the record later.
+    A pre-deployed spare stack saves the session if the live deploy is slow. ~8–10 min.
+- [EX] Baseline and scope
+  - Workbook — tasks 1 and 2.
+  - Deploy the baseline environment and confirm it serves, then record the scope you are authorised to build from your design sign-off.
+  timer: ~30 min
+  image: none
+  notes:
+    Activity = practice workbook tasks 1–2.
+    The deploy takes time — have them record the scope while the stack builds.
+- [TAKEAWAYS] Section 1 · The start
+  - Baseline first; the improvement rides over it.
+  - The database tier is create-only; its DR is evidenced in the design.
+  - Scope copied from the sign-off, before anything else deploys.
+  image: none
 
-### C2 — Monitor & measure
+### C2 — Apply the approved improvement
+- Teaches: [ICTCLD504 PC 3.1] · [ICTCLD504 PE 2]
+- Kicker: your design, applied as a reviewable diff
+- [BESPOKE] The improvement as a change-set
+  - Create the change-set for your approved improvement; read the diff before executing — every line is an add or a modify you intended.
+  - The database shows no changes in the diff; anything that would replace a resource is a flag to stop and think.
+  - Execute, watch to completion, confirm the improved resources are live.
+  image: none
+  notes:
+    Workbook task 3 — their own approved improvement, applied. The diff review is the assessed habit.
+    A REPLACE in the diff means data questions — make them notice before executing, not after.
+- [DEMO] Apply a change-set
+  - Create a change-set over the deployed baseline, read the diff with the class, execute it, confirm the improvement is live.
+  source: recorded/live demo
+  image: none
+  notes:
+    Live demonstration, educator-led. Pause on the diff and read it aloud — additions, modifies, and the untouched database.
+    Screenshot the diff and the completed update as the evidence pattern students mirror. ~8 min.
+- [EX] Apply your improvement
+  - Workbook — task 3.
+  - Apply your own approved improvement as a change-set: review the diff, execute, and confirm the improvement is live.
+  timer: ~30 min
+  image: none
+  notes:
+    Activity = practice workbook task 3, each student applying their own design.
+    Stop anyone executing without reading the diff — the review is the point.
+- [TAKEAWAYS] Section 2 · The apply
+  - Read the diff; know every line.
+  - The database stays untouched; replacements are a stop sign.
+  - Confirmed live, with the evidence captured.
+  image: none
+
+### C3 — Monitor and measure
 - Teaches: [ICTCLD504 PC 3.2] · [ICTCLD504 KE 10]
-- Kicker: measure the deploy against the AT1 metrics and business goals
-- [PRIMER] Monitoring against metrics & business goals
-  - Monitor and measure the architecture against the performance metrics and business goals set at AT1 — the deploy has to prove the improvement, not just exist.
-  - Use industry-standard metrics, methods and monitoring techniques for cloud resources (KE 10): CloudWatch metrics, alarms and dashboards.
-  - Pick the metrics that map to each goal — latency/throughput for performance, healthy-host count for reliability.
+- Kicker: measured against the metrics you set
+- [BESPOKE] Monitoring against the metrics and goals
+  - Point the monitoring at the deployed resources and measure against the metrics and goals from your design — the deploy has to prove the improvement, not just exist.
+  - Industry-standard tooling: metrics, alarms, dashboards — chosen because each maps to a goal, not to collect everything.
+  - Record the baseline reading and the post-improvement reading; the before-and-after pair is the proof.
   image: none
   notes:
-    Open Section 2 — a deploy has to PROVE the improvement, not just exist. PC 3.2 and KE 10 land here.
-    • First bullet: monitor and measure the architecture against the PERFORMANCE METRICS and BUSINESS
-    GOALS set at AT1 — the deploy proves the improvement against the targets you already agreed.
-    • Second bullet: use industry-standard metrics, methods and monitoring techniques for cloud resources
-    (KE 10) — CloudWatch metrics, alarms and dashboards. Name the tooling.
-    • Third bullet: pick the metrics that MAP to each goal — latency/throughput for performance,
-    healthy-host count for reliability. A metric with no goal behind it is noise.
-    Misconception to pre-empt: "monitoring = turn on CloudWatch and collect everything." No — you measure
-    against the AT1 goals; the skill is choosing the metric that evidences a specific goal, not maximising
-    data.
-    Question to pose: "Your AT1 goal was 'improve availability' — which specific metric proves it, and what
-    alarm threshold would you set?" (ties a goal to a metric to a threshold).
-    UoC/AT3 tie: ICTCLD504 PC 3.2 + KE 10 (monitor/measure against metrics and business goals) → the
-    monitoring evidence in the AT3 record.
-- [BESPOKE] Read the numbers on the deployed stack
-  - Point CloudWatch at the deployed resources: CPU/latency/request counts on the app tier, alarm on the thresholds the AT1 goals imply.
-  - A metric is only useful against a target — record the baseline reading, then the post-improvement reading, and compare.
-  - Monitoring is evidence: these readings become part of the AT3 implementation record.
+    Workbook task 4. The metrics were set back in the design — this is where they come due.
+    One reading proves nothing; the comparison does.
+- [EX] Monitor and measure
+  - Workbook — task 4.
+  - Set up the monitoring and measure the deployed architecture against your own metrics and business goals, before and after.
+  timer: ~25 min
   image: none
   notes:
-    The how-to for Section 2 — point monitoring at the ACTUAL deployed resources and read them against
-    targets.
-    • First bullet: point CloudWatch at the deployed resources — CPU/latency/request counts on the app
-    tier; alarm on the thresholds the AT1 goals imply. Concrete metrics on concrete resources.
-    • Second bullet (the key discipline): a metric is only useful AGAINST A TARGET — record the BASELINE
-    reading, then the POST-IMPROVEMENT reading, and compare. Before/after is what proves the improvement.
-    • Third bullet: monitoring is EVIDENCE — these readings become part of the AT3 implementation record.
-    Capture them as you go.
-    Misconception to pre-empt: "one post-improvement reading proves the improvement." No — without the
-    baseline reading you have nothing to compare to; the before/after pair is the proof.
-    Question to pose: "You added app-tier scaling — what two readings do you need to show it helped, and
-    when do you take each?" (draws out baseline vs post-improvement).
-    UoC/AT3 tie: ICTCLD504 PC 3.2 + KE 10 → the baseline / post-improvement readings evidenced in the AT3
-    record.
+    Activity = practice workbook task 4.
+    Every metric watched should trace to a goal from their design; challenge orphans.
+- [TAKEAWAYS] Section 3 · The measure
+  - Metrics mapped to goals, alarms on the thresholds.
+  - Before and after — the pair is the evidence.
+  image: none
 
-### C3 — Test & demonstrate
+### C4 — Test and demonstrate, four ways
 - Teaches: [ICTCLD504 PC 3.3] · [ICTCLD504 PE 2] · [ICTCLD504 KE 7]
-- Kicker: prove security, reliability, scalability and cost on the running system
-- [BESPOKE] Test & demonstrate the improvements
-  - Test and demonstrate the security, reliability, scalability and cost optimisation of the deployed resources (PC 3.3) — deploy, test and measure the design against its principles, metrics and goals (PE 2).
-  - Reliability: fail/remove one app-tier instance and show the Multi-AZ deployment stays available — a technique to avoid a single point of failure (KE 7).
-  - Scalability: drive load and show the app tier scales; cost: show the improvement's cost against the goal.
+- Kicker: prove it, don't assert it
+- [BESPOKE] Demonstrating each concern
+  - Reliability: fail an app-tier instance and show the service stays available — the single-point-of-failure test is the headline.
+  - Security: show the layers hold — the isolation that should block, blocks. Scalability: drive load and show capacity move.
+  - Cost: show the improvement's running cost against the goal. Four concerns, four demonstrations — a claim is not a demonstration.
   image: none
   notes:
-    Open Section 3 — PROVE the four concerns on the running system. PC 3.3, PE 2 and KE 7 land here.
-    • First bullet: test and demonstrate the SECURITY, RELIABILITY, SCALABILITY and COST OPTIMISATION of
-    the deployed resources (PC 3.3) — deploy, test and measure the design against its principles, metrics
-    and goals (PE 2). Four concerns, all demonstrated.
-    • Second bullet (the headline): RELIABILITY — fail/remove one app-tier instance and show the Multi-AZ
-    deployment stays available — a technique to AVOID A SINGLE POINT OF FAILURE (KE 7). This is the marquee
-    test.
-    • Third bullet: SCALABILITY — drive load and show the app tier scales; COST — show the improvement's
-    cost against the goal. Each concern gets a demonstration.
-    Misconception to pre-empt: "demonstrating reliability means saying it's reliable." No — you have to
-    SHOW it: kill an instance and show continued availability. A claim isn't a demonstration.
-    Question to pose: "How do you PROVE, not assert, that the app tier has no single point of failure?"
-    (draws out the fail-an-instance SPOF test).
-    UoC/AT3 tie: ICTCLD504 PC 3.3 + PE 2 + KE 7 → the test-and-demonstrate evidence across the four
-    concerns in AT3.
-- [BESPOKE] Testing & debugging techniques
-  - Apply testing/debugging techniques to the deployed system: reproduce, isolate, read the logs/metrics, confirm the fix (KE 7).
-  - The SPOF test is the headline — because the DB tier is create-only here, the reliability demonstration lands on the app tier (DB-tier DR stays design-level).
-  - Every test produces a result you can act on — that feeds C4.
+    Workbook tasks 5 to 8, one concern per task. The SPOF test is the marquee — killing an instance and watching the service hold.
+    Because the DB tier is create-only, the reliability demonstration lands on the app tier — restate the constraint where it bites.
+- [BESPOKE] Testing and debugging technique
+  - The loop: reproduce, isolate, read the logs and metrics, confirm the fix.
+  - Every test produces a result you can act on — the findings feed the refinements next.
+  - Capture as you test: the screenshot taken during the failure is the one you can't take afterwards.
   image: none
   notes:
-    The technique slide for Section 3 — give a repeatable testing/debugging method (KE 7) and place the
-    SPOF test.
-    • First bullet: apply testing/debugging techniques to the deployed system — reproduce, isolate, read
-    the logs/metrics, confirm the fix (KE 7). A four-step debugging loop.
-    • Second bullet: the SPOF test is the headline — and because the DB tier is CREATE-ONLY here, the
-    reliability demonstration lands on the APP tier (DB-tier DR stays design-level). Same constraint as C1,
-    restated where it bites.
-    • Third bullet: every test produces a RESULT you can act on — that feeds C4 (short-term refinements).
-    Testing isn't the end; it drives the refine loop.
-    Misconception to pre-empt: "debugging is random poking until it works." No — reproduce → isolate → read
-    logs/metrics → confirm; a method you can evidence, not trial and error.
-    Question to pose: "Your SPOF test shows a slow failover — walk the reproduce → isolate → read → confirm
-    loop on it" (rehearses the technique; leads into C4).
-    UoC/AT3 tie: ICTCLD504 KE 7 + PC 3.3 + PE 2 → the testing/debugging evidence in AT3; feeds the
-    refinements in C4.
+    The repeatable method — a debugging loop you can evidence, against random poking.
+    The capture-during habit matters most in the SPOF test; the recovering state is the evidence.
+- [EX] Test and demonstrate
+  - Workbook — tasks 5, 6, 7 and 8.
+  - Test and demonstrate reliability, security, scalability and cost optimisation on your deployed system, capturing the evidence as each test runs.
+  timer: ~45 min
+  image: none
+  notes:
+    Activity = practice workbook tasks 5–8 — the proving session; budget real time.
+    Each test states what was done, what was observed, and what it proves — push all three parts.
+- [TAKEAWAYS] Section 4 · The proof
+  - Four concerns, four demonstrations.
+  - The SPOF test is the reliability headline.
+  - Reproduce, isolate, read, confirm — and capture during, not after.
+  image: none
 
-### C4 — Short-term refinements
+### C5 — Short-term refinements
 - Teaches: [ICTCLD504 PC 3.4]
-- Kicker: act on the test results, now
-- [BESPOKE] Apply short-term refinements
-  - Apply short-term refinements to the deployed resources according to the test results (PC 3.4) — a threshold tweak, a scaling adjustment, a security-group tightening.
-  - Short-term = what you change now on the running system as a small follow-up change-set; long-term strategy is Topic 8.
-  - Re-measure after each refinement to confirm it moved the metric the right way — the test → refine loop.
+- Kicker: act on the results, now
+- [BESPOKE] Apply what the tests found
+  - Your tests will have found something — a threshold too tight, a missing alarm, a slow health check, capacity set wrong.
+  - Short-term means applied now, on the running system, as a small follow-up change; the long-term strategy is next Topic.
+  - Re-measure after each refinement — a refinement you don't re-measure isn't finished.
   image: none
   notes:
-    Close the deploy loop — ACT on the test results now. PC 3.4 lands here.
-    • First bullet: apply SHORT-TERM refinements to the deployed resources according to the test results
-    (PC 3.4) — a threshold tweak, a scaling adjustment, a security-group tightening. Small, immediate
-    changes.
-    • Second bullet: SHORT-TERM = what you change NOW on the running system as a small follow-up
-    change-set; LONG-TERM strategy is Topic 8. Draw the line explicitly.
-    • Third bullet: RE-MEASURE after each refinement to confirm it moved the metric the right way — the
-    test → refine loop. A refinement you don't re-measure isn't finished.
-    Misconception to pre-empt: "short-term and long-term improvements are the same list." No — short-term
-    is applied now on the deployed stack (PC 3.4); long-term is described, not applied (Topic 8, PC 4.2).
-    Don't mix them.
-    Question to pose: "Your SPOF test showed failover was slow — what's a SHORT-TERM refinement you'd apply
-    now, and how do you confirm it worked?" (draws out tweak + re-measure).
-    UoC/AT3 tie: ICTCLD504 PC 3.4 (short-term refinements from test results) → the refinement evidence in
-    AT3; long-term strategy is Topic 8 (PC 4.2).
+    Workbook task 9 — the workbook says plainly the tests will have found something; finding nothing means look harder.
+    Keep the short/long distinction crisp: applied now versus described for later.
+- [EX] Refine and re-measure
+  - Workbook — task 9.
+  - Apply the short-term refinements your test results call for, and re-measure to confirm each one moved the metric the right way.
+  timer: ~25 min
+  image: none
+  notes:
+    Activity = practice workbook task 9.
+    Every refinement cites the test result that caused it and the re-measurement that confirmed it.
+- [TAKEAWAYS] Topic 7 · Key takeaways
+  - Baseline, scope, improvement — in that order, as reviewable diffs.
+  - Measured before and after against your own metrics.
+  - Four demonstrations, evidence captured during.
+  - Refined from the results, and re-measured.
+  image: none
 
 ### Close
-- [TAKEAWAYS] Topic 7 · Key takeaways
-  - Deploy the approved baseline first, then apply the improvement as an in-place/additive change-set — review the diff before executing.
-  - The lab DB tier is create-only (rds:ModifyDBInstance denied) — DB-tier DR stays design-level; the improvement lands on the app tier.
-  - Monitor and measure against the AT1 metrics and business goals; test and demonstrate security, reliability, scalability and cost — the SPOF test is the reliability headline.
-  - Apply short-term refinements from the test results and re-measure — the test → refine loop.
-  image: none
-- [BESPOKE] Next: Topic 8 — document, strategise, sign off
-  - You have deployed, proven and refined the improvement in the lab.
-  - Next you document the as-deployed system, set the long-term strategy, and take it to final sign-off.
+- [BESPOKE] Next: Topic 8 — document, strategise, close
+  - Deployed, proven, refined — the improvement runs and the evidence exists.
+  - Next: the as-deployed record, the long-term strategy, the handover, and taking it all down.
   image: none
 
 ## Build notes
-~13 slides. `teach → demo → practice` on the practice engagement in us-east-1 (substituted). One generated diagram (`diagram change-set-flow`: baseline stack → change-set adds app-tier Multi-AZ + scaling, DB untouched → improved stack); one decorative `gen` image (opener hero); one DEMO (deploy baseline + apply change-set); one EX (deploy + apply the change-set on the practice engagement). Vehicle taught = Ledgerline; the website engagement is the practice vehicle.
+~26 slides. Five activities, mapping to practice workbook tasks 1–2 · 3 · 4 · 5–8 · 9. One generated
+diagram (`diagram change-set-flow`, already in `diagrams/`); one decorative `gen` opener hero (cached
+in `images/`); two DEMOs (deploy baseline; apply change-set — split from the old single demo to match
+the task split). Content carried from the 2026-07-02 plan; new teaching: the approved-scope
+discipline (task 2), and the four test tasks taught as four demonstrations.
 
 ## Changelog
+- 2026-09-08 — redrafted from the AT3 practice workbook (tasks 1–9): scope recording taught with its
+  task; testing split into the four concerns; every section ends in its workbook tasks.
 - 2026-07-02 — authored to full content.

@@ -1,13 +1,20 @@
-# Topic 04 Documenting and presenting the Solution Design — Slide plan
+# Topic 04 Drawing, documenting and presenting the design — Slide plan
 > **Covers:** Topic 04 — see coverage.md
-> **Subtitle:** Assemble the whole Solution Design, present it for review, and obtain sign-off to proceed
-> **STATUS: DRAFT** (authored 2026-07-02).
+> **Subtitle:** Draw the improved architecture, document and justify it, present it, and get sign-off to build
+> **STATUS: DRAFT — redrafted 2026-09-08 from the AT1 practice workbook, tasks 14–18 and the
+> assessment's knowledge questions Q1 and Q3 (Q2 is rehearsed in Topic 2).**
 
 ## Depth ceiling
-DESIGN → sign-off — assemble the four design concerns (Topics 2–3) plus the baseline analysis (Topic 1) into one reviewable Solution Design, present it to the required personnel, and obtain the sign-off to proceed to deployment. No build — this Topic closes the AT1 design phase and gates the AT2/AT3 work.
+DESIGN → sign-off — close AT1 on the practice workbook: draw the improved architecture, document and
+justify the proposal, prepare and run the review presentation, and obtain the sign-off to proceed to
+deployment. No build; this gates the AT2/AT3 work.
+
+**Answer discipline:** activities run on the practice engagement (the website); AT1 assesses the same
+work on Ledgerline. Teach the method on the practice vehicle; the drawings and documents are the
+student's own.
 
 ## Teaching source
-Bespoke — technical documentation of a proposed architecture and the review / sign-off discipline; grounded in the Ledgerline improvement scenario, rehearsed on the website practice vehicle.
+Bespoke — technical documentation of a proposed architecture and the review / sign-off discipline.
 
 ## AWS pin table
 None — bespoke topic.
@@ -16,182 +23,150 @@ None — bespoke topic.
 
 ### Opener
 - [BESPOKE] Closing AT1 — from design to sign-off
-  - Topics 1–3 produced the design; Topic 4 turns it into one reviewable Solution Design and gets it approved.
-  - Two moves: document and present the proposed architecture, then obtain the sign-off to proceed to deployment.
-  - The cost-benefit reasoning rides inside the Solution Design — there is no separate business case.
-  - Design only — this is the AT1 deliverable and its approval gate; the build is AT2/AT3.
+  - The design is complete; now it becomes one reviewable proposal: drawn, documented, presented, approved.
+  - The cost-benefit reasoning rides inside the proposal — there is no separate business case.
+  - This Topic ends with the sign-off that authorises the build.
   image: gen flat vector hero illustration of a presenter showing a cloud architecture proposal to stakeholders for sign-off, blue and gold accents, minimal, no text
   notes:
-    Frame the CLOSE of AT1 — Topics 1–3 produced the design; Topic 4 turns it into one reviewable Solution
-    Design and gets it approved. Two moves: document/present, then obtain sign-off.
-    • First two bullets: Topics 1–3 produced the design; today you assemble it into one reviewable Solution
-    Design and get it approved — document and present, then obtain the sign-off to proceed to deployment.
-    • Third bullet: the cost-benefit reasoning rides INSIDE the Solution Design — there is no separate
-    business case. Say this clearly; students expect a standalone business case.
-    • Fourth bullet (the discipline): design only — this is the AT1 deliverable and its approval gate; the
-    build is AT2/AT3.
-    Misconception to pre-empt: "we write a separate business case for the cost-benefit." No — in this cluster
-    the cost-benefit is a SECTION of the Solution Design; one document carries the design, the rationale and
-    the trade-offs.
-    Question to pose: "Where does the no-Multi-AZ-database argument live in the deliverable?" (inside the
-    Solution Design's cost-benefit section — not a separate document).
-    UoC/AT1 tie: this Topic develops ICTCLD504 PC 2.4 (document & present) and PC 2.5 (obtain sign-off); the
-    output is the assembled AT1 Solution Design + the observed presentation and sign-off record.
+    Workbook tasks 14 to 18, then the remaining written questions.
+    Students expect a standalone business case — say clearly the cost-benefit is a section of the one document.
 
-### C1 — Documenting & presenting
+### C1 — Draw the improved architecture
+- Teaches: [ICTCLD504 PE 1]
+- Kicker: one picture of the whole design
+- [BESPOKE] Draw what you designed
+  - One diagram of the whole improved architecture: every tier, every improvement, and where the users come in.
+  - Label what each component is for, not just what product it uses — a reader sees the job of every box.
+  - The diagram must agree with the design tables that produced it; a mismatch here is what reviewers catch first.
+  image: none
+  notes:
+    Workbook task 14. Any drawing tool is fine; agreement with the design beats prettiness.
+    The single-instance database should be visibly single-instance — the diagram states the design honestly, rejection included.
+- [EX] Draw the architecture
+  - Workbook — task 14.
+  - Draw the full improved architecture for the practice engagement, agreeing with every design decision you recorded.
+  timer: ~30 min
+  image: none
+  notes:
+    Activity = practice workbook task 14.
+    Pair-swap works: if a partner can't read a box's job, it needs a better label.
+- [TAKEAWAYS] Section 1 · The drawing
+  - Every tier, every improvement, one picture.
+  - Labels say the job; the drawing agrees with the tables.
+  image: none
+
+### C2 — Document and justify the proposal
 - Teaches: [ICTCLD504 PC 2.4]
-- Kicker: assemble it, then walk them through it
-- [PRIMER] What a Solution Design document is
-  - A Solution Design is a professional artefact: the proposed architecture, the rationale, and the trade-offs — complete and readable by a reviewer who wasn't in the room.
-  - It documents the improved architecture with clear diagrams, decision rationale, and the metrics behind each call.
-  - Pitched for a review audience: the required personnel who decide whether to proceed.
+- Kicker: readable cold, defensible line by line
+- [PRIMER] What the proposal document is
+  - A professional artefact: the proposed architecture, the rationale, and the trade-offs — readable by a reviewer who wasn't in the room.
+  - Diagrams, decision rationale, and the metrics behind each call — all three, not just the pictures.
+  - Written for the decider, not the builder.
   image: none
   notes:
-    Open Section 1 — what a Solution Design document IS: a professional artefact a reviewer who wasn't in
-    the room can read and decide on. Teach the standard before they assemble theirs.
-    • First bullet: a Solution Design is a professional artefact — the proposed architecture, the rationale,
-    and the trade-offs — complete and readable by a reviewer who wasn't in the room.
-    • Second bullet: it documents the improved architecture with clear DIAGRAMS, decision RATIONALE, and the
-    METRICS behind each call. Three things, not just diagrams.
-    • Third bullet: it's pitched for a REVIEW audience — the required personnel who decide whether to
-    proceed. Write for the decider, not the builder.
-    Misconception to pre-empt: "a diagram is the design." No — the diagram is one part; without the rationale
-    and the metrics a reviewer can't judge WHY, only WHAT. All three are marked.
-    Question to pose: "A reviewer who wasn't in your design sessions opens the document — what must be there
-    for them to approve it?" (architecture + rationale + metrics/trade-offs, readable cold).
-    UoC/AT1 tie: ICTCLD504 PC 2.4 (document & present proposed architecture for review) → the AT1 Solution
-    Design document.
-- [BESPOKE] Assemble the whole design
-  - Bring together the baseline analysis (Topic 1) and the four design concerns — reliability and scalability (Topics 2–3) — into one document.
-  - Each proposed change traces back to a named requirement or gap; the diagrams, tables and prose agree.
-  - Fold in the cost-benefit reasoning: what each change costs and the improvement it buys.
-  image: none
-  notes:
-    The assembly slide — bring Topics 1–3 together into one coherent document where every part agrees. This
-    is where scattered design work becomes a single deliverable.
-    • First bullet: bring together the baseline analysis (Topic 1) and the four design concerns —
-    reliability and scalability (Topics 2–3) — into ONE document.
-    • Second bullet: each proposed change traces back to a named requirement or gap; the diagrams, tables and
-    prose AGREE. Consistency is a marked quality.
-    • Third bullet: fold in the cost-benefit reasoning — what each change costs and the improvement it buys
-    (including the no-Multi-AZ-database call).
-    Misconception to pre-empt: "assemble = staple the topic outputs together." No — assembly means making
-    them agree and traceable; contradictions between the diagram and the prose are exactly what a reviewer
-    catches.
-    Question to pose: "Your reliability diagram shows a single-AZ DB but your prose says 'highly available
-    database' — what's wrong, and which is right?" (they must agree; the design is single-AZ DB by the
-    cost-benefit call).
-    UoC/AT1 tie: ICTCLD504 PC 2.4 → the assembled AT1 Solution Design document.
-- [TABLE] Solution Design document structure
+    Without rationale and metrics a reviewer can judge what, but not why — and why is what gets approved.
+- [TABLE] Proposal structure
   | Section | What it contains |
-  | Baseline & gaps | Current Ledgerline architecture and the improvement needs (Topic 1) |
-  | Proposed architecture | The improved design + diagrams (reliability + scalability, Topics 2–3) |
+  | Baseline & gaps | The current architecture and the improvement needs |
+  | Proposed architecture | The improved design and its diagram |
   | Decision rationale | Each change: the requirement met, the option chosen, why over alternatives |
-  | Cost-benefit | The trade-offs — including why the database is not Multi-AZ |
+  | Cost-benefit | The trade-offs — including what was rejected and why |
   | Sign-off record | The approval to proceed to deployment |
-  note: The cost-benefit is a section here, not a separate business case; the sign-off record closes the document.
+  note: The cost-benefit is a section here, not a separate business case.
   image: none
-- [BESPOKE] Present it for review
-  - Present the proposed architecture to the required personnel for review — walk the decisions that matter, not every line.
-  - Be ready to defend the reliability cost-benefit call: why the database stays single-AZ rather than Multi-AZ.
-  - Seek feedback and respond — accept, adjust, or defend with reasons; this is an observed individual oral in AT1 Part B.
-  image: none
-  notes:
-    Teach the PRESENTATION — walking a reviewer through the design and defending the key call. Note this is
-    an observed individual oral (AT1 Part B), so the skill is spoken, not written.
-    • First bullet: present the proposed architecture to the required personnel — walk the DECISIONS that
-    matter, not every line. Curate for the audience.
-    • Second bullet: be ready to DEFEND the reliability cost-benefit call — why the database stays single-AZ
-    rather than Multi-AZ. This is the question a reviewer will press.
-    • Third bullet: seek feedback and respond — accept, adjust, or defend with reasons. This is an observed
-    individual oral in AT1 Part B; responding well is assessed.
-    Misconception to pre-empt: "presenting = reading every slide." No — you walk the decisions that matter
-    and can defend them under questioning; reading the document aloud isn't presenting it.
-    Question to pose: "A reviewer says 'a real accounting system should have a Multi-AZ database' — what's
-    your response?" (defend the cost-benefit: vendor single-instance, product-replacement cost
-    disproportionate to the goal).
-    UoC/AT1 tie: ICTCLD504 PC 2.4 (present for review to required personnel) → AT1 Part B observed
-    presentation.
-- [EX] Rehearse the design walkthrough
-  - For the practice engagement (the website vehicle), present your assembled Solution Design to a mock review panel.
-  - Walk the key decisions and defend the cost-benefit trade-offs; seek and respond to feedback.
-  timer: ~25 min
+- [BESPOKE] Document and justify
+  - Bring the analysis, the designs and the drawing into one document where the diagrams, tables and prose agree.
+  - Each proposed change traces to a named requirement or gap; each rejection carries its argument.
+  - Internal consistency is a marked quality — contradictions between diagram and prose are what reviewers catch.
   image: none
   notes:
-    Facilitation — the Section 1 practice; students present their assembled practice Solution Design to a
-    mock review panel — a live rehearsal of the AT1 Part B oral.
-    Tell students: "For the practice engagement — the website vehicle — present your assembled Solution
-    Design to a mock review panel. Walk the key decisions, defend your cost-benefit trade-offs, and seek and
-    respond to feedback."
-    Run it (put on the board):
-    1. Pair or small-group: one presents, the others are the review panel.
-    2. Presenter walks the decisions that matter (not every line) and defends at least one cost-benefit
-    trade-off.
-    3. Panel gives feedback; presenter responds — accept, adjust, or defend with reasons. Then swap.
-    Must produce: each student has presented once and fielded at least one challenge on a trade-off.
-    Timing: ~25 min. Where they get stuck: they read the document instead of presenting, and they crumble on
-    the first challenge instead of defending with the cost-benefit reasoning — coach both.
-    Share-back prompt: ask a panel which defence they found most convincing, and why.
-    No-leakage note: the website is the practice vehicle; AT1 assesses the presentation on Ledgerline —
-    comparable, not identical.
+    Workbook task 15. Assembly means making the parts agree, not stapling them together.
+    The classic catch: a diagram showing one thing and prose claiming another — have them self-check for it.
+- [EX] Document the proposal
+  - Workbook — task 15.
+  - Document and justify the proposed architecture for the practice engagement, to the proposal structure.
+  timer: ~35 min
+  image: none
+  notes:
+    Activity = practice workbook task 15.
+    Press traceability: any change picked at random leads back to a requirement, or it doesn't belong.
+- [TAKEAWAYS] Section 2 · The document
+  - Architecture, rationale, metrics — readable cold.
+  - Every change traces; every rejection argues.
+  image: none
 
-### C2 — Obtaining sign-off
-- Teaches: [ICTCLD504 PC 2.5]
-- Kicker: get the deploy authorised
-- [BESPOKE] The deploy sign-off — the approval gate
-  - Obtain sign-off to proceed to deployment from the required personnel — the formal authorisation to build.
-  - Sign-off is the gate: no AT2/AT3 work starts until the design is approved.
-  - Record it — who approved, on what, when — as part of the Solution Design.
+### C3 — Present it, and get the sign-off
+- Teaches: [ICTCLD504 PC 2.4] · [ICTCLD504 PC 2.5]
+- Kicker: walk the decisions, record the approval
+- [BESPOKE] Prepare the presentation
+  - Plan the order you take the reviewer through the proposal, and for each part the one point they must take away.
+  - Anticipate the questions: the choices someone could challenge are the ones to prepare — your justifications already hold the answers.
+  - Time it to the slot; running out of time is the most common way this goes wrong.
   image: none
   notes:
-    Open Section 2 — the deploy sign-off, the formal authorisation that gates the build. Teach it as a real
-    gate with a record, not a formality.
-    • First bullet: obtain sign-off to proceed to deployment from the required personnel — the formal
-    AUTHORISATION to build.
-    • Second bullet: sign-off is the GATE — no AT2/AT3 work starts until the design is approved. It has
-    consequences.
-    • Third bullet: RECORD it — who approved, on what, when — as part of the Solution Design. An unrecorded
-    approval is no approval.
-    Misconception to pre-empt: "sign-off is just a signature at the end." No — it's the authorisation that
-    lets the build begin, and it must be recorded (who/what/when) to be evidence.
-    Question to pose: "What can't happen until this sign-off is obtained and recorded?" (the AT2/AT3 build —
-    sign-off gates deployment).
-    UoC/AT1 tie: ICTCLD504 PC 2.5 (obtain sign-off to proceed to deployment) → the AT1 sign-off record.
-- [BESPOKE] Two approval moments — don't confuse them
-  - This is the cluster's first approval: sign-off to proceed to deployment, on the design.
-  - The second is the final sign-off at AT3, on the deployed and tested improvement.
-  - This gate authorises the build; the AT3 gate accepts the result.
+    Workbook task 16 — the preparation is its own task, and the one-point-per-part discipline stops a page-turn.
+    The cost-benefit rejection is the challenge to expect; the C2 argument is the prepared answer.
+- [BESPOKE] Present for review, then ask for the decision
+  - Walk the decisions that matter, not every line; defend or adjust under questioning, with reasons.
+  - Then ask for the sign-off to proceed to deployment, and record it — who approved, what, when.
+  - This is the cluster's first approval: it authorises the build. The second, at the end of the build, accepts the result. Different moment, different question.
   image: none
   notes:
-    Distinguish the cluster's TWO approval moments so students don't conflate them — a common exam error.
-    This slide exists purely to separate them cleanly.
-    • First bullet: THIS is the cluster's first approval — sign-off to proceed to deployment, on the DESIGN.
-    It authorises work that hasn't happened yet.
-    • Second bullet: the SECOND is the final sign-off at AT3 — on the deployed and tested improvement. It
-    accepts work that has happened.
-    • Third bullet: this gate authorises the build; the AT3 gate accepts the result. Different moment,
-    different object, different question.
-    Misconception to pre-empt: "sign-off is sign-off." No — the AT1 sign-off approves a PLAN to build; the
-    AT3 sign-off accepts a BUILT-and-tested result. Confusing them muddles what each is evidence of.
-    Question to pose: "The AT1 sign-off and the AT3 sign-off — what does each one approve?" (AT1: proceed to
-    deploy, on the design; AT3: accept the deployed & tested improvement).
-    UoC/AT1 tie: ICTCLD504 PC 2.5 (obtain sign-off to proceed) — the first of the cluster's two approval
-    moments; the second is evidenced at AT3.
+    Workbook tasks 17 and 18. The presentation is observed; responding to challenge is assessed, not just surviving it.
+    The two-approvals distinction matters — this one approves a plan; the final one accepts a result.
+- [EX] Present and close
+  - Workbook — tasks 16, 17 and 18.
+  - Prepare the walkthrough, present the proposal to a mock review panel, respond to the feedback, then ask for sign-off and record the decision.
+  timer: ~40 min
+  image: none
+  notes:
+    Activity = practice workbook tasks 16–18, in pairs or small groups, roles swapped.
+    The panel challenges at least one trade-off; the presenter answers from their own document.
+- [TAKEAWAYS] Section 3 · The close
+  - One point per part; prepare the questions your choices invite.
+  - Defend with reasons; record the decision.
+  - First approval authorises the build; the final one accepts the result.
+  image: none
+
+### C4 — The written questions
+- Teaches: [ICTCLD504 KE 1] · [ICTCLD504 KE 2] · [ICTCLD504 KE 3] · [ICTCLD504 KE 5]
+- Kicker: your design, your answers
+- [BESPOKE] The questions ask about your own design
+  - Two questions remain: the standards and standard products your design relies on, and what cloud adoption changed — with the migration principles that manage the change.
+  - Every answer cites your own analysis and design — the review you ran, the options you weighed, the path you chose.
+  - A textbook definition with none of your design in it answers nothing.
+  image: none
+  notes:
+    The assessment carries Q1–Q3; Q2 was rehearsed in Topic 2. The practice workbook carries none — rehearse with the assessment's.
+    Push each answer back to their own workbook: the standards their review used, the migration path their options assessment weighed.
+- [EX] Answer the questions
+  - The assessment's questions Q1 and Q3, rehearsed from your practice design.
+  - Answer from your own work: the standards and products your build relies on, and what cloud adoption changed for this system.
+  timer: ~20 min
+  image: none
+  notes:
+    Activity = assessment Q1 + Q3 rehearsed on the practice design.
+    Listen for citations of their own analysis rather than recited definitions.
 - [TAKEAWAYS] Topic 4 · Key takeaways
-  - Assemble the baseline analysis and the four design concerns into one reviewable Solution Design.
-  - The cost-benefit rides inside the document — no separate business case; be ready to defend the no-Multi-AZ call.
-  - Present the proposed architecture to the required personnel and respond to feedback.
-  - Obtain and record the sign-off to proceed — the deploy gate, distinct from the AT3 final sign-off.
+  - Drawn, documented, presented, approved — one proposal, internally consistent.
+  - The rejection argued is the strongest section.
+  - Approval recorded; the build is authorised.
+  - Written answers cite your own design.
   image: none
 
 ### Close
-- [BESPOKE] Next: Topic 5 — leading the AT2 build
-  - AT1 is closed out: designed, documented, presented, signed off to proceed.
-  - Next you switch from design to build — lead and plan the team that implements the approved design.
+- [BESPOKE] Next: Topic 5 — leading the build team
+  - AT1 is closed: designed, justified, presented, signed off to proceed.
+  - Next you switch from designing to leading — the team that builds the approved design.
   image: none
 
 ## Build notes
-~10 slides. One `[EX]` rehearses the design walkthrough + sign-off conversation on the website practice vehicle (design only, no build). One `[TABLE]` gives the Solution Design document structure. One decorative `gen` image (opener hero); no technical diagram.
+~21 slides. Four activities, mapping to practice workbook tasks 14 · 15 · 16–18 + the assessment's
+Q1 and Q3 (Q2 rehearsed in Topic 2). One decorative `gen` opener hero (cached in `images/`); one
+TABLE (proposal structure). Content carried from the 2026-07-02 plan; new teaching: the drawing task,
+the preparation task, and the written-question rehearsal.
 
 ## Changelog
+- 2026-09-08 — redrafted from the AT1 practice workbook (tasks 14–18 + Q1/Q3): drawing and
+  preparation taught as their own tasks; question rehearsal added.
 - 2026-07-02 — authored to full content.

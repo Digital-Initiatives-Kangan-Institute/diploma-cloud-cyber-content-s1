@@ -1,280 +1,200 @@
-# Topic 06 Writing the IaC by component: leading, supporting and monitoring the team — Slide plan
+# Topic 06 Leading the build — Slide plan
 > **Covers:** Topic 06 — see coverage.md
-> **STATUS: DRAFT** (authored 2026-07-02).
+> **Subtitle:** Build and integrate as a team, lead the observed meeting, reflect, measure and develop
+> **STATUS: DRAFT — redrafted 2026-09-08 from the AT2 practice workbook, tasks 7–17 and the
+> assessment's questions Q1–Q3.**
 
 ## Depth ceiling
-LEADERSHIP — lead, support and monitor the team (BSBXTW401 el 3–4) *while* it writes the improved-architecture CloudFormation, divided by component. The IaC write is the vehicle; the assessed evidence is the leadership exercised through it — coaching, feedback, conflict handling, development. The technical write is NOT 504-assessed (the individual deploy is AT3, Topics 7–8). No CloudFormation authoring depth here.
+LEADERSHIP — the delivery half of AT2 on the practice workbook: do and integrate the allocated work,
+lead the observed team meeting, write the reflective accounts, measure the team, give the feedback,
+develop the members, and reflect on the leading. The IaC write is the vehicle; the leadership is the
+assessed evidence. No CloudFormation authoring depth here.
+
+**Answer discipline:** activities run as the practice team; AT2 assesses the same leadership on the
+assessed build. The reflections are the student's own true accounts — teach the techniques, never
+script the episodes.
 
 ## Teaching source
-BSBXTW401 leadership content (mentoring/coaching techniques, conflict-resolution/negotiation strategies, professional leadership behaviours, teamwork challenges); bespoke for leading a divided-IaC write in the YAT/Ledgerline scenario.
+BSBXTW401 leadership content (coaching, conflict resolution, feedback, development) applied to
+leading a divided-IaC build.
 
 ## AWS pin table
-None — leadership (BSBXTW401) topic; bespoke.
+None — leadership topic; bespoke.
 
 ## Slides
 
 ### Opener
-- [BESPOKE] Leading the AT2 build
-  - Topic 5 planned the team and allocated the four components; now the team writes the IaC and you lead the build.
-  - The team leader runs the build: coaching, supporting, facilitating issue resolution, problem-solving, managing conflict, then monitoring performance and developing others.
-  - In-world: you lead the YAT ICT team building Ledgerline's improved infrastructure.
-  - Leadership, not code — the CloudFormation write is the vehicle; the assessed evidence (AT2) is how you lead it.
+- [BESPOKE] Leading the build
+  - The team is stood up; now the build runs — and the evidence is how you lead it.
+  - Today: build and integrate, lead the observed meeting, then the written accounts — conflict, coaching, issues, measurement, feedback, development, reflection.
+  - Leadership, not code: nobody is marked on their template here.
   image: gen flat vector hero illustration of a team leader coaching and giving feedback to developers at work, supportive gesture, blue and gold accents, minimal, no text
   notes:
-    Frame Topic 6 as the DELIVERY half of AT2 — Topic 5 planned and allocated; now the team writes the
-    IaC and you LEAD the build. Set the mode; don't teach coaching yet.
-    • First bullet: Topic 5 planned the team and allocated the four components; now the team writes the
-    code and you run the build.
-    • Second bullet: name what "leading the build" actually is — coaching, supporting, facilitating issue
-    resolution, problem-solving, managing conflict, then measuring performance and developing others. That
-    list IS today's four sections.
-    • Third bullet: in-world you lead the YAT ICT team building Ledgerline's improved infrastructure —
-    keep it concrete.
-    • Fourth bullet (the framing to hold all Topic): LEADERSHIP, NOT CODE — the CloudFormation write is
-    the vehicle; the assessed evidence (AT2) is how you lead it.
-    Misconception to pre-empt: "to lead the build I need to be the best coder." No — you don't write the
-    components; you develop the people and run the process. The leadership is what's marked (BSBXTW401
-    el 3–4).
-    Question to pose: "If you're not writing any of the four components, what exactly are you contributing
-    to this build?" (draws out coaching, unblocking, measuring, developing — the leadership).
-    UoC/AT2 tie: opens the AT2 delivery arc — BSBXTW401 el 3–4 (support + monitor the team); everything
-    today feeds the coaching/issue-resolution/feedback/development evidence in AT2.
+    Workbook tasks 7 to 17 today, plus the written questions. The reflective accounts (11–17) are written from real episodes in the build — that's why the build comes first.
+    Misconception: to lead the build you must be the best coder. You run the process and develop the people.
 
-### C1 — Coaching & supporting
-- Teaches: [BSBXTW401 PC 3.1] · [BSBXTW401 PC 3.2] · [BSBXTW401 KE 4] · [BSBXTW401 KE 8]
-- Kicker: coach the people, run the build
-- [BESPOKE] The divided-IaC write — your vehicle
-  - The team writes four components — network, compute, database, storage — one per member, integrated into one template.
-  - The build flows: component drafts → integrate into one template → review and monitor → team sign-off.
-  - You don't write the components; you run the build — coaching, supporting and monitoring the team through it.
+### C1 — Do the work, and integrate the build
+- Teaches: [BSBXTW401 PC 3.3]
+- Kicker: four components, one template
+- [BESPOKE] The build, and where leadership acts
+  - The team writes four components, one each; they integrate into one deployable template the team confirms together.
+  - Your code is submitted as itself — kept where the team can see it, not copied into worksheets.
+  - The leader's work sits on the flow — coaching, unblocking, integrating — not inside a component.
   image: diagram team-build-flow
   notes:
-    Set the vehicle before teaching coaching — use the team-build-flow diagram (component drafts →
-    integrate → review/monitor → team sign-off) so students see WHERE leadership acts.
-    • First bullet: the team writes four components — network, compute, database, storage — one per
-    member, integrated into ONE template.
-    • Second bullet: walk the flow off the diagram — component drafts → integrate into one template →
-    review and monitor → team sign-off. Point at each stage.
-    • Third bullet (the framing): you don't write the components; you RUN the build — coaching, supporting
-    and monitoring the team through each of those stages. Your work sits ON the flow, not inside a
-    component.
-    Misconception to pre-empt: "the integrate step is a technical merge I do." No — you FACILITATE the
-    integration (the seams the team agreed in Topic 5); the leadership is getting the four to fit, not
-    typing the merge.
-    Question to pose: "Point at the flow — at which stage is a conflict between two component owners most
-    likely, and what do you do there?" (locates leadership on the diagram; sets up C2).
-    UoC/AT2 tie: frames the C1–C4 leadership of the build; the divided write is the vehicle for BSBXTW401
-    el 3–4 evidenced in AT2.
-- [PRIMER] Mentoring & coaching techniques
-  - Coaching develops capability in the moment; mentoring builds it over time — both grow the person, not just the task (KE 4).
-  - Techniques: ask before telling, model then hand over, give room to try, check understanding.
-  - Coaching is how you enhance the workplace culture — a team that learns from each other, not one that waits to be told.
+    Workbook tasks 7 and 8. Walk the flow on the diagram: drafts, integrate, review, team sign-off.
+    Integration is facilitated, not typed — the seams agreed in Topic 5 come due here.
+- [EX] Build and integrate
+  - Workbook — tasks 7 and 8.
+  - Build your allocated component and record where it lives, then integrate the four components into one deployable template and confirm it as a team.
+  timer: ~60 min
   image: none
   notes:
-    The primer for C1 — distinguish coaching from mentoring and give nameable techniques (KE 4).
-    • First bullet: COACHING develops capability in the moment; MENTORING builds it over time — both grow
-    the PERSON, not just the task (KE 4). Say the distinction explicitly.
-    • Second bullet: name the techniques — ask before telling, model then hand over, give room to try,
-    check understanding. These are the moves students are marked on using.
-    • Third bullet: coaching is how you ENHANCE the workplace culture — a team that learns from each
-    other, not one that waits to be told. Culture is the payoff, not a side-effect.
-    Misconception to pre-empt: "coaching = giving the answer faster." No — "ask before telling" is the
-    point; if you just supply the fix you've solved the task but developed no one.
-    Question to pose: "A member is stuck on their component — what's a COACHING response versus a telling
-    response?" (draws out ask-before-telling).
-    UoC/AT2 tie: BSBXTW401 KE 4 (mentoring/coaching techniques) → the coaching evidence in AT2; underpins
-    PC 3.1 on the next slide.
-- [BESPOKE] Coach the culture, support the individuals
-  - Provide coaching to staff to enhance workplace culture as the team writes its components (PC 3.1).
-  - Support individuals per organisational requirements toward the common team goals — the one integrated, working template (PC 3.2).
-  - Role-model professional leadership behaviours: reliability, fairness, openness, following through (KE 8).
+    Activity = practice workbook tasks 7–8 — the working session of the Topic; budget real time.
+    Record what integration actually took — that record feeds the issue reflection later.
+- [TAKEAWAYS] Section 1 · The build
+  - Work visible to the team, integrated together, confirmed together.
+  - What integration took is worth writing down — it becomes evidence.
   image: none
-  notes:
-    Apply the coaching primer to the build — this is where PC 3.1, PC 3.2 and KE 8 land.
-    • First bullet: provide COACHING to enhance workplace culture as the team writes its components
-    (PC 3.1) — coaching in the flow of the build, not a separate training session.
-    • Second bullet: SUPPORT individuals per organisational requirements toward the COMMON goal — the one
-    integrated, working template (PC 3.2). Support is aimed at the shared outcome, not just individual
-    comfort.
-    • Third bullet: role-model professional leadership behaviours — reliability, fairness, openness,
-    following through (KE 8). The team copies what you DO, not what you say.
-    Misconception to pre-empt: "supporting individuals means shielding them from the hard parts." No —
-    support moves them toward the common goal; sometimes that's a stretch, not a rescue.
-    Question to pose: "Name one professional behaviour you'd role-model in the first stand-up, and what
-    the team would take from seeing it" (makes KE 8 concrete).
-    UoC/AT2 tie: BSBXTW401 PC 3.1 + PC 3.2 + KE 8 → the coaching/support records and role-modelling
-    evidenced in AT2.
 
-### C2 — Facilitating issue resolution & problem-solving
-- Teaches: [BSBXTW401 PC 3.3] · [BSBXTW401 PC 3.4] · [BSBXTW401 PE 5] · [BSBXTW401 KE 5] · [BSBXTW401 KE 10]
-- Kicker: surface the issue, resolve it together
-- [PRIMER] Facilitating issue resolution & problem-solving
-  - Facilitate the team to identify, brainstorm, report and resolve task-related issues and inefficiencies — don't solve it for them, run the process (PC 3.3).
-  - Use problem-solving skills for team, task or individual challenges: name the problem, options, decide, act (PC 3.4).
-  - A stand-up is the routine that surfaces issues early — blockers reported before they stall the build.
+### C2 — Lead the meeting, observed
+- Teaches: [BSBXTW401 PC 2.1] · [BSBXTW401 PC 2.3]
+- Kicker: run it so someone watching sees leadership
+- [BESPOKE] Leading a team meeting
+  - A led meeting has a shape: purpose stated, everyone heard, blockers surfaced, decisions made and recorded.
+  - Facilitate open and respectful communication — draw out the quiet member, park the derail, keep the thread.
+  - An observer completes notes at the end — what someone outside the team saw is part of the record.
   image: none
   notes:
-    Open Section 2 — the leader RUNS the problem-solving process, doesn't own the solution. PC 3.3 and
-    PC 3.4 land here.
-    • First bullet: facilitate the team to IDENTIFY, BRAINSTORM, REPORT and RESOLVE task-related issues
-    and inefficiencies — don't solve it for them, run the process (PC 3.3). The verbs are the process.
-    • Second bullet: use problem-solving skills for team, task or individual challenges — name the
-    problem, options, decide, act (PC 3.4). A repeatable four-step loop.
-    • Third bullet: a STAND-UP is the routine that surfaces issues early — blockers reported before they
-    stall the build. Routine beats heroics.
-    Misconception to pre-empt: "resolving issues = the leader gives the fix." No — PC 3.3 is FACILITATION;
-    if you supply every answer the team never learns to surface and solve its own issues.
-    Question to pose: "A member reports their component won't integrate — do you fix it, or facilitate?
-    What does facilitating look like here?" (draws out the run-the-process stance).
-    UoC/AT2 tie: BSBXTW401 PC 3.3 + PC 3.4 → the issue-resolution episodes evidenced in AT2; exercised in
-    the next activity.
-- [BESPOKE] Conflict, challenges & the teamwork risks
-  - Manage conflicts and challenges per organisational requirements using conflict-resolution and negotiation strategies (PE 5, KE 5).
-  - Separate the person from the problem; find the shared interest; agree a way forward, not a winner.
-  - Watch for the teamwork challenges the evidence expects (KE 10): difficulties performing tasks; conflicts with clients or team members; potential risks or safety hazards; unethical or inappropriate behaviour.
+    Workbook tasks 9 and 10 — the meeting is observed by the assessor in AT2; here a classmate or the teacher observes.
+    The observable behaviours are the teaching: stating purpose, inviting contributions, resolving on the spot, recording decisions.
+- [EX] Run the meeting
+  - Workbook — tasks 9 and 10.
+  - Lead a team meeting with an observer watching, then have the observer complete the observation notes while it's fresh.
+  timer: ~30 min
   image: none
   notes:
-    The conflict-and-challenges slide — PE 5, KE 5 and the KE 10 checklist land here.
-    • First bullet: manage conflicts and challenges per organisational requirements using
-    conflict-resolution and negotiation strategies (PE 5, KE 5). Conflict is normal; managing it well is
-    the skill.
-    • Second bullet: the technique — separate the person from the problem; find the shared interest; agree
-    a way forward, not a winner. Say it as a procedure they can run.
-    • Third bullet: watch for the teamwork challenges the evidence EXPECTS (KE 10) — difficulties
-    performing tasks; conflicts with clients or team members; potential risks or safety hazards;
-    unethical or inappropriate behaviour. This is a named list they must be able to recognise.
-    Misconception to pre-empt: "good teams don't have conflict, so I should suppress it." No — surfaced,
-    well-managed conflict improves the build; suppressed conflict resurfaces at integration. Manage, don't
-    bury.
-    Question to pose: "Two owners disagree on the network/compute boundary — what's the shared interest
-    you'd steer them to?" (models person-vs-problem; previews the seeded conflict in the activity).
-    UoC/AT2 tie: BSBXTW401 PE 5 + KE 5 + KE 10 → the conflict-management episode evidenced in AT2
-    (exercised next).
-- [EX] Run the stand-up & resolve a seeded conflict
-  - Lead a stand-up for the practice team: each member reports progress on their component and any blocker.
-  - A conflict is injected (two members disagree over an integration boundary) — facilitate it to a resolution and record how you handled it.
-  timer: ~25 min
+    Activity = practice workbook tasks 9–10, roles rotated so everyone leads once.
+    The observer writes what they saw, not what they'd have done — that's the note's value.
+- [TAKEAWAYS] Section 2 · The meeting
+  - Purpose, voices, blockers, decisions, record.
+  - The observer's view is evidence — hear it while it's fresh.
   image: none
-  notes:
-    Facilitation — the Section 2 practice; students LEAD a stand-up and facilitate an injected conflict to
-    resolution, recording how they handled it (the AT2 evidence shape).
-    Tell students, in these words: "Lead a stand-up for your practice team — each member reports progress
-    on their component and any blocker. Partway through, a conflict is injected: two members disagree over
-    an integration boundary. Facilitate it to a resolution and record how you handled it."
-    Steps (put on the board):
-    1. Run the stand-up — each member: what's done, what's next, any blocker.
-    2. When the conflict lands, separate person from problem; surface each side's interest.
-    3. Steer to a shared way forward (not a winner); confirm the agreed boundary.
-    4. Record the episode — the issue, what you did, the resolution.
-    Must produce: a short written record of the facilitated stand-up and the conflict resolution — the
-    practice version of the AT2 issue-resolution evidence.
-    Timing: ~25 min. Where they get stuck: they ADJUDICATE (pick a winner) instead of facilitating a
-    shared way forward — circulate and push "what do both owners actually need?"; and the stand-up drifts
-    into solving the whole thing on the spot.
-    Share-back prompt: ask one leader how they turned the disagreement into a shared interest — surface the
-    person-vs-problem move.
-    No-leakage note: this is the PRACTICE team — AT2 assesses the same conflict-management leadership on
-    the Ledgerline build (comparable, not identical); keep them on the practice vehicle.
 
-### C3 — Measuring performance & feedback
-- Teaches: [BSBXTW401 PC 4.1] · [BSBXTW401 PC 4.2] · [BSBXTW401 PE 2]
-- Kicker: measure against the plan, feed it back
-- [PRIMER] Measuring performance against the work plans
-  - Measure each member's performance against the agreed work plans from Topic 5 — the plan is the yardstick (PC 4.1).
-  - Measure the work, not the person: what was due, what was delivered, on what quality.
-  - Measurement is the input to feedback — you can't give useful feedback without it.
+### C3 — The reflective accounts
+- Teaches: [BSBXTW401 PC 3.1] · [BSBXTW401 PC 3.2] · [BSBXTW401 PC 3.4] · [BSBXTW401 PE 2] · [BSBXTW401 PE 5] · [BSBXTW401 KE 4] · [BSBXTW401 KE 5] · [BSBXTW401 KE 10]
+- Kicker: real episodes, told honestly
+- [BESPOKE] Handling conflict and challenge
+  - The strategies: separate the person from the problem, find the shared interest, agree a way forward — not a winner.
+  - The challenges worth recognising: difficulty performing tasks, conflict with clients or teammates, risks and hazards, unethical behaviour.
+  - Surfaced and managed conflict improves the build; suppressed conflict resurfaces at integration.
   image: none
   notes:
-    Open Section 3 — measurement is the input to feedback. PC 4.1 lands here.
-    • First bullet: measure each member's performance against the AGREED WORK PLANS from Topic 5 — the
-    plan is the yardstick (PC 4.1). This is why the performance plans had to be measurable.
-    • Second bullet: measure the WORK, not the person — what was due, what was delivered, at what quality.
-    Keep it objective and evidence-based.
-    • Third bullet: measurement is the INPUT to feedback — you can't give useful feedback without it.
-    Section 3 runs measure → feedback in order.
-    Misconception to pre-empt: "measuring performance = judging the person." No — you measure the work
-    against the plan; the person-level conversation is the feedback that follows, and it's about the gap,
-    not character.
-    Question to pose: "The compute owner's plan said 'valid, peer-reviewed, deployed by the milestone' —
-    how do you measure whether they met it?" (ties measurement back to the Topic 5 plan).
-    UoC/AT2 tie: BSBXTW401 PC 4.1 (measure performance against agreed work plans) → the
-    performance-measurement evidence in AT2.
-- [BESPOKE] Timely, constructive feedback & assistance
-  - Provide timely, constructive performance feedback to expected organisational standards — close to the event, specific, actionable (PC 4.2).
-  - Balance recognition with the gap; describe the behaviour and its effect, then agree the next step.
-  - Provide feedback and assistance to team members — feedback names the gap, assistance helps close it (PE 2).
+    The techniques behind workbook task 11's reflection. Conflict is normal; managing it is the skill.
+    The named challenge list is examinable — it also shapes what counts as a reportable episode.
+- [BESPOKE] Coaching, and supporting individuals
+  - Coaching develops capability in the moment: ask before telling, model then hand over, give room to try, check understanding.
+  - Support individuals toward the common goal — sometimes that's a stretch, not a rescue.
+  - If you just supply the fix, you've solved the task and developed no one.
   image: none
   notes:
-    The feedback slide — PC 4.2 and PE 2 land here. Teach feedback as a skill with a shape.
-    • First bullet: provide TIMELY, CONSTRUCTIVE feedback to expected organisational standards — close to
-    the event, specific, actionable (PC 4.2). Late or vague feedback doesn't change anything.
-    • Second bullet: the shape — balance recognition with the gap; describe the BEHAVIOUR and its EFFECT,
-    then agree the next step. Behaviour → effect → next step keeps it constructive.
-    • Third bullet: provide feedback AND ASSISTANCE (PE 2) — feedback names the gap, assistance helps
-    close it. Naming a gap without helping close it is half a job.
-    Misconception to pre-empt: "constructive feedback means only positives." No — it means specific and
-    actionable, including the gap; a "constructive" that never names the gap develops no one.
-    Question to pose: "Give the database owner feedback that they missed the peer-review step — say it as
-    behaviour → effect → next step" (rehearses the shape live).
-    UoC/AT2 tie: BSBXTW401 PC 4.2 + PE 2 (timely constructive feedback; feedback and assistance) → the
-    feedback records in AT2.
+    The techniques behind task 12's reflection. Ask-before-telling is the move to rehearse.
+    Coaching in the flow of the build, not a separate training session.
+- [BESPOKE] Writing a reflective account
+  - A reflection is a real episode, told honestly: what happened, what you did, what came of it, what you'd do differently.
+  - Name the technique you used — the account shows the skill by showing it in use.
+  - Three accounts: a conflict or challenge, a coaching moment, an issue the team hit and your part in resolving it.
+  image: none
+  notes:
+    Workbook tasks 11, 12 and 13. The episodes come from the build they just ran — that's why the order matters.
+    An invented episode reads as one; the honest small story beats the polished fiction.
+- [EX] Write the three accounts
+  - Workbook — tasks 11, 12 and 13.
+  - Write the conflict account, the coaching account, and the issue account — real episodes from your build, with the technique named in each.
+  timer: ~35 min
+  image: none
+  notes:
+    Activity = practice workbook tasks 11–13, individually.
+    Press for the technique named in every account, and the what-would-you-do-differently line.
+- [TAKEAWAYS] Section 3 · The accounts
+  - Person from problem; shared interest; a way forward.
+  - Ask before telling; stretch, don't rescue.
+  - Real episode, named technique, honest lesson.
+  image: none
 
-### C4 — Development opportunities & action plans
-- Teaches: [BSBXTW401 PC 4.3] · [BSBXTW401 PC 4.4] · [BSBXTW401 PE 3] · [BSBXTW401 PE 4]
-- Kicker: turn the gaps into growth
-- [BESPOKE] Identify learning & development opportunities
-  - Identify specific learning and development opportunities to improve team and individual performance and behaviours (PC 4.3).
-  - A gap you measured (C3) becomes a development opportunity — a skill to build, a behaviour to shift.
-  - Tie each opportunity to an individual and to the team's common goals.
+### C4 — Measure, feed back, develop
+- Teaches: [BSBXTW401 PC 4.1] · [BSBXTW401 PC 4.2] · [BSBXTW401 PC 4.3] · [BSBXTW401 PC 4.4] · [BSBXTW401 PE 2] · [BSBXTW401 PE 3] · [BSBXTW401 PE 4]
+- Kicker: the plan is the yardstick
+- [BESPOKE] Measure the team against the plan
+  - The performance plans from the set-up are the yardstick: what was due, what was delivered, at what quality.
+  - Measure the work, not the person — objective, evidence-based, collated so the picture is evidence rather than impression.
+  - Measurement is the input to feedback; without it feedback is opinion.
   image: none
   notes:
-    Open Section 4 — turn measured gaps into GROWTH. PC 4.3 lands here.
-    • First bullet: identify specific learning and development opportunities to improve team and
-    individual performance and behaviours (PC 4.3). "Specific" is the word — not "do more training".
-    • Second bullet: a gap you MEASURED (Section 3) becomes a development opportunity — a skill to build,
-    a behaviour to shift. The measurement feeds this directly.
-    • Third bullet: tie each opportunity to an INDIVIDUAL and to the team's common goals — development
-    serves the build, not just the person's CV.
-    Misconception to pre-empt: "development opportunities are generic courses." No — they're specific,
-    drawn from a measured gap, tied to a named person and the team goal; generic = not assessable.
-    Question to pose: "The network owner struggled with shared parameters — what specific development
-    opportunity does that suggest, for whom?" (turns a measured gap into a specific opportunity).
-    UoC/AT2 tie: BSBXTW401 PC 4.3 (identify specific learning/development opportunities) → the development
-    plan evidenced in AT2.
-- [BESPOKE] Action plans, collated feedback & developing others
-  - Implement action plans to address individual and team training needs — who, what, by when (PC 4.4).
-  - Collate feedback on individual and team performance so the picture is evidence, not impression (PE 3).
-  - Identify and implement development opportunities for others — leadership grows the team, not just the build (PE 4).
+    Workbook task 14. This is why the Topic 5 performance plans had to be measurable.
+    Collating scattered notes into one picture is what makes the judgement defensible.
+- [BESPOKE] Feedback, and development
+  - The feedback shape: close to the event, specific, actionable — behaviour, effect, next step.
+  - A measured gap becomes a development opportunity: specific, tied to a person and the team's goal.
+  - An opportunity without an action plan is a note — who, what, by when.
   image: none
   notes:
-    Close Section 4 — make development ACTIONABLE and evidence-based. PC 4.4, PE 3, PE 4 land here.
-    • First bullet: implement ACTION PLANS to address individual and team training needs — who, what, by
-    when (PC 4.4). An opportunity without an action plan is just a note.
-    • Second bullet: COLLATE feedback on individual and team performance so the picture is EVIDENCE, not
-    impression (PE 3). Pulling it together is what makes it defensible.
-    • Third bullet: identify and implement development opportunities for OTHERS (PE 4) — leadership grows
-    the team, not just the build. This is the leader-develops-people point.
-    Misconception to pre-empt: "collating feedback is admin busywork." No — collated feedback is what
-    turns scattered impressions into an evidence base for the action plans (and for AT2).
-    Question to pose: "You have feedback from three stand-ups on the storage owner — what does 'collating'
-    it give you that three separate notes don't?" (draws out the evidence-base point).
-    UoC/AT2 tie: BSBXTW401 PC 4.4 + PE 3 + PE 4 (action plans; collate feedback; develop others) → the
-    development / action-plan evidence in AT2.
+    Workbook tasks 15 and 16. Feedback that never names the gap develops no one; a gap without help closing it is half a job.
+    "Do more training" is not a development opportunity; a named skill for a named person is.
+- [EX] Measure, feed back, develop
+  - Workbook — tasks 14, 15 and 16.
+  - Measure the team against the plan, record the feedback you gave, and record the development opportunities and what you did about them.
+  timer: ~30 min
+  image: none
+  notes:
+    Activity = practice workbook tasks 14–16.
+    Every judgement cites the plan; every opportunity carries an action.
+- [TAKEAWAYS] Section 4 · Measure and grow
+  - Measured against the plan, collated as evidence.
+  - Behaviour, effect, next step.
+  - Gaps become opportunities become action plans.
+  image: none
+
+### C5 — Reflect, and answer
+- Teaches: [BSBXTW401 KE 8]
+- Kicker: how you led, in your own words
+- [BESPOKE] Reflect on how you led
+  - The professional behaviours to reflect against: reliability, fairness, openness, following through.
+  - A reflection reviews, it doesn't summarise: what your leading changed, what it cost, what you'd carry forward.
+  - The questions that follow ask for your techniques — facilitation, coaching, conflict — cited from your own build.
+  image: none
+  notes:
+    Workbook task 17 plus the assessment's Q1–Q3, rehearsed from the practice build.
+    The team copies what a leader does, not what they say — the reflection should notice what was copied.
+- [EX] Reflect and answer the questions
+  - Workbook — task 17, then the assessment's questions Q1 to Q3 from your own build.
+  - Reflect on how you led, then answer: the requirements that applied, the techniques you used, and how you resolve conflict.
+  timer: ~30 min
+  image: none
+  notes:
+    Activity = practice workbook task 17 + assessment Q1–Q3.
+    Every answer cites an episode from their own build — the accounts from C3 are the source material.
 - [TAKEAWAYS] Topic 6 · Key takeaways
-  - You lead the build; the divided-IaC write is the vehicle, the leadership is the assessed evidence (AT2).
-  - Coach to enhance culture and support individuals toward the common goal; role-model professional behaviours.
-  - Facilitate issue resolution and problem-solving; manage conflict and the teamwork risks.
-  - Measure against the work plans, give timely constructive feedback, and turn gaps into development action plans.
+  - The build is the vehicle; the leading is the evidence.
+  - Real episodes, techniques named, measured against the plan.
+  - Reflection reviews; answers cite your own build.
   image: none
 
 ### Close
 - [BESPOKE] Next: Topic 7 — the individual deploy
-  - You can now lead, support and monitor the team through the build.
-  - Next (AT3, Topics 7–8): each member deploys, tests and documents their built infrastructure — the 504-assessed individual work.
+  - The team delivered, and you led it — planned, run, measured, developed, reflected.
+  - Next is AT3: each member individually deploys, tests and proves the improvement.
   image: none
 
 ## Build notes
-~14 slides. One `[EX]` — lead a practice-team stand-up and facilitate a seeded conflict to resolution (~25 min). One generated diagram (`diagram team-build-flow`: component drafts → integrate → review/monitor → team sign-off); one decorative `gen` image (opener hero); all other slides `image: none`. Leadership depth only — the technical write is the vehicle, not the assessed object.
+~26 slides. Five activities, mapping to practice workbook tasks 7–8 · 9–10 · 11–13 · 14–16 · 17 +
+the assessment's Q1–Q3. One generated diagram (`diagram team-build-flow`, already in `diagrams/`);
+one decorative `gen` opener hero (cached in `images/`). Content carried from the 2026-07-02 plan,
+re-ordered to the workbook: build-then-reflect (the accounts are written from real episodes), the
+observed meeting taught as its own performance, measurement/feedback/development pointed at their
+tasks.
 
 ## Changelog
+- 2026-09-08 — redrafted from the AT2 practice workbook (tasks 7–17 + Q1–Q3): the build and observed
+  meeting come first so the reflective accounts have real episodes; every section ends in its tasks.
 - 2026-07-02 — authored to full content.

@@ -1,24 +1,24 @@
-# Topic 8 — Testing, refining & documenting the whole system; final sign-off · Coverage
+# Topic 08 — Documenting, handover and close · Coverage
 
-**Topic 8 of 8** · **AT3 content Topic** (Implement — finalise; 504 el 4) · teaching source: bespoke (as-deployed documentation + long-term strategy + sign-off) + AWS as-built documentation conventions · *DRAFT 2026-07-02*.
+**Topic 08 of 8** · **AT3 content Topic** — the slides and the AT3 workbook advance together: each component ends in the workbook task it prepares.
 
-This file is the **coverage spec** for the Topic.
+The coverage spec — what this Topic must cover, in UoC and AT terms. `slide_plan.md` and the deck are built to satisfy it.
 
-**Depth ceiling: BUILD / FINALISE.** Close out AT3: document the as-deployed architecture and test results against the approved design, describe the long-term improvement strategy, and obtain the final sign-off. The build is done in Topic 7; here it is written up and signed off.
-
----
+## Depth ceiling
+CLOSE — the last Topic of the cluster: document the as-deployed architecture and test results,
+describe the long-term strategy, hand over and obtain final sign-off, then remove what was deployed.
+No new build; the material is what was captured live in Topic 7.
 
 ## What this Topic must cover
 
-The finalisation half of AT3: turn the deployed-and-tested improvement into an as-deployed record and close the engagement. Document the as-deployed architecture and test results — highlighting the changes and improvements from the approved design — describe the long-term improvement strategies and their benefits, and obtain the final sign-off from the required personnel (the cluster's second approval moment). Three components:
-
-- **C1 — Document as-deployed + test results.** Document the as-deployed architecture and test results, highlighting the changes and improvements from the approved design; create the documentation of the deployment and testing steps.
-- **C2 — Long-term improvement strategies.** Describe long-term improvement strategies and their benefits as applied to the deployed resources — what a next iteration would improve and why.
-- **C3 — Final sign-off.** Obtain final sign-off from the required personnel — the second of the cluster's two approval moments (the first was the AT1 deploy sign-off).
-
----
+- **C1 — Document the as-deployed system.** Culminates in the workbook: **task 10**.
+- **C2 — The long-term strategy.** Culminates in the workbook: **task 11**.
+- **C3 — Hand over, sign off, take it down.** Culminates in the workbook: **tasks 12 and 13**.
+- **C4 — The written questions.** Culminates in the workbook: **The assessment's questions Q1 and Q2, rehearsed from your practice build**.
 
 ## 1. UoC mapping
+
+UoC **taught / developed** in this Topic:
 
 | UoC item | Descriptor | Component |
 |---|---|---|
@@ -26,34 +26,9 @@ The finalisation half of AT3: turn the deployed-and-tested improvement into an a
 | [ICTCLD504 PE 5] | create documentation of deployment and testing steps | C1 |
 | [ICTCLD504 PC 4.2] | Describe long-term improvement strategies and their benefits as applied to deployed resources | C2 |
 | [ICTCLD504 PC 4.3] | Obtain final sign off from required personnel | C3 |
+| [ICTCLD504 PE 4] | use cloud management consoles, software development kits or command line tools | C3 |
+| [ICTCLD504 KE 7] | testing and debugging techniques, including techniques to avoid single point failures | C4 |
+| [ICTCLD504 KE 10] | techniques, methods and industry standard metrics and business goals used to monitor performance of cloud resources | C4 |
 
-> Taught here; formally **evidenced** in AT3 (Implementation — the as-deployed report, long-term strategy and the final sign-off record).
-
----
-
-## 2. AT alignment
-
-| AT3 element | How Topic 8 aligns |
-|---|---|
-| **Implement — element 4 (finalise)** | Direct — document the as-deployed architecture and test results vs the approved design, describe long-term strategy, obtain final sign-off (C1–C3). |
-
-**Practice-activity alignment:** write the as-deployed report + long-term strategy for the **practice-vehicle** deploy and run the final sign-off conversation, before finalising the assessed Ledgerline implementation.
-
----
-
-## Out of scope for this Topic (covered elsewhere)
-
-- **The deploy, monitoring and testing being documented** → Topic 7.
-- **The approved design being compared against** → AT1 (Topics 1–4).
-- **The leadership evidence of the team build** → AT2 (Topics 5–6).
-
----
-
-## Coverage checklist
-
-- [ ] Every UoC item in §1 is taught.
-- [ ] Each of C1–C3 has teaching content (bespoke and/or AWS as-built conventions).
-- [ ] The as-deployed report highlights changes/improvements from the approved design.
-- [ ] The long-term improvement strategy is described.
-- [ ] The final sign-off is distinguished from the AT1 deploy sign-off.
-- [ ] A student leaving this Topic could attempt the finalisation half of AT3.
+## Changelog
+- regenerated from the slide plan by scripts/generate_topic_coverage.py; components re-cut so each one ends in a workbook task.

@@ -52,4 +52,4 @@ UoC **taught / developed** in this Topic:
 | [ICTCLD505 KE 2] | industry standard hardware and software products, their general features, capabilities and application, including storage technology | C5 |
 
 ## Changelog
-- 2026-09-08 — regenerated from the redrafted slide plan; components re-cut so each one ends in a workbook task.
+- regenerated from the slide plan by scripts/generate_topic_coverage.py; components re-cut so each one ends in a workbook task.
