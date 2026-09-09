@@ -1,7 +1,7 @@
 # diploma-cloud-cyber-content
 
 Curriculum and assessment authoring for the **ICT50220 Diploma of Information Technology — Cloud and
-Cybersecurity**: cluster assessments, UoC mappings, and validators.
+Cybersecurity**: the clusters' generated assessment instruments (guided workbooks + practice twins), UoC transcriptions and mappings, delivery decks, and the semester-specific generators (validators + the shared engine live in the umbrella).
 
 > **Part of the `diploma-cloud-cyber-umbrella` project — not worked on directly.**
 > This repo is meant to be cloned **inside** the
