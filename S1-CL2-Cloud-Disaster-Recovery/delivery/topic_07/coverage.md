@@ -1,67 +1,50 @@
-# Topic 7 — Authoring & parameterising your own IaC template · Coverage
+# Topic 07 — Building the microservice with your own IaC · Coverage
 
-**Topic 7 of 10** · **AT2 content Topic** (build — IaC author half) · teaching source: AWS ACA CloudFormation + bespoke · *deck pinning TBD (Step 3)*.
+**Topic 07 of 9** · **AT2 content Topic** — the slides and the AT2 workbook advance together: each component ends in the workbook task it prepares.
 
-This file is the **coverage spec** for the Topic.
+The coverage spec — what this Topic must cover, in UoC and AT terms. `slide_plan.md` and the deck are built to satisfy it.
 
-**Depth ceiling: BUILD.** The second IaC skill — authoring, not just operating. `teach → demo → practice`. Builds on Topic 6's template anatomy.
-
----
+## Depth ceiling
+BUILD — the core of AT2: review the supplied code, author your own template that provisions the
+microservice, deploy it, confirm it, test it end to end, troubleshoot it, then parameterise and extend
+it. One continuous run of work, in workbook order.
 
 ## What this Topic must cover
 
-Writing your *own* template from scratch — the author-your-own half of IaC. Three components:
-
-- **C1 — Authoring a template.** Apply the template syntax to create and deploy a template that provisions a set of related cloud resources to business needs.
-- **C2 — Update & parameterise for reuse.** Update and redeploy the template to modify and add resources; parameterise it so the same template deploys to different configurations without editing the body; confirm via console/CLI — the key code-reuse outcome.
-- **C3 — Remove & troubleshoot.** Remove the deployed resources and delete templates cleanly; test and troubleshoot errors in your own template.
-
-Plus the industry practice that governs it: parameters over hard-coding, least-privilege, tagging, outputs for integration.
-
----
+- **C1 — Review before you build.** Culminates in the workbook: **task 11**.
+- **C2 — Author your template.** Culminates in the workbook: **task 12**.
+- **C3 — Deploy it, and confirm it.** Culminates in the workbook: **tasks 13 and 14**.
+- **C4 — Test it end to end, and troubleshoot.** Culminates in the workbook: **tasks 15 and 16**.
+- **C5 — Make it reusable, then grow it.** Culminates in the workbook: **tasks 17 and 18**.
 
 ## 1. UoC mapping
 
+UoC **taught / developed** in this Topic:
+
 | UoC item | Descriptor | Component |
 |---|---|---|
-| [ICTCLD505 PC 3.1] | Learn template syntax of the selected IaC service | C1 |
-| [ICTCLD505 PC 3.2] | Create and deploy a template to provision a related resource set | C1 |
-| [ICTCLD505 PC 3.3] | Update and redeploy to modify and add resources | C2 |
-| [ICTCLD505 PC 3.4] | Confirm deployment; configure via console or CLI | C2 |
-| [ICTCLD505 PC 3.5] | Parameterise and deploy to reuse configuration | C2 |
-| [ICTCLD505 PC 3.6] | Remove deployed resources; delete templates | C3 |
-| [ICTCLD505 PC 3.7] | Test and troubleshoot template errors | C3 |
-| [ICTCLD505 PE 2] | Create, run and update at least one own template | C1–C3 |
-| [ICTCLD505 KE 8] | Parameterisation for configuration and code reuse | C2 |
-| [ICTCLD505 KE 9] | Industry standard practices to define IaC | C1 |
+| [ICTCLD503 PC 3.1] | Review microservice design and code components for application | C1 |
+| [ICTCLD505 PC 3.1] | Learn template syntax of selected cloud infrastructure as code service | C2 |
+| [ICTCLD505 PC 3.2] | Create and deploy template to provision a set of related cloud resources according to business needs | C2 |
+| [ICTCLD505 KE 5] | syntax of selected infrastructure as code service templates | C2 |
+| [ICTCLD505 KE 9] | industry standard practices to define infrastructure as code | C2 |
+| [ICTCLD505 PC 3.2] | Create and deploy template to provision a set of related cloud resources according to business needs | C3 |
+| [ICTCLD505 PC 3.4] | Confirm deployment of cloud resources and configure resources using the cloud platform console or command line tools | C3 |
+| [ICTCLD505 PE 2] | create, run and update at least one own template required to deploy and modify cloud infrastructure | C3 |
+| [ICTCLD505 PE 3] | use cloud management console, cloud software development kits or command line tools | C3 |
+| [ICTCLD503 PC 3.2] | Deploy and configure cloud services to implement the application | C3 |
+| [ICTCLD503 PE 3] | deploy a microservice application utilising cloud serverless technologies | C3 |
+| [ICTCLD503 PE 4] | use cloud management consoles, software development kits or command line tools | C3 |
+| [ICTCLD503 PC 3.3] | Test microservice components and confirm that the application is functioning | C4 |
+| [ICTCLD503 PC 3.4] | Troubleshooting and fix errors as required | C4 |
+| [ICTCLD503 KE 5] | testing and debugging techniques | C4 |
+| [ICTCLD505 PC 3.7] | Test and troubleshoot template errors | C4 |
+| [ICTCLD505 KE 7] | testing and debugging techniques, including common issues and errors relating to deploying cloud infrastructure as code | C4 |
+| [ICTCLD505 PE 3] | use cloud management console, cloud software development kits or command line tools | C4 |
+| [ICTCLD505 PC 3.3] | Update and redeploy template to modify previously deployed resources and add new resources | C5 |
+| [ICTCLD505 PC 3.5] | Parameterise and deploy template to reuse configuration with a modified resource configuration | C5 |
+| [ICTCLD505 KE 8] | parameterisation of templates to support configuration and code reuse | C5 |
+| [ICTCLD505 KE 10] | uses and methods to create, manage, provision and update cloud resources and templates | C5 |
 
-> Taught here; formally **evidenced** in AT2 §4.3 (the student's own microservice template) — the authored artefact realised in Topic 8.
-
----
-
-## 2. AT2 alignment
-
-| AT2 element | Criterion | How Topic 7 aligns |
-|---|---|---|
-| **§4.3 — Authoring the microservice IaC template** | D3 | Direct — author/parameterise/update/redeploy/remove an own template (C1–C3); reference the provided table. |
-| **§5 — config decisions** | D8 | Parameterisation + industry IaC practice (KE 8, 9). |
-
-**Practice-activity alignment:** `teach → demo → practice` — author a small template from scratch on the practice scenario (provision a related resource set, parameterise it, redeploy with new values, remove). The microservice template proper is built in Topic 8.
-
----
-
-## Out of scope for this Topic (covered elsewhere)
-
-- **Operating a *provided* template** → Topic 6.
-- **The microservice services + the provided code** (what the authored template deploys) → Topic 8.
-- **Monitoring** → Topic 9; **documentation/sign-off** → Topic 10.
-
----
-
-## Coverage checklist
-
-- [ ] Every UoC item in §1 is taught.
-- [ ] Each of C1–C3 has teaching content (AWS deck reference and/or bespoke).
-- [ ] A `[DEMO]` precedes the practice (author + parameterise a template).
-- [ ] The exercise has students author their *own* template, parameterise it, redeploy and remove it.
-- [ ] A student leaving this Topic could attempt AT2 §4.3.
+## Changelog
+- 2026-09-08 — regenerated from the redrafted slide plan; components re-cut so each one ends in a workbook task.

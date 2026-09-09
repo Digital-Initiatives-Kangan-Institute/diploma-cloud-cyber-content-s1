@@ -1,56 +1,44 @@
-# Topic 9 — Monitoring & alarms · Coverage
+# Topic 09 — Documenting, teardown & sign-off · Coverage
 
-**Topic 9 of 10** · **AT2 content Topic** (build — monitoring) · teaching source: AWS ACA CloudWatch + bespoke · *deck pinning TBD (Step 3)*.
+**Topic 09 of 9** · **AT2 content Topic** — the slides and the AT2 workbook advance together: each component ends in the workbook task it prepares.
 
-This file is the **coverage spec** for the Topic.
+The coverage spec — what this Topic must cover, in UoC and AT terms. `slide_plan.md` and the deck are built to satisfy it.
 
-**Depth ceiling: BUILD.** Configure monitoring on the running microservice from Topic 8. `teach → demo → practice`.
-
----
+## Depth ceiling
+CLOSE — the build is done; this Topic documents it for the people who inherit it, removes it cleanly,
+walks the client through it for sign-off, and answers the written questions. Last Topic of the cluster.
 
 ## What this Topic must cover
 
-Observing the running system — metrics and a scaling-relevant alarm on the serverless microservice. Two components:
-
-- **C1 — Metrics & monitoring.** Cloud metrics and what to watch on a serverless microservice — queue depth (the scaling signal for a queue-driven function), function errors/throttles, store throttles; the techniques to monitor in a cloud environment.
-- **C2 — Scaling alarms & alerts.** Set up metrics and a scaling-relevant alarm to the design specification — a threshold that triggers and a notification — and the methods to create alerts.
-
----
+- **C1 — User documentation.** Culminates in the workbook: **task 20**.
+- **C2 — Taking it down cleanly.** Culminates in the workbook: **task 21**.
+- **C3 — Confirming the build, and sign-off.** Culminates in the workbook: **task 22**.
+- **C4 — The written questions.** Culminates in the workbook: **The assessment's questions Q1 to Q3, rehearsed from your practice build**.
 
 ## 1. UoC mapping
 
+UoC **taught / developed** in this Topic:
+
 | UoC item | Descriptor | Component |
 |---|---|---|
-| [ICTCLD503 PC 4.1] | Set up metrics and trigger scaling alarms according to design specifications | C1, C2 |
-| [ICTCLD501 KE 6] | Techniques and methods to monitor and create alerts in cloud environments | C1, C2 |
+| [ICTCLD505 PC 4.1] | Create user documentation including cloud infrastructure as code templates | C1 |
+| [ICTCLD505 PE 4] | create user documentation | C1 |
+| [ICTCLD505 FS Writing] | Writing** — Prepares user documentation detailing developed cloud infrastructure in a logical manner using required syntax and language | C1 |
+| [ICTCLD505 PC 2.5] | Remove deployed resources using cloud infrastructure as code tools and delete templates as required | C2 |
+| [ICTCLD505 PC 3.6] | Remove deployed resources using cloud infrastructure as code tools and delete templates as required | C2 |
+| [ICTCLD505 PE 1] | deploy, update and remove cloud infrastructure using cloud platform templates | C2 |
+| [ICTCLD503 PC 4.2] | Confirm, seek and respond to feedback with required personnel | C3 |
+| [ICTCLD503 PC 4.3] | Obtain final sign off from required personnel | C3 |
+| [ICTCLD505 PC 4.2] | Obtain final sign off from required personnel | C3 |
+| [ICTCLD505 FS Oral communication] | Oral communication** — Uses listening and questioning techniques to confirm requirements and articulate complex concepts and matters using relevant industry for intended audience | C3 |
+| [ICTCLD505 KE 1] | industry technology standards used in cloud computing solutions and services | C4 |
+| [ICTCLD505 KE 2] | industry standard hardware and software products, their general features, capabilities and application, including storage technology | C4 |
+| [ICTCLD503 KE 1] | industry technology standards used in cloud computing solutions and services | C4 |
+| [ICTCLD503 KE 2] | industry standard hardware and software products, their general features, capabilities and application, including storage technology | C4 |
+| [ICTCLD505 KE 7] | testing and debugging techniques, including common issues and errors relating to deploying cloud infrastructure as code | C4 |
+| [ICTCLD503 KE 5] | testing and debugging techniques | C4 |
+| [ICTCLD505 KE 10] | uses and methods to create, manage, provision and update cloud resources and templates | C4 |
+| [ICTCLD505 KE 11] | techniques, methods and industry standard metrics used to leverage cloud platform capabilities and deploy and manage templates | C4 |
 
-> Taught here; formally **evidenced** in AT2 §4.5 (the configured metric + alarm). [ICTCLD501 KE 6] is the monitoring/alerting knowledge that also underpins the DR plan's detection step (AT1 Topic 4) — taught here in its practical form.
-
----
-
-## 2. AT2 alignment
-
-| AT2 element | Criterion | How Topic 9 aligns |
-|---|---|---|
-| **§4.5 — Monitoring and alarms** | D6 | Direct — configure a metric + a scaling-relevant alarm with threshold and notification on the microservice (C1, C2). |
-| **§6.5 — alarm test** | D9 | Drive the metric past the threshold and confirm the alarm fires (C2). |
-
-**Practice-activity alignment:** `teach → demo → practice` — configure a queue-depth (or function-error) alarm with a notification on the practice microservice, then drive it to ALARM and back.
-
----
-
-## Out of scope for this Topic (covered elsewhere)
-
-- **The microservice build** the monitoring sits on → Topic 8.
-- **The DR plan's detection/alerting concept** (planning depth) → AT1 Topic 4; here it's the practical CloudWatch configuration.
-- **Documentation/sign-off** → Topic 10.
-
----
-
-## Coverage checklist
-
-- [ ] Both UoC items in §1 are taught.
-- [ ] Each of C1–C2 has teaching content (AWS deck reference and/or bespoke).
-- [ ] A `[DEMO]` precedes the practice (configure + fire an alarm).
-- [ ] The exercise configures a real metric + alarm with notification and tests it.
-- [ ] A student leaving this Topic could attempt AT2 §4.5.
+## Changelog
+- 2026-09-08 — regenerated from the redrafted slide plan; components re-cut so each one ends in a workbook task.

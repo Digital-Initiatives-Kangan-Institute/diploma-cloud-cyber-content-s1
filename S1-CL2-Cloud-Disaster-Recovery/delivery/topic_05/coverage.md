@@ -1,62 +1,31 @@
-# Topic 5 — Documenting & presenting for approval · Coverage
+# Topic 05 — Presenting for approval · Coverage
 
-**Topic 5 of 10** · **AT1 content Topic** (Part A documentation close-out + Part C presentation/approval) · teaching source: bespoke (technical writing to the YAT templates; the walkthrough / feedback / lodgement / sign-off discipline) + scenario · *DRAFT 2026-06-25; deck pinning TBD (Step 4)*.
+**Topic 05 of 9** · **AT1 content Topic** — the slides and the AT1 workbook advance together: each component ends in the workbook task it prepares.
 
-This file is the **coverage spec** for the Topic.
+The coverage spec — what this Topic must cover, in UoC and AT terms. `slide_plan.md` and the deck are built to satisfy it.
 
-**Depth ceiling: PRODUCE & PRESENT.** Assemble and justify the Solution Design (Part A) and present the Solution Design + DR Plan to management for approval, obtaining sign-off. No new design and no build — this is the AT1 close-out / design-approval gate.
-
----
+## Depth ceiling
+PERFORM — AT1 Part C on the practice workbook: prepare the walkthrough, run it, handle the feedback,
+lodge the plan and obtain sign-off. The documents being presented were finished in Topics 1–4; nothing
+new is designed here.
 
 ## What this Topic must cover
 
-The AT1 close-out: turn the design work into a documented, justified Solution Design and run the approval presentation for both deliverables. Three components:
-
-- **C1 — Documenting & justifying the design.** Assemble the Solution Design (web-scale + microservice) in the YAT template; document and justify the architecture changes and the microservice design; plain professional English, complete and internally consistent.
-- **C2 — Presenting for approval.** Conduct the verbal walkthrough of the Solution Design and DR Plan with the required personnel; seek and respond to feedback; answer contextual Q&A on the student's own choices.
-- **C3 — Lodgement & sign-off.** Lodge the DR plan per organisational and legislative protocol; obtain final sign-off from the required personnel — the gate to AT2 implementation.
-
----
+- **C1 — Preparing the walkthrough.** Culminates in the workbook: **tasks 38 and 39**.
+- **C2 — The walkthrough, and the feedback.** Culminates in the workbook: **tasks 40 and 41**.
+- **C3 — Lodgement and sign-off.** Culminates in the workbook: **tasks 42 and 43**.
 
 ## 1. UoC mapping
 
+UoC **taught / developed** in this Topic:
+
 | UoC item | Descriptor | Component |
 |---|---|---|
-| [ICTCLD503 PC 1.7] | Document and justify architecture changes | C1 |
-| [ICTCLD503 PC 2.4] | Document and justify architecture design | C1 |
+| [ICTCLD501 PC 5.1] | Conduct verbal walkthrough of cloud disaster recovery plan with required personnel | C1 |
 | [ICTCLD501 PC 5.1] | Conduct verbal walkthrough of cloud disaster recovery plan with required personnel | C2 |
 | [ICTCLD501 PC 5.2] | Seek and respond to feedback as required | C2 |
 | [ICTCLD501 PC 5.3] | Lodge cloud disaster recovery plan according to organisation and legislative protocol | C3 |
 | [ICTCLD501 PC 5.4] | Obtain final sign off from required personnel | C3 |
 
-> Taught here; formally **evidenced** in AT1 Part A (documented & justified design) + Part C (presentation, feedback, lodgement, sign-off).
-
----
-
-## 2. AT1 alignment
-
-| AT1 element | Criterion | How Topic 5 aligns |
-|---|---|---|
-| **Part A — documented & justified** | A11, A13 | architecture changes documented and justified; document quality (YAT template, professional English, consistent) (C1). |
-| **Part C — presentation** | C1, C2, C5, C6 | verbal walkthrough; seek/respond to feedback; KE Q&A on own choices; oral communication (C2). |
-| **Part C — lodgement & sign-off** | C3, C4 | lodge per protocol; obtain final sign-off (C3). |
-
-**Practice-activity alignment:** assemble and justify the **practice scenario's** Solution Design, then rehearse the walkthrough → feedback → lodgement → sign-off close-out for the design + DR plan.
-
----
-
-## Out of scope for this Topic (covered elsewhere)
-
-- **Producing the design content itself** (web-scale, microservice) → Topics 1–2.
-- **Producing the DR plan content** (requirements/impact, strategy/plan) → Topics 3–4.
-- **The AT2 build's user documentation + build sign-off** (503/505 element 4) → Topics 9–10.
-
----
-
-## Coverage checklist
-
-- [ ] Every UoC item in §1 is taught.
-- [ ] Each of C1–C3 has teaching content (bespoke).
-- [ ] The exercise assembles + justifies the Solution Design and rehearses the walkthrough/feedback/lodgement/sign-off on the practice scenario.
-- [ ] Depth stays at produce & present — no new design, no build.
-- [ ] A student leaving this Topic could complete Part A documentation and conduct Part C.
+## Changelog
+- 2026-09-08 — regenerated from the redrafted slide plan; components re-cut so each one ends in a workbook task.
