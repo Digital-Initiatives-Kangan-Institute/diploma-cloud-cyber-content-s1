@@ -1,7 +1,7 @@
 AWSTemplateFormatVersion: '2010-09-09'
 
 Description: >-
-  YAT Ledgerline - AT3 IMPROVED state, applied as a CloudFormation change-set (stack update) to the
+  YAT Enrolline - AT3 IMPROVED state, applied as a CloudFormation change-set (stack update) to the
   SAME stack created from baseline.yaml. Same logical IDs, so changes are in-place/additive - no
   resource is replaced.
 
@@ -27,14 +27,14 @@ Parameters:
   InstanceType:
     Type: String
     Default: t3.micro
-    Description: Ledgerline application tier EC2 instance type (AWS Academy may restrict types).
+    Description: Enrolline application tier EC2 instance type (AWS Academy may restrict types).
 
   DBEngine:
     Type: String
     Default: postgres
     AllowedValues: [postgres]
     Description: >-
-      RDS engine. Ledgerline runs on Amazon RDS for PostgreSQL (see the Accounting System
+      RDS engine. Enrolline runs on Amazon RDS for PostgreSQL (see the Enrolline
       Infrastructure Specifications). Must match the value used for the other template in this pack -
       Engine is a replacement property, so a mismatch destroys and rebuilds the database instead of
       updating it in place.
@@ -75,19 +75,19 @@ Resources:
   Vpc:
     Type: AWS::EC2::VPC
     Properties:
-      CidrBlock: 10.0.0.0/16
+      CidrBlock: 10.30.0.0/16
       EnableDnsHostnames: true
       EnableDnsSupport: true
       Tags:
-        - { Key: Name, Value: !Sub 'ledgerline-${EnvName}' }
-        - { Key: Project, Value: YAT-Ledgerline }
+        - { Key: Name, Value: !Sub 'enrolline-${EnvName}' }
+        - { Key: Project, Value: YAT-Enrolline }
         - { Key: Environment, Value: !Ref EnvName }
 
   InternetGateway:
     Type: AWS::EC2::InternetGateway
     Properties:
       Tags:
-        - { Key: Name, Value: !Sub 'ledgerline-igw-${EnvName}' }
+        - { Key: Name, Value: !Sub 'enrolline-igw-${EnvName}' }
 
   IgwAttachment:
     Type: AWS::EC2::VPCGatewayAttachment
@@ -99,7 +99,7 @@ Resources:
     Type: AWS::EC2::Subnet
     Properties:
       VpcId: !Ref Vpc
-      CidrBlock: 10.0.1.0/24
+      CidrBlock: 10.30.1.0/24
       AvailabilityZone: !Select [0, !GetAZs '']
       MapPublicIpOnLaunch: true
       Tags:
@@ -109,7 +109,7 @@ Resources:
     Type: AWS::EC2::Subnet
     Properties:
       VpcId: !Ref Vpc
-      CidrBlock: 10.0.2.0/24
+      CidrBlock: 10.30.2.0/24
       AvailabilityZone: !Select [1, !GetAZs '']
       MapPublicIpOnLaunch: true
       Tags:
@@ -119,7 +119,7 @@ Resources:
     Type: AWS::EC2::Subnet
     Properties:
       VpcId: !Ref Vpc
-      CidrBlock: 10.0.11.0/24
+      CidrBlock: 10.30.11.0/24
       AvailabilityZone: !Select [0, !GetAZs '']
       Tags:
         - { Key: Name, Value: !Sub 'private-app-a-${EnvName}' }
@@ -128,7 +128,7 @@ Resources:
     Type: AWS::EC2::Subnet
     Properties:
       VpcId: !Ref Vpc
-      CidrBlock: 10.0.12.0/24
+      CidrBlock: 10.30.12.0/24
       AvailabilityZone: !Select [1, !GetAZs '']
       Tags:
         - { Key: Name, Value: !Sub 'private-app-b-${EnvName}' }
@@ -137,7 +137,7 @@ Resources:
     Type: AWS::EC2::Subnet
     Properties:
       VpcId: !Ref Vpc
-      CidrBlock: 10.0.21.0/24
+      CidrBlock: 10.30.21.0/24
       AvailabilityZone: !Select [0, !GetAZs '']
       Tags:
         - { Key: Name, Value: !Sub 'private-data-a-${EnvName}' }
@@ -146,7 +146,7 @@ Resources:
     Type: AWS::EC2::Subnet
     Properties:
       VpcId: !Ref Vpc
-      CidrBlock: 10.0.22.0/24
+      CidrBlock: 10.30.22.0/24
       AvailabilityZone: !Select [1, !GetAZs '']
       Tags:
         - { Key: Name, Value: !Sub 'private-data-b-${EnvName}' }
@@ -162,7 +162,7 @@ Resources:
       AllocationId: !GetAtt NatEip.AllocationId
       SubnetId: !Ref PublicNatA
       Tags:
-        - { Key: Name, Value: !Sub 'ledgerline-nat-${EnvName}' }
+        - { Key: Name, Value: !Sub 'enrolline-nat-${EnvName}' }
 
   PublicRouteTable:
     Type: AWS::EC2::RouteTable
@@ -218,6 +218,78 @@ Resources:
       RouteTableId: !Ref PrivateRouteTable
       SubnetId: !Ref PrivateAppB
 
+  # IMPROVEMENT (network): Gateway endpoint for Amazon S3. Document traffic from the application
+  # tier stops leaving the VPC through the NAT Gateway - it removes a NAT data-processing charge
+  # and removes the NAT Gateway as a dependency for reaching student document attachments.
+  S3VpcEndpoint:
+    Type: AWS::EC2::VPCEndpoint
+    Properties:
+      VpcId: !Ref Vpc
+      ServiceName: !Sub 'com.amazonaws.${AWS::Region}.s3'
+      VpcEndpointType: Gateway
+      RouteTableIds:
+        - !Ref PrivateRouteTable
+
+  # IMPROVEMENT (network): VPC flow logs. The DPDP Act's security-safeguard obligations assume the
+  # ability to detect and investigate a personal-data breach; the baseline keeps no network record
+  # at all. Delivered to S3 rather than CloudWatch Logs because an S3 destination needs only a
+  # bucket policy - the lab role cannot create the IAM role a CloudWatch destination requires.
+  FlowLogsBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: !Sub 'enrolline-flowlogs-${EnvName}-${AWS::Region}-${AWS::AccountId}'
+      BucketEncryption:
+        ServerSideEncryptionConfiguration:
+          - ServerSideEncryptionByDefault:
+              SSEAlgorithm: AES256
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: true
+        BlockPublicPolicy: true
+        IgnorePublicAcls: true
+        RestrictPublicBuckets: true
+      LifecycleConfiguration:
+        Rules:
+          - Id: expire-flow-logs
+            Status: Enabled
+            ExpirationInDays: 180
+
+  FlowLogsBucketPolicy:
+    Type: AWS::S3::BucketPolicy
+    Properties:
+      Bucket: !Ref FlowLogsBucket
+      PolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Sid: AWSLogDeliveryWrite
+            Effect: Allow
+            Principal:
+              Service: delivery.logs.amazonaws.com
+            Action: 's3:PutObject'
+            Resource: !Sub '${FlowLogsBucket.Arn}/AWSLogs/${AWS::AccountId}/*'
+            Condition:
+              StringEquals:
+                's3:x-amz-acl': bucket-owner-full-control
+          - Sid: AWSLogDeliveryCheck
+            Effect: Allow
+            Principal:
+              Service: delivery.logs.amazonaws.com
+            Action:
+              - 's3:GetBucketAcl'
+              - 's3:ListBucket'
+            Resource: !GetAtt FlowLogsBucket.Arn
+
+  VpcFlowLog:
+    Type: AWS::EC2::FlowLog
+    DependsOn: FlowLogsBucketPolicy
+    Properties:
+      ResourceId: !Ref Vpc
+      ResourceType: VPC
+      TrafficType: ALL
+      LogDestinationType: s3
+      LogDestination: !GetAtt FlowLogsBucket.Arn
+      Tags:
+        - { Key: Name, Value: !Sub 'enrolline-flowlogs-${EnvName}' }
+
   # ---------- Security groups (unchanged) ----------
   AlbSecurityGroup:
     Type: AWS::EC2::SecurityGroup
@@ -225,7 +297,7 @@ Resources:
       GroupDescription: Internal ALB - HTTP from internal (VPN-connected) clients only
       VpcId: !Ref Vpc
       SecurityGroupIngress:
-        - { IpProtocol: tcp, FromPort: 80, ToPort: 80, CidrIp: 10.0.0.0/16, Description: HTTP from internal clients }
+        - { IpProtocol: tcp, FromPort: 80, ToPort: 80, CidrIp: 10.30.0.0/16, Description: HTTP from internal clients }
       Tags:
         - { Key: Name, Value: !Sub 'sg-alb-${EnvName}' }
 
@@ -253,7 +325,7 @@ Resources:
   AppLaunchTemplate:
     Type: AWS::EC2::LaunchTemplate
     Properties:
-      LaunchTemplateName: !Sub 'ledgerline-app-${EnvName}'
+      LaunchTemplateName: !Sub 'enrolline-app-${EnvName}'
       LaunchTemplateData:
         ImageId: !Ref AmiId
         InstanceType: !Ref InstanceType
@@ -268,17 +340,17 @@ Resources:
             #!/bin/bash
             dnf install -y httpd
             systemctl enable --now httpd
-            echo "Ledgerline infrastructure ready - awaiting application deployment" > /var/www/html/index.html
+            echo "Enrolline infrastructure ready - awaiting application deployment" > /var/www/html/index.html
         TagSpecifications:
           - ResourceType: instance
             Tags:
-              - { Key: Name, Value: !Sub 'ledgerline-app-${EnvName}' }
-              - { Key: Project, Value: YAT-Ledgerline }
+              - { Key: Name, Value: !Sub 'enrolline-app-${EnvName}' }
+              - { Key: Project, Value: YAT-Enrolline }
 
   AppAutoScalingGroup:
     Type: AWS::AutoScaling::AutoScalingGroup
     Properties:
-      AutoScalingGroupName: !Sub 'ledgerline-app-${EnvName}'
+      AutoScalingGroupName: !Sub 'enrolline-app-${EnvName}'
       MinSize: '2'                    # IMPROVED: was 1
       MaxSize: '4'                    # IMPROVED: was 2
       DesiredCapacity: '2'            # IMPROVED: was 1
@@ -293,7 +365,7 @@ Resources:
       HealthCheckType: ELB
       HealthCheckGracePeriod: 300
       Tags:
-        - { Key: Name, Value: !Sub 'ledgerline-app-${EnvName}', PropagateAtLaunch: true }
+        - { Key: Name, Value: !Sub 'enrolline-app-${EnvName}', PropagateAtLaunch: true }
 
   AppScalingPolicy:
     Type: AWS::AutoScaling::ScalingPolicy
@@ -305,11 +377,35 @@ Resources:
           PredefinedMetricType: ASGAverageCPUUtilization
         TargetValue: 70
 
+  # IMPROVEMENT (compute): scheduled capacity against the academic calendar. The intake enrolment
+  # windows and census dates are published months ahead, so capacity is raised on a schedule -
+  # before the load arrives - rather than reactively by the CPU policy after users are already
+  # queuing. Outside those windows the group drops back, which is where the cost saving comes from.
+  ScheduledScaleUpIntake:
+    Type: AWS::AutoScaling::ScheduledAction
+    Properties:
+      AutoScalingGroupName: !Ref AppAutoScalingGroup
+      # 1 Feb and 1 Jul - ahead of each intake enrolment window
+      Recurrence: '0 6 1 2,7 *'
+      MinSize: 2
+      MaxSize: 4
+      DesiredCapacity: 4
+
+  ScheduledScaleDownPostIntake:
+    Type: AWS::AutoScaling::ScheduledAction
+    Properties:
+      AutoScalingGroupName: !Ref AppAutoScalingGroup
+      # 1 Apr and 1 Oct - after each intake window and its census processing have closed
+      Recurrence: '0 6 1 4,10 *'
+      MinSize: 2
+      MaxSize: 4
+      DesiredCapacity: 2
+
   # ---------- Internal load balancer (unchanged) ----------
   AppLoadBalancer:
     Type: AWS::ElasticLoadBalancingV2::LoadBalancer
     Properties:
-      Name: !Sub 'ledgerline-${EnvName}'
+      Name: !Sub 'enrolline-${EnvName}'
       Scheme: internal
       Type: application
       Subnets:
@@ -321,7 +417,7 @@ Resources:
   AppTargetGroup:
     Type: AWS::ElasticLoadBalancingV2::TargetGroup
     Properties:
-      Name: !Sub 'ledgerline-${EnvName}'
+      Name: !Sub 'enrolline-${EnvName}'
       VpcId: !Ref Vpc
       Port: 80
       Protocol: HTTP
@@ -345,7 +441,7 @@ Resources:
   DbSubnetGroup:
     Type: AWS::RDS::DBSubnetGroup
     Properties:
-      DBSubnetGroupDescription: Ledgerline data subnets (spans 2 AZs - the standby lands in the second)
+      DBSubnetGroupDescription: Enrolline data subnets (spans 2 AZs - the standby lands in the second)
       SubnetIds:
         - !Ref PrivateDataA
         - !Ref PrivateDataB
@@ -355,7 +451,7 @@ Resources:
     DeletionPolicy: Delete
     UpdateReplacePolicy: Delete
     Properties:
-      DBInstanceIdentifier: !Sub 'ledgerline-${EnvName}'
+      DBInstanceIdentifier: !Sub 'enrolline-${EnvName}'
       Engine: !Ref DBEngine
       DBInstanceClass: !Ref DBInstanceClass
       AllocatedStorage: '20'
@@ -372,14 +468,14 @@ Resources:
       BackupRetentionPeriod: 7        # UNCHANGED from baseline - DB is untouched by this change-set
       PubliclyAccessible: false
       Tags:
-        - { Key: Name, Value: !Sub 'ledgerline-${EnvName}' }
-        - { Key: Project, Value: YAT-Ledgerline }
+        - { Key: Name, Value: !Sub 'enrolline-${EnvName}' }
+        - { Key: Project, Value: YAT-Enrolline }
 
   # ---------- Storage (IMPROVED: lifecycle tiering on attachments for cost) ----------
   AttachmentsBucket:
     Type: AWS::S3::Bucket
     Properties:
-      BucketName: !Sub 'ledgerline-attachments-${EnvName}-${AWS::Region}-${AWS::AccountId}'
+      BucketName: !Sub 'enrolline-attachments-${EnvName}-${AWS::Region}-${AWS::AccountId}'
       VersioningConfiguration:
         Status: Enabled
       BucketEncryption:
@@ -404,7 +500,7 @@ Resources:
   BackupsBucket:
     Type: AWS::S3::Bucket
     Properties:
-      BucketName: !Sub 'ledgerline-backups-${EnvName}-${AWS::Region}-${AWS::AccountId}'
+      BucketName: !Sub 'enrolline-backups-${EnvName}-${AWS::Region}-${AWS::AccountId}'
       VersioningConfiguration:
         Status: Enabled
       BucketEncryption:
@@ -421,7 +517,7 @@ Resources:
   AlarmAppCpuHigh:
     Type: AWS::CloudWatch::Alarm
     Properties:
-      AlarmName: !Sub 'ledgerline-app-cpu-high-${EnvName}'
+      AlarmName: !Sub 'enrolline-app-cpu-high-${EnvName}'
       Namespace: AWS/EC2
       MetricName: CPUUtilization
       Dimensions:
@@ -437,7 +533,7 @@ Resources:
   AlarmRdsCpuHigh:
     Type: AWS::CloudWatch::Alarm
     Properties:
-      AlarmName: !Sub 'ledgerline-rds-cpu-high-${EnvName}'
+      AlarmName: !Sub 'enrolline-rds-cpu-high-${EnvName}'
       Namespace: AWS/RDS
       MetricName: CPUUtilization
       Dimensions:

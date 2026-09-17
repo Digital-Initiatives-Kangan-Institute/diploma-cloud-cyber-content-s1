@@ -2,11 +2,11 @@
 """The S1-CL3 AT2 PRACTICE team-implementation run sheet — content.
 
 Same shape as the AT2 assessment workbook, with the team building the website improvement
-rather than the Ledgerline one.
+rather than the Enrolline one.
 
 BE HONEST ABOUT WHAT THE CONTRAST IS WORTH HERE. In AT1 and AT3 the practice vehicle changes
 the answers: a public 24x7 site is a different design and a different deployment from an
-internal finance system. In AT2 it mostly does not. A conflict is a conflict, coaching is
+internal student records system. In AT2 it mostly does not. A conflict is a conflict, coaching is
 coaching, and the criteria this workbook carries are about how the student worked with people
 — which does not change because the template builds a load balancer instead of a subnet. The
 system swap is still worth having (it keeps the four component briefs genuinely different,

@@ -34,7 +34,7 @@
 
 One integrated cluster assessment that reads as a single engagement on one system. **Shape:** *design the
 improvement (individual) → plan and build it as a team (group) → deploy and operate it (individual)*, all on
-Ledgerline. The units meet without colliding because they are evidenced on **different jobs**: 504 owns the
+Enrolline. The units meet without colliding because they are evidenced on **different jobs**: 504 owns the
 **design** (AT1) and **deploy-and-operate** (AT3), both individual; 401 owns the **team write** (AT2), the
 only job free to divide. It is CL1 AT3's improve-loop widened (security + reliability + scalability + cost)
 and run by a team.
@@ -50,20 +50,26 @@ deployment documents; leadership KE rides the AT2 reflection. No abstract recall
 
 ## 2. Scenario
 
-**Reuse the YAT world.** By CL3, **Ledgerline** (the Accounting system) sits at a **single-AZ cloud
-baseline** (on-prem in CL1 → migrated → improved in CL3). The engagement is triggered by YAT's India-campus
-partnership: MTS is engaged to confirm Ledgerline is stable, reliable, fit for purpose and compliant with
-the applicable Indian regulatory requirements, and to improve it across the four concerns. The student team
-designs the improvement, builds it as code, and deploys it. The improvement is **open** — its shape follows
-the analysis, proportionate to an internal business-hours finance system (IR-2).
+**Reuse the YAT world.** By CL3, **Enrolline** (the student records and enrolment management system) sits at
+a **single-AZ cloud baseline**, migrated under an earlier engagement and improved in CL3. The engagement is
+triggered by YAT's India-campus partnership: MTS is engaged to confirm Enrolline is stable, reliable, fit for
+purpose and compliant with the applicable Indian regulatory requirements, and to improve it across the four
+concerns. The student team designs the improvement, builds it as code, and deploys it. The improvement is
+**open** — its shape follows the analysis, proportionate to an internal, staff-facing system whose load
+concentrates at intake and census (IR-2).
+
+Enrolline is **not** the LMS and **not** Ledgerline: the LMS is teaching and delivery, Ledgerline is the
+general ledger (and stays CL1's practice vehicle), and Enrolline is student administration — enrolments,
+student records, USI, fee invoicing and receipting, AVETMISS compliance reporting. Enrolline and Ledgerline
+come from the same vendor and integrate at the fee-posting boundary; that is the only thing they share.
 
 **Provided framing (not the answer):** the engagement framing (MSA, Role Brief, Improvement Requirements
-IR-1…7, ICT Manager Consultation Notes, Indian Regulatory Requirements) is supplied; each student's
+IR-1…7, Consultation Notes, Indian Regulatory Requirements) is supplied; each student's
 analysis, compliance assessment and improvement design (AT1) are student-authored. The engagement then
 adopts a single **agreed improvement Solution Design** (provided), which AT2 encodes into IaC and AT3
 deploys.
 
-**Vehicle (per `scenario-flow.md`):** assess on **Ledgerline** (single-AZ cloud), practise on the
+**Vehicle (per `scenario-flow.md`):** assess on **Enrolline** (single-AZ cloud), practise on the
 **website** (no-leakage: the website is assessed in CL2). The testable scenario needs are the `SR-*` in §3 +
 the register in §6.
 
@@ -125,7 +131,7 @@ workbook's review tasks).
 ## 4. Provenance
 
 **Lightest cluster, heaviest reuse.** The technical workflow (analyse → design → deploy → test → document →
-sign-off) is structurally CL1 AT3 + CL2, re-pointed at Ledgerline with a team-leadership overlay on the
+sign-off) is structurally CL1 AT3 + CL2, re-pointed at Enrolline with a team-leadership overlay on the
 write.
 
 - **Reused / proven:** CL1 AT3's improve-an-existing-baseline shape + the lab-pack standard
@@ -168,10 +174,10 @@ the **AC link** names the UoC Assessment Condition each environmental requiremen
 | SR | Condition the scenario must enable | AT(s) | AC link |
 |----|---|---|---|
 | **SR-CL3-01** | AWS Academy Learner Lab (us-east-1) — cloud vendor services, managed DB, console/SDK/CLI, IDE, browser, SSH/RDP; the team build + individual deploy/operate environment | AT2, AT3 | [ICTCLD504 AC 1] · [ICTCLD504 AC 2] · [ICTCLD504 AC 3] · [ICTCLD504 AC 4] · [ICTCLD504 AC 6] · [ICTCLD504 AC 7] · [BSBXTW401 AC 1] |
-| **SR-CL3-02** | Deployable single-AZ Ledgerline **baseline lab-pack** (EC2+ASG / internal ALB / single-AZ RDS for SQL Server / S3 / VPC; encrypted at rest, empty DB) — the as-is system AT3 deploys then improves | AT3 | — |
+| **SR-CL3-02** | Deployable single-AZ **baseline lab-pack** for the assessed system (EC2+ASG / internal ALB / single-AZ RDS / S3 document store / VPC; encrypted at rest, empty DB) — the as-is system AT3 deploys then improves | AT3 | — |
 | **SR-CL3-03** | Engagement framing — Master Services Agreement, Engagement Role Brief, Improvement Requirements (IR-1…7), ICT Manager Consultation Notes | AT1 | — |
-| **SR-CL3-04** | Indian Regulatory Requirements (CERT-In logging + Companies-Act books-of-account) driving the compliance assessment + the India residency slice | AT1 | [ICTCLD504 AC 5] |
-| **SR-CL3-05** | Current-state ICT records (baseline Solution Design, infrastructure/application specs, operational costing) carrying the Multi-AZ database limitation breadcrumb (TF-03) | AT1 | — |
+| **SR-CL3-04** | Indian Regulatory Requirements — a compliance determination naming the applicable Indian instruments (personal-data protection, in-India system-log residency and retention, and Indian financial-record obligations) driving the compliance assessment + the India residency slice | AT1 | [ICTCLD504 AC 5] |
+| **SR-CL3-05** | Current-state ICT records (baseline Solution Design, infrastructure/application/server specs, network diagram, operational costing) for the assessed system — the as-is cloud state AT1 analyses | AT1 | — |
 | **SR-CL3-06** | A required-personnel stakeholder who role-plays the design review + sign-off (AT1 Part B) and the final sign-off (AT3) | AT1, AT3 | — |
 | **SR-CL3-07** | The agreed "to be" improvement Solution Design provided to the team (AT2 build input) + an assessor reference combined template (AT3 fallback) | AT2, AT3 | — |
 | **SR-CL3-08** | A student team of four (the MTS improvement team) for the group write | AT2 | [BSBXTW401 AC 1] |

@@ -45,7 +45,7 @@ TIME_ALLOWED = [
 
 OVERVIEW = [
     "Students are assessed individually, within a team, on leading and facilitating the team that "
-    "implements the approved Ledgerline improvement as infrastructure as code. AT2 is the second "
+    "implements the approved Enrolline improvement as infrastructure as code. AT2 is the second "
     "of three assessment tasks in the S1-CL3 Cloud Infrastructure Improvement cluster and the "
     "only group assessment in the semester.",
     "The team is four members, each owning one cloud component — network, compute, database or "
@@ -99,7 +99,7 @@ STUDENT_OVERVIEW = [
 ]
 
 TASKS = [
-    "YAT College has approved the improvement design for the Ledgerline cloud infrastructure. The "
+    "YAT College has approved the improvement design for the Enrolline cloud infrastructure. The "
     "MTS improvement team implements it: four members, one cloud component each, one integrated "
     "deployable template.",
     "Part A — The planning meeting. Six tasks worked through with the team in the room, as an "

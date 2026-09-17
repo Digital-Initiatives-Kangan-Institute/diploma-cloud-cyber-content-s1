@@ -42,7 +42,7 @@ The cluster organises into **four workflow phases**, each with a **technical gro
 
 **Two approval moments (UoC-faithful):** end of **AT1** = sign-off to proceed to deployment (`[ICTCLD504 PC 2.5]`); end of **AT3** = final sign-off (`[ICTCLD504 PC 4.3]`). *(AT2 also carries its own internal team sign-off on the completed build.)*
 
-**Vehicle (per `scenario-flow.md`):** **Ledgerline** (the Accounting system), single-AZ cloud — the system whose cloud infrastructure is improved. CL3 **assesses on Ledgerline**; the **website is the practice vehicle**. *`[ICTCLD504 KE 6]` (object storage for static web sites) is evidenced as a **contextual knowledge question** in AT1's design knowledge — the student contrasts Ledgerline with an object-storage-dependent system (e.g. a website) and explains how they would provision that storage if needed.*
+**Vehicle (per `scenario-flow.md`):** **Enrolline** (the student records and enrolment management system), single-AZ cloud — the system whose cloud infrastructure is improved. CL3 **assesses on Enrolline**; the **website is the practice vehicle**. *`[ICTCLD504 KE 6]` (object storage for static web sites) is evidenced as a **contextual knowledge question** in AT1's design knowledge — Enrolline holds scanned student attachments in a **private** S3 document store behind a relational system of record, so the student contrasts that with a system that serves object storage **publicly** to end users (the website), and explains how such storage is provisioned and served.*
 
 **Cross-cutting & delivery environment.** G9 (foundation skills) is co-evidenced inside both ATs' deliverables; G10 (environment & resource access) is provided by the scenario site + AWS Academy labs; G11 (assessor requirements) is the institutional assessor condition.
 
@@ -56,7 +56,7 @@ Analyse the system (AT1) and set the team up (AT2) before designing changes.
 
 **Why grouped:** the opening of the improve-cycle — review the existing architecture, evaluate it and its business impact, weigh options against the business model, and set the improvement goals.
 
-**Assessment:** an **individual** architecture analysis of the supplied baseline (Ledgerline's current single-AZ cloud infrastructure) — review, business-impact evaluation, the compliance assessment against the Indian Regulatory Requirements, options, and the security / reliability / scalability / cost goals + metrics. This is the analysis half of **AT1** (the individual Solution Design), so the holistic element-1 evidence (PC 1.1, PC 1.6) is valid per student; it feeds the design (G3, also AT1).
+**Assessment:** an **individual** architecture analysis of the supplied baseline (Enrolline's current single-AZ cloud infrastructure) — review, business-impact evaluation, the compliance assessment against the Indian Regulatory Requirements, options, and the security / reliability / scalability / cost goals + metrics. This is the analysis half of **AT1** (the individual Solution Design), so the holistic element-1 evidence (PC 1.1, PC 1.6) is valid per student; it feeds the design (G3, also AT1).
 
 - 1.1 Identify and review business’s cloud architecture design [ICTCLD504 PC 1.1]
 - 1.2 Evaluate cloud architecture and identify business impact of design decisions [ICTCLD504 PC 1.2]

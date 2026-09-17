@@ -38,7 +38,7 @@ TIME_ALLOWED = [
 ]
 
 OVERVIEW = [
-    "Students are assessed on deploying the approved Ledgerline improvement, demonstrating it "
+    "Students are assessed on deploying the approved Enrolline improvement, demonstrating it "
     "against the metrics and business goals they set in AT1, refining it from their own test "
     "results, documenting the as-deployed environment and obtaining final sign-off. AT3 is the "
     "third and final assessment task in the S1-CL3 Cloud Infrastructure Improvement cluster.",
@@ -104,9 +104,9 @@ TASKS = [
     "of the as-deployed architecture and test results with every difference from the approved "
     "design highlighted, a prioritised long-term improvement strategy, handover and final "
     "sign-off, and teardown through the tooling.",
-    "Lab environment: AWS Academy Learner Lab. The scenario places Ledgerline in Sydney — "
+    "Lab environment: AWS Academy Learner Lab. The scenario places Enrolline in Sydney — "
     "[scenario: ap-southeast-2 | deploy: us-east-1].",
-    "MTS scope: cloud infrastructure only. The Ledgerline application and its financial data are "
+    "MTS scope: cloud infrastructure only. The Enrolline application and its financial data are "
     "out of scope, and no financial data may be lost.",
 ]
 
@@ -116,7 +116,7 @@ RESOURCES = [
     "database service, console / CLI / SDK tooling, an SSH or RDP client, and internet and web "
     "browser access",
     "The baseline lab-pack — the infrastructure-as-code template that builds the current "
-    "single-AZ Ledgerline environment. THE ASSESSOR MUST PROVIDE THIS at the start of task 1",
+    "single-AZ Enrolline environment. THE ASSESSOR MUST PROVIDE THIS at the start of task 1",
     "The assessor reference improvement template, as a fallback where a team's integrated "
     "template from AT2 is not usable",
     "Access to the YAT scenario site / intranet — the improvement requirements, the operational "
@@ -193,7 +193,7 @@ CRITERIA_MAP = [
               "highlighted with its reason"),
     dict(code="I7", tasks=["11"],
          text="Long-term improvement strategy described (task 11) — prioritised, specific to "
-              "Ledgerline's position after this deployment, each with a benefit"),
+              "Enrolline's position after this deployment, each with a benefit"),
     dict(code="I8", tasks=["12"],
          text="Handover and final sign-off (task 12) — the documentation filed per YAT's Records "
               "Management Policy and final sign-off obtained, recorded with a decision, a name "

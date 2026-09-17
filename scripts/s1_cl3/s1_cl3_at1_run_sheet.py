@@ -15,17 +15,23 @@ require a document is ICTCLD501, via `[ICTCLD501 AC 3]`.
 THE IMPROVEMENT IS OPEN. This is the thing that separates CL3 from CL1's AT3. There is no
 target architecture and no planted set of faults to find. The Improvement Requirements are
 framed as outcomes — stable, reliable, fit for purpose, compliant — and IR-2 asks for sound
-engineering proportionate to an internal, business-hours finance system, explicitly not
+engineering proportionate to an internal, staff-facing student records system, explicitly not
 gold-plating. So a student who proposes every available improvement has not done better than one
 who proposes three and justifies each; they have done worse, because IR-2 and IR-6 both ask for
 justification against business need. The `standard` lines below are written to mark that.
 
-STARTING STATE. Ledgerline sits at the single-AZ cloud baseline it reached during the migration:
+STARTING STATE. Enrolline sits at the single-AZ cloud baseline it reached during the migration:
 one application instance in one availability zone, a single-AZ database, one NAT gateway. It
 runs on Amazon Linux with a managed PostgreSQL database, and the vendor supports a
 high-availability deployment with an automatic-failover standby — so database-tier resilience is
-available to the student's design if they judge it warranted. Whether it IS warranted for an
-internal business-hours system is exactly the proportionality judgement the cluster is testing.
+available to the student's design if they judge it warranted. Whether it IS warranted is exactly
+the proportionality judgement the cluster is testing, and Enrolline makes that judgement
+genuinely two-sided: for most of the year it is a quiet staff-facing back-office system where
+peak-grade resilience is hard to justify, but twice a year an intake enrolment window opens
+against externally fixed census dates, and in those weeks an outage cannot be made up later.
+A student who sizes for the quiet weeks and argues it, and a student who sizes for the intake
+and argues it, have both met the item. A student who never notices the year has two shapes
+has not.
 
 THE MARKING MODEL. Values here are ours, invented so the student has a concrete task. Each
 element carries the `uoc` items it evidences and a `standard` naming what must be true for them
@@ -39,8 +45,8 @@ from helpers import run_sheet as R  # noqa: E402  (the shared workbook engine, i
 
 SITE = "https://yat.timbaird.com"
 STATE = "s1-cl3-at1"
-PROJECT = f"{SITE}/intranet/{STATE}/projects/ledgerline-improvement"
-MIGRATION = f"{SITE}/intranet/{STATE}/projects/accounting-cloud-migration"
+PROJECT = f"{SITE}/intranet/{STATE}/projects/enrolline-improvement"
+MIGRATION = f"{SITE}/intranet/{STATE}/projects/enrolline-cloud-migration"
 ICT = f"{SITE}/intranet/{STATE}/ict"
 POLICY = f"{SITE}/intranet/{STATE}/policies"
 REFERENCE = f"{SITE}/intranet/{STATE}/reference"
@@ -49,13 +55,18 @@ REFERENCE = f"{SITE}/intranet/{STATE}/reference"
 
 SCENARIO = [
     "YAT College's offshore partnership in India has put a spotlight on the systems that support "
-    "it. Ledgerline — YAT's finance and office-administration system — was migrated to AWS in an "
-    "earlier engagement and has run there since, but it was migrated as-is: everything sits in one "
+    "it. Enrolline — YAT's student records and enrolment management system — was migrated to AWS in "
+    "an earlier engagement and has run there since, but it was migrated as-is: everything sits in one "
     "availability zone, and nothing has been revisited since the cutover.",
+    "Enrolline holds the enrolment record, student identity and USI, results, student fee invoicing "
+    "and receipting, and the data YAT reports to NCVER. It is staff-facing — admissions, student "
+    "services, faculty administration and compliance use it, and students hold no accounts. It is "
+    "not the LMS, which delivers teaching, and it is not Ledgerline, which is the general ledger; "
+    "Enrolline provisions students into the former and posts fee summaries to the latter.",
     "You are an MTS Consultant on this engagement, reporting to Pat Lin (MTS Senior Consultant). "
-    "Sam Walker (YAT ICT Manager) is your primary stakeholder, with YAT Finance as the business "
-    "owner of the system.",
-    "MTS has been engaged to confirm Ledgerline is stable, reliable, fit for purpose and compliant "
+    "Sam Walker (YAT ICT Manager) is your primary stakeholder, with Jess Tran (YAT Registrar) as the "
+    "business owner of the system.",
+    "MTS has been engaged to confirm Enrolline is stable, reliable, fit for purpose and compliant "
     "with the Indian regulatory requirements that now apply — and to improve it where it is not. "
     "What that improvement consists of is your analysis to make.",
 ]
@@ -65,12 +76,12 @@ RESOURCES = [
      f"{PROJECT}/improvement-requirements"),
     ("Indian Regulatory Requirements — the obligations the infrastructure is assessed against",
      f"{PROJECT}/indian-regulatory-requirements"),
-    ("Accounting System Infrastructure Specifications — the current as-built environment",
-     f"{ICT}/accounting-server-status-cloud"),
-    ("Accounting System Application Specification — the workload, its users and its patterns",
-     f"{ICT}/accounting-application-spec-cloud"),
-    ("Accounting System Operational Costing — what the environment costs to run today",
-     f"{ICT}/accounting-operational-costing-cloud"),
+    ("Enrolline Infrastructure Specifications — the current as-built environment",
+     f"{ICT}/enrolline-server-status-cloud"),
+    ("Enrolline Application Specification — the workload, its users and its patterns",
+     f"{ICT}/enrolline-application-spec-cloud"),
+    ("Enrolline Operational Costing — what the environment costs to run today",
+     f"{ICT}/enrolline-operational-costing-cloud"),
     ("Engagement Role Brief — your role, and what is in and out of scope for MTS",
      f"{PROJECT}/role-brief"),
 ]
@@ -84,9 +95,15 @@ INSTRUCTIONS = [
     "Work the tasks in order — each builds on the answer before it. They tell you what to decide; "
     "they do not tell you what to decide it to.",
     "There is no right answer waiting to be found. The Improvement Requirements are outcomes, not "
-    "solutions, and IR-2 asks for improvements proportionate to an internal, business-hours "
-    "finance system. Proposing every improvement available is not a better answer than proposing "
-    "three you can justify — it is a worse one.",
+    "solutions, and IR-2 asks for improvements proportionate to what this system actually is. "
+    "Proposing every improvement available is not a better answer than proposing three you can "
+    "justify — it is a worse one.",
+    "Be careful what you take 'proportionate' to mean here. Enrolline is a staff-facing system that "
+    "is idle overnight and quiet for most of the year — and for about six weeks of it, during the "
+    "intake enrolment windows and census processing, the business cannot function without it and "
+    "the deadlines are fixed outside YAT's control. Both of those are true at once. An answer that "
+    "sizes the whole year to the quiet weeks, and an answer that sizes it to the busy ones, can "
+    "each be defended; what cannot be defended is not noticing the difference.",
     "Every improvement you propose must carry a cost-versus-benefit justification (IR-6). An "
     "improvement with no cost stated is not a proposal, it is a wish.",
     "This part is analysis and design only. You are not deploying anything — AT3 deploys the "
@@ -106,42 +123,55 @@ CURRENT_ARCH_INTRO = [
 
 CURRENT_ARCH = [
     ("Region", "ap-southeast-2 (Sydney), with the whole workload in a single availability zone"),
-    ("Workload", "Ledgerline Finance & Office Suite — general ledger, accounts payable and "
-                 "receivable, student fee billing, procurement and asset management. Internal "
-                 "back-office system; payroll is outsourced and does not run here."),
-    ("Access path", "internal only — staff reach it from campus over the Site-to-Site VPN. No "
-                    "public ingress."),
+    ("Workload", "Enrolline Student Management Suite — applications and offers, enrolment, student "
+                 "identity and USI verification, results, student fee invoicing and receipting, and "
+                 "AVETMISS compliance reporting. Staff-facing back-office system; students hold no "
+                 "accounts and submit applications through the public website."),
+    ("Access path", "reached through the load balancer over HTTP. A production front door for a "
+                    "student-records system would sit behind TLS and restricted ingress; this "
+                    "baseline stops short of that."),
     ("Application tier", "Amazon Linux on general-purpose burstable instances, in an Auto Scaling "
-                         "group with min 1 / desired 1 / max 2, in ledgerline-app-a only; target "
+                         "group with min 1 / desired 1 / max 2, in enrolline-app-a only; target "
                          "tracking on CPU at 70%"),
-    ("Load balancing", "Application Load Balancer across ledgerline-public-a and -b (a load "
-                       "balancer requires two zones), HTTP :80 to ledgerline-tg"),
+    ("Load balancing", "Application Load Balancer across enrolline-public-a and -b (a load "
+                       "balancer requires two zones), HTTP :80 to enrolline-tg"),
     ("Database", "Amazon RDS for PostgreSQL, single-AZ with no standby, gp3 20 GB, encrypted, "
-                 "7-day backup retention, in ledgerline-data-a"),
-    ("Storage", "block storage only — the instance root volume and the database storage. No object "
-                "storage is in use."),
-    ("Network", "ledgerline-vpc 10.20.0.0/16; public-a/-b, app-a, data-a/-b; a single NAT gateway "
-                "in ledgerline-public-a"),
-    ("Security groups", "ledgerline-alb-sg  HTTP 80 from anywhere  ·  ledgerline-app-sg  from the "
-                        "load balancer group  ·  ledgerline-db-sg  PostgreSQL 5432 from the app "
+                 "7-day backup retention, in enrolline-data-a"),
+    ("Storage", "block storage for the instance root volume and the database, plus an Amazon S3 "
+                "document store (yat-enrolline-documents) holding scanned student attachments — ID "
+                "evidence, prior qualifications, USI evidence, support plans. ~26 GB, growing ~6 GB "
+                "a year, versioned, encrypted, public access blocked, and no lifecycle "
+                "configuration. Reached through the NAT gateway; there is no S3 VPC endpoint."),
+    ("Network", "enrolline-vpc 10.30.0.0/16; public-a/-b, app-a, data-a/-b; a single NAT gateway "
+                "in enrolline-public-a. No VPC endpoints. No flow logs, no load-balancer access "
+                "logs and no S3 access logging are configured."),
+    ("Security groups", "enrolline-alb-sg  HTTP 80 from anywhere  ·  enrolline-app-sg  from the "
+                        "load balancer group  ·  enrolline-db-sg  PostgreSQL 5432 from the app "
                         "group only"),
-    ("Monitoring", "two alarms — ledgerline-unhealthy-hosts (any unhealthy target) and "
-                   "ledgerline-db-storage-low (free storage below 15%)"),
-    ("Usage", "business hours only, Monday to Friday, roughly 07:30–18:00; effectively idle "
-              "overnight and at weekends. Month-end close is the monthly peak at 45–55 concurrent "
-              "users; end of financial year is the annual peak."),
-    ("Target availability", "99.5% business-hours service"),
+    ("Monitoring", "two alarms — enrolline-unhealthy-hosts (any unhealthy target) and "
+                   "enrolline-db-storage-low (free storage below 15%)"),
+    ("Usage", "business hours only, Monday to Friday, roughly 08:00–18:00; effectively idle "
+              "overnight and at weekends. Out of intake it carries 25–40 concurrent users. During "
+              "an intake enrolment window — the first three weeks of February and of July — that "
+              "rises to 90–110 and stays there; census processing about four weeks later is a "
+              "second, shorter spike. The application tier is provisioned for that peak and held "
+              "at that size all year."),
+    ("Target availability", "99.5% business-hours service; the Registrar expects 99.9% during an "
+                            "intake enrolment window, because enrolment and census dates are fixed "
+                            "externally and work missed inside the window cannot be made up later"),
     ("Administrative access", "Systems Manager Session Manager — no key pair, no open management "
                               "port, no bastion host"),
 ]
 
-SCOPE_NOTE = ("Your work is the cloud infrastructure. The Ledgerline application and its financial "
+SCOPE_NOTE = ("Your work is the cloud infrastructure. The Enrolline application and its student "
               "data are out of scope (IR-4) — the application continues to run unchanged, and no "
-              "financial data may be lost.")
+              "student record may be lost or altered. Student and assessment records carry a "
+              "thirty-year retention obligation and are the evidence that a qualification was "
+              "legitimately issued.")
 
 SIZING_NOTE = ("Instance and database classes throughout this environment are sized to what will "
                "actually launch in an AWS Academy Learner Lab, which caps what is available. "
-               "Ledgerline's real finance workload would warrant considerably larger. Reason about "
+               "Enrolline's real intake-window load would warrant considerably larger. Reason about "
                "sizing as you would at full scale — the reasoning is what is assessed, not the "
                "vCPU count.")
 
@@ -151,9 +181,9 @@ DESIGN = [
     # ---- element 1: analyse ----
     dict(n=1, title="Review the current architecture",
          resources=[
-             ("Accounting System Infrastructure Specifications — the environment tier by tier",
-              f"{ICT}/accounting-server-status-cloud"),
-             ("Accounting System Cloud Architecture — Baseline Design — how it was designed at "
+             ("Enrolline Infrastructure Specifications — the environment tier by tier",
+              f"{ICT}/enrolline-server-status-cloud"),
+             ("Enrolline Cloud Architecture — Baseline Design — how it was designed at "
               "migration, and why", f"{MIGRATION}/solution-design"),
              ("Network Diagram — the environment drawn out", f"{ICT}/network-diagram-cl3"),
          ],
@@ -184,28 +214,31 @@ DESIGN = [
 
     dict(n=2, title="Evaluate the architecture and identify the business impact",
          resources=[
-             ("Accounting System Application Specification — who uses it, when, and how heavily",
-              f"{ICT}/accounting-application-spec-cloud"),
+             ("Enrolline Application Specification — who uses it, when, and how heavily",
+              f"{ICT}/enrolline-application-spec-cloud"),
              ("Improvement Requirements — the outcomes the current state is judged against",
               f"{PROJECT}/improvement-requirements"),
          ],
          prompt="Now evaluate it. For each design decision from task 1, say what it means for the "
                 "business — not what it means technically. 'Single availability zone' is a fact; "
-                "'a zone failure stops month-end close and finance cannot pay suppliers' is a "
-                "business impact.",
+                "'a zone failure stops enrolment processing and students cannot be enrolled before "
+                "census' is a business impact.",
          uoc=["ICTCLD504 PC 1.2", "ICTCLD504 FS Problem solving"],
-         standard="impacts are expressed in business terms and are proportionate to what Ledgerline "
-                  "actually is — an internal, business-hours system with outsourced payroll and a "
-                  "99.5% target. A student who describes a zone outage as catastrophic for a system "
-                  "that is idle overnight and at weekends has not evaluated it against the business; "
-                  "neither has one who dismisses it because the system is 'only internal'. PC 1.2 is "
-                  "about the impact of DESIGN DECISIONS, so each row must trace to one.",
+         standard="impacts are expressed in business terms and are proportionate to what Enrolline "
+                  "actually is — a staff-facing system, idle overnight and at weekends, quiet for "
+                  "most of the year, and business-critical for about six weeks of it. A student who "
+                  "describes a zone outage as uniformly catastrophic has not evaluated it against "
+                  "the business; neither has one who dismisses it because the system is 'only "
+                  "internal' and so misses that census dates are externally fixed. The strongest "
+                  "answers say WHEN the impact bites. PC 1.2 is about the impact of DESIGN "
+                  "DECISIONS, so each row must trace to one.",
          given=1, blank_rows=6,
          table=(["Design decision", "Business impact if it fails or falls short", "How serious"],
                 [["Single availability zone",
-                  "a zone failure takes finance offline until it is rebuilt elsewhere; during "
-                  "month-end close that stops supplier payments and billing",
-                  "significant, but bounded by business hours"],
+                  "a zone failure takes admissions and student services offline until it is rebuilt "
+                  "elsewhere; inside an intake enrolment window that stops enrolment against a "
+                  "census date that cannot be moved",
+                  "bounded by business hours, but severe inside an intake window"],
                  ["Single application instance",
                   "an instance failure takes the system down until the ASG replaces it — minutes, "
                   "not hours", "moderate; the ASG already limits it"],
@@ -217,7 +250,7 @@ DESIGN = [
                   "loss of outbound access — patching and external integrations stop; the system "
                   "itself keeps serving users", "low"],
                  ["HTTP only, no TLS",
-                  "finance data crosses the campus network unencrypted", "significant for a finance "
+                  "student data crosses the campus network unencrypted", "significant for a finance "
                                                                         "system"],
                  ["Two alarms only",
                   "problems that are not an unhealthy host or low storage are found by users "
@@ -237,7 +270,7 @@ DESIGN = [
          uoc=["ICTCLD504 AC 5", "ICTCLD504 FS Reading"],
          standard="the student works from the supplied determination rather than reasoning about "
                   "the law themselves, identifies the gaps that actually apply to an internal "
-                  "finance system, and proposes infrastructure changes rather than policy. A student "
+                  "student records system, and proposes infrastructure changes rather than policy. A student "
                   "who advises on the legal position has stepped outside the engagement's scope, "
                   "which the Role Brief and IR-3 both set explicitly.",
          given=1, blank_rows=5,
@@ -278,7 +311,7 @@ DESIGN = [
                  ["Redundant outbound path",
                   "removes the single NAT gateway exposure", "a NAT gateway per zone"],
                  ["Transport encryption",
-                  "protects finance data in transit", "TLS terminating at the load balancer"],
+                  "protects student data in transit", "TLS terminating at the load balancer"],
                  ["Infrastructure as code",
                   "reproducibility, and the ability to rebuild elsewhere", "the whole environment; "
                                                                           "IR-5 asks for it"],
@@ -288,25 +321,29 @@ DESIGN = [
 
     dict(n=5, title="Assess the benefits against the current business model",
          resources=[
-             ("Accounting System Operational Costing — what this environment costs today",
-              f"{ICT}/accounting-operational-costing-cloud"),
+             ("Enrolline Operational Costing — what this environment costs today",
+              f"{ICT}/enrolline-operational-costing-cloud"),
          ],
          prompt="Determine and assess what the options from task 4 actually give YAT, against the "
-                "way this business runs. Ledgerline is used by finance staff during business hours "
-                "and is idle the rest of the time — that shapes what an improvement is worth. Say "
-                "what each option costs and what it buys.",
+                "way this business runs. Enrolline is used by admissions, student services and "
+                "faculty administration during business hours and is idle the rest of the time — "
+                "and its load is concentrated into two intake windows a year. That shapes what an "
+                "improvement is worth. Say what each option costs and what it buys.",
          uoc=["ICTCLD504 PC 1.4", "ICTCLD504 KE 3", "ICTCLD504 KE 5"],
-         standard="each option carries a cost posture and a benefit stated against Ledgerline's "
-                  "actual operating profile. The strongest answers notice that an idle-overnight, "
-                  "business-hours system changes the value of always-on redundancy, and that some "
-                  "cloud benefits (elasticity) matter less here than others (managed recovery). "
+         standard="each option carries a cost posture and a benefit stated against Enrolline's "
+                  "actual operating profile. The strongest answers notice that an idle-overnight "
+                  "system changes the value of always-on redundancy, that an improvement's worth "
+                  "may differ sharply between intake weeks and the rest of the year, and that some "
+                  "cloud benefits matter more here than others — elasticity is worth a great deal "
+                  "to a workload with two known annual peaks, which is a different argument from "
+                  "the one a flat workload would make. "
                   "KE 3 and KE 5 are evidenced by the student reasoning about what cloud adoption "
                   "and migration bring to THIS system rather than in general.",
          given=1, blank_rows=6,
          table=(["Option", "What it costs", "What it buys, for this business"],
                 [["Multi-AZ application tier",
                   "a second running instance — roughly doubles application compute",
-                  "removes the zone and instance exposure; matters most during month-end close"],
+                  "removes the zone and instance exposure; matters most inside an intake window"],
                  ["Database standby",
                   "roughly doubles database cost, running continuously",
                   "automatic failover instead of a restore measured in hours"],
@@ -316,7 +353,7 @@ DESIGN = [
                  ["NAT gateway per zone", "a second gateway, hourly",
                   "outbound survives a zone failure; low value if the tier does not"],
                  ["TLS at the load balancer", "a certificate — effectively nothing",
-                  "finance data encrypted in transit; the cheapest improvement on this list"],
+                  "student data encrypted in transit; the cheapest improvement on this list"],
                  ["Infrastructure as code", "effort now, not run cost",
                   "reproducibility, reviewable change, and a rebuild path"]])),
 
@@ -331,24 +368,24 @@ DESIGN = [
                 "demonstrate whether it was met.",
          uoc=["ICTCLD504 PC 1.6", "ICTCLD504 PE 3"],
          standard="a goal is set in each of the four areas, each measurable and each defensible "
-                  "against Ledgerline's profile. 'Improve reliability' is not a goal; 'business-hours "
+                  "against Enrolline's profile. 'Improve reliability' is not a goal; 'business-hours "
                   "availability of 99.9%, up from 99.5%' is. PE 3 requires the student to determine "
                   "metrics AND business goals, so the pairing must be visible. Goals wildly beyond "
-                  "the system's need (99.99% for a business-hours finance system) fail IR-2 and "
+                  "the system's need (99.99% for a staff-facing student records system) fail IR-2 and "
                   "should be marked as not proportionate.",
          given=1, blank_rows=5,
          table=(["Area", "Business goal", "Why this level, for this system"],
                 [["Reliability", "raise business-hours availability from 99.5% to 99.9%",
-                  "a zone or instance failure should not stop finance; overnight outages cost "
-                  "nothing"],
+                  "a zone or instance failure should not stop enrolment; overnight outages cost "
+                  "nothing, and the Registrar already expects 99.9% inside an intake window"],
                  ["Recovery", "restore service within 4 hours, losing no more than 1 hour of "
-                              "financial data",
-                  "a business day is the unit that matters; financial records cannot be lost"],
-                 ["Security", "no finance data in transit unencrypted",
+                              "student records",
+                  "a business day is the unit that matters; student records cannot be lost"],
+                 ["Security", "no student data in transit unencrypted",
                   "cheap to fix and indefensible to leave"],
                  ["Cost", "no more than a modest increase in monthly run cost",
                   "IR-2 and IR-6 — proportionate to an internal system"],
-                 ["Performance", "month-end close performance no worse than today",
+                 ["Performance", "intake-window performance no worse than today",
                   "the peak that matters; nothing suggests it is currently a problem"]])),
 
     dict(n=7, title="Confirm your design decisions against business needs",
@@ -360,25 +397,31 @@ DESIGN = [
          standard="the student commits to a proportionate set and can defend the exclusions. There "
                   "is no correct set: converting the database to a standby is defensible on the "
                   "recovery goal, and so is leaving it single-AZ with a tested restore if the cost "
-                  "is argued against a business-hours system. What fails PC 1.5 is a proposal set "
-                  "with no rejected options beside it, or one whose items do not trace to a task 6 "
-                  "goal.",
+                  "is argued — though that argument is harder here than it looks, because the "
+                  "restore has to complete inside an intake window against a census date nobody at "
+                  "YAT can move. Either position can pass; a student who reaches the cheaper one "
+                  "without confronting the census constraint has not made the argument. What fails "
+                  "PC 1.5 is a proposal set with no rejected options beside it, or one whose items "
+                  "do not trace to a task 6 goal.",
          given=1, blank_rows=7,
          table=(["Proposing / not proposing", "Improvement", "The business need it serves"],
                 [["Proposing", "spread the application tier across two availability zones",
                   "the reliability goal — removes the zone and instance exposure"],
                  ["Proposing", "TLS terminating at the load balancer",
-                  "the security goal — finance data encrypted in transit"],
+                  "the security goal — student data encrypted in transit"],
                  ["Proposing", "broader monitoring against the metrics set in task 8",
                   "reliability, and AT3 has to demonstrate the goals were met"],
                  ["Proposing", "define the environment as infrastructure as code",
                   "IR-5 — operable and reproducible by YAT ICT"],
                  ["Decide and justify", "the database — standby, or backup and tested restore",
                   "the recovery goal, weighed against cost; either is defensible if argued"],
-                 ["Not proposing", "a second region",
-                  "far beyond an internal business-hours system; fails IR-2"],
+                 ["Not proposing", "a second region for the whole system",
+                  "beyond what a staff-facing system with a two-hour recovery objective needs; "
+                  "fails IR-2. Note this is separate from the India log residency, which IR-3 "
+                  "requires"],
                  ["Not proposing", "larger instance classes",
-                  "capacity is not the constraint — the specifications say so"]])),
+                  "capacity is not the constraint — the specifications say so. The question is "
+                  "when the capacity runs, not how big it is"]])),
 
     # ---- element 2: design ----
     dict(n=8, title="Evaluate and confirm the performance metrics",
@@ -482,8 +525,10 @@ DESIGN = [
                  ["NAT gateway", "one per zone", "outbound continues from the surviving zone"],
                  ["Load balancer", "unchanged — already spans two zones",
                   "the service handles this itself"],
-                 ["Scalability at month-end", "existing target tracking, maximum raised",
-                  "the group scales to absorb the close; unchanged in mechanism"]])),
+                 ["Scalability at intake", "existing target tracking, maximum raised, capacity "
+                  "scheduled against the published academic calendar",
+                  "the peaks are known months ahead, so capacity can be in place before the load "
+                  "arrives rather than chased after users are already queuing"]])),
 
     dict(n=12, title="Design — cost optimisation and monitoring",
          prompt="Two things that pull in opposite directions. Say how you are keeping the cost of "
@@ -491,16 +536,22 @@ DESIGN = [
                 "demonstrate the goals from task 6 were actually met. A goal nobody can measure is "
                 "not a goal.",
          uoc=["ICTCLD504 PC 2.3", "ICTCLD504 KE 9"],
-         standard="the student proposes at least one genuine cost measure that suits a "
-                  "business-hours system (right-sizing, scheduled scale-down outside business "
-                  "hours, or accepting a slower recovery instead of a standby) and designs "
-                  "monitoring that maps onto the task 8 metrics. Monitoring that does not measure "
-                  "the stated goals has not met the item.",
+         standard="the student proposes at least one genuine cost measure that suits this system's "
+                  "actual shape — scheduled scale-down outside business hours, capacity scheduled "
+                  "against the academic calendar so peak size is not held for forty-six quiet "
+                  "weeks, storage lifecycle tiering under the retention obligation, or accepting a "
+                  "slower recovery instead of a standby — and designs monitoring that maps onto the "
+                  "task 8 metrics. The costing document states the tier is provisioned for the "
+                  "intake peak and held there all year; a student who proposes no measure touching "
+                  "that has missed the largest saving in front of them. Monitoring that does not "
+                  "measure the stated goals has not met the item.",
          given=1, blank_rows=6,
          table=(["Item", "Your design", "Why"],
                 [["Cost — scaling profile",
-                  "the tier scales down outside business hours; the system is idle overnight",
-                  "the largest available saving, and it costs nothing in service"],
+                  "the tier scales down outside business hours, and capacity is scheduled against "
+                  "the intake calendar rather than held at peak all year",
+                  "the largest available saving, and it costs nothing in service because the peaks "
+                  "are published months ahead"],
                  ["Cost — right-sizing",
                   "keep the current instance families; capacity is not the constraint",
                   "IR-6 — no cost without benefit"],
@@ -515,8 +566,8 @@ DESIGN = [
 
     dict(n=13, title="Cost-benefit justification",
          resources=[
-             ("Accounting System Operational Costing — the current run cost, and the basis for "
-              "your comparison", f"{ICT}/accounting-operational-costing-cloud"),
+             ("Enrolline Operational Costing — the current run cost, and the basis for "
+              "your comparison", f"{ICT}/enrolline-operational-costing-cloud"),
          ],
          prompt="IR-6 requires every improvement to be justified on cost versus benefit, with its "
                 "ongoing operating-cost impact made explicit. Do that for each improvement you are "
@@ -536,11 +587,12 @@ DESIGN = [
                  ["Second NAT gateway", "increase — hourly per gateway",
                   "outbound survives a zone failure",
                   "small, and pointless to spread the tier without it"],
-                 ["TLS listener", "negligible", "finance data encrypted in transit",
+                 ["TLS listener", "negligible", "student data encrypted in transit",
                   "cheapest improvement on the list; indefensible to skip"],
                  ["The database decision", "carried from task 7", "", ""],
                  ["Scheduled scale-down", "decrease", "offsets part of the above",
-                  "the system is genuinely idle overnight and at weekends"],
+                  "the system is genuinely idle overnight and at weekends, and outside the intake "
+                  "windows it carries about a third of its peak load on peak-sized capacity"],
                  ["Infrastructure as code", "no run cost; effort now",
                   "reproducibility and reviewable change", "IR-5 asks for it"],
                  ["Extended monitoring", "small increase",
@@ -554,7 +606,7 @@ DESIGN = [
          standard="the diagram shows the improved architecture consistently with tasks 9 to 12, "
                   "with both zones and the changed components identifiable. This is where the design "
                   "is demonstrated as an architecture rather than as a set of decisions.",
-         diagram="the improved Ledgerline architecture — both zones, every tier, and what is new"),
+         diagram="the improved Enrolline architecture — both zones, every tier, and what is new"),
 
     dict(n=15, title="Document and justify the proposed architecture",
          prompt="Justify the architecture you have documented in tasks 9 to 14. For each significant "
@@ -570,8 +622,8 @@ DESIGN = [
                   "improvements on the grounds that they are best practice, has not met PC 2.4.",
          points=[
              "each improvement is tied to a specific business goal from task 6, not to convention",
-             "the database decision is argued at length — cost against recovery time, for a "
-             "business-hours system with outsourced payroll",
+             "the database decision is argued at length — cost against recovery time, for a system "
+             "that is quiet most of the year and cannot afford to be down inside an intake window",
              "the improvements NOT proposed appear with their reasons; IR-2 is assessed here as "
              "much as anywhere",
              "the existing strengths are named as deliberately retained, not overlooked",
@@ -645,40 +697,51 @@ QUESTIONS = [
                 "products your design uses, and for each say what it contributes here.",
          uoc=["ICTCLD504 KE 1", "ICTCLD504 KE 2"],
          standard="real standards (TLS, HTTP, SQL, the availability-zone model) and real product "
-                  "categories (managed relational database, load balancer, auto scaling, block "
-                  "storage) are named and tied to the student's own design. A list with no "
+                  "categories (managed relational database, load balancer, auto scaling, block and "
+                  "object storage) are named and tied to the student's own design. A list with no "
                   "connection to their architecture has not met the contextual bar.",
          points=[
-             "TLS for transport, and why it matters for a finance system on an internal network",
+             "TLS for transport, and why it matters for a system holding student identity evidence",
              "the managed relational database — what YAT gets by not running PostgreSQL themselves",
              "the load balancer and auto scaling group as the standard availability pattern",
-             "block storage versus object storage, and why this system uses only the first",
+             "block storage for the instance and database, object storage for the document store — "
+             "and which job each is doing here",
              "the availability-zone model as the platform primitive the whole design rests on",
          ]),
 
-    dict(n=2, title="Where would object storage be the right answer, and why not here?",
-         prompt="Ledgerline uses no object storage. Contrast it with a system that depends on object "
-                "storage for static content — the YAT public website is the obvious example — and "
-                "explain how you would provision that storage and serve content from it if this "
-                "system needed it.",
+    dict(n=2, title="Enrolline uses object storage. The website depends on it. What is the difference?",
+         prompt="Enrolline holds scanned student attachments in an S3 document store, but its system "
+                "of record is the relational database. The YAT public website uses object storage "
+                "differently again — it serves public static content from it. Explain how object "
+                "storage is provisioned and content served from it, and set out what actually "
+                "differs between those two uses, including what that difference means for how each "
+                "system's storage should be configured.",
          uoc=["ICTCLD504 KE 6"],
-         standard="the student explains object storage for static content — durable, served "
-                  "independently of any instance, cheap per gigabyte, able to serve a static site "
-                  "directly or through a content delivery network — and correctly identifies that "
-                  "Ledgerline has no static public content and would gain nothing. Proposing object "
-                  "storage for Ledgerline anyway would fail IR-2 and should be marked accordingly.",
+         standard="the student explains object storage concretely — a bucket, objects addressed by "
+                  "key, durability, access control, storage classes, cost per gigabyte — and then "
+                  "draws the real distinction: the website serves objects PUBLICLY to end users "
+                  "(so it cares about public read access, a content delivery network in front, and "
+                  "cache behaviour), while Enrolline's store is PRIVATE and reached only by the "
+                  "application on behalf of a staff user (so it cares about blocked public access, "
+                  "a private network path, access logging, and lifecycle tiering under a long "
+                  "retention obligation). A student who treats the two as the same use, or who "
+                  "proposes public access or a CDN for Enrolline's student identity evidence, has "
+                  "not met the item — and the latter is a serious error, not a stylistic one.",
          points=[
-             "static assets served straight from the store, with no server in the path",
-             "every instance sees the same content — the store is not tied to an instance",
+             "the bucket and object model, and addressing an object by key rather than by path on a disk",
+             "every instance sees the same content — the store is not tied to any one instance",
              "durability and cost per gigabyte compared with block storage",
-             "fronting it with a content delivery network for a geographically spread audience",
-             "why Ledgerline gains nothing: an internal, dynamic, form-driven finance application "
-             "with no static public content",
+             "the website's use: public read, served directly or fronted by a content delivery "
+             "network for a geographically spread audience",
+             "Enrolline's use: private, blocked from public access, reached by the application over "
+             "a private path, and carrying personal information",
+             "why the retention obligation drives lifecycle tiering rather than deletion — thirty "
+             "years of attachments that are almost never read again, but can never be removed",
          ]),
 
-    dict(n=3, title="What did cloud adoption change for Ledgerline, and what would migrating "
+    dict(n=3, title="What did cloud adoption change for Enrolline, and what would migrating "
                     "further change?",
-         prompt="Ledgerline moved from a server under a desk to a managed cloud environment. Explain "
+         prompt="Enrolline moved from a server under a desk to a managed cloud environment. Explain "
                 "what that change actually gave YAT, what it did not, and what principles would "
                 "apply if YAT migrated more of this system — for instance to a fully managed or "
                 "serverless model.",
@@ -689,14 +752,15 @@ QUESTIONS = [
                   "assess suitability first, migrate in stages, keep the application unchanged where "
                   "the vendor constrains it, prove recovery before decommissioning.",
          points=[
-             "what was gained: managed database operations, elasticity for month-end, no hardware "
-             "refresh cycle",
+             "what was gained: managed database operations, elasticity available for the intake "
+             "peaks, no hardware refresh cycle",
              "what was not: the single-zone design came across with it — a lift and shift moves the "
              "architecture too",
              "IR-4 constrains further change: the application runs unchanged",
              "migration principles — assess first, stage the work, prove recovery before you rely "
              "on it",
-             "where a further move would and would not pay for an internal business-hours system",
+             "where a further move would and would not pay for a staff-facing system with two known "
+             "annual peaks",
          ]),
 ]
 
@@ -726,7 +790,7 @@ def render(doc, h1, h2, mode="student", design=None, approval=None, questions=No
     """Render AT1 into `doc`. mode = student | assessor.
 
     The content lists default to AT1's own. The PRACTICE sheet passes its own — same renderer,
-    same shapes, the website instead of Ledgerline — so the two cannot drift structurally even
+    same shapes, the website instead of Enrolline — so the two cannot drift structurally even
     though every value in them differs.
     """
     DESIGN_ = DESIGN if design is None else design

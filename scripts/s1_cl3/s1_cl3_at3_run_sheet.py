@@ -35,7 +35,7 @@ from helpers import run_sheet as R  # noqa: E402  (the shared workbook engine, i
 
 SITE = "https://yat.timbaird.com"
 STATE = "s1-cl3-at3"
-PROJECT = f"{SITE}/intranet/{STATE}/projects/ledgerline-improvement"
+PROJECT = f"{SITE}/intranet/{STATE}/projects/enrolline-improvement"
 ICT = f"{SITE}/intranet/{STATE}/ict"
 POLICY = f"{SITE}/intranet/{STATE}/policies"
 
@@ -46,8 +46,10 @@ SCENARIO = [
     "This is the deployment phase: you stand the environment up, apply the approved improvement, "
     "prove it does what you said it would, and hand it over.",
     "You are an MTS Consultant reporting to Pat Lin (MTS Senior Consultant). Sam Walker (YAT ICT "
-    "Manager) accepts the completed work. YAT Finance depend on Ledgerline during business hours, "
-    "so your work happens inside a maintenance window and outside the Restricted Period.",
+    "Manager) accepts the completed work. Admissions and student services depend on Enrolline "
+    "during business hours, so your work happens inside a maintenance window and outside the "
+    "Restricted Period — the intake enrolment windows, the week either side of a census date, and "
+    "the January AVETMISS submission window.",
     "You deploy what was approved — not a new design, and not everything the team wrote. If your "
     "sign-off in AT1 approved some improvements and not others, that approved list is your scope.",
 ]
@@ -55,8 +57,8 @@ SCENARIO = [
 RESOURCES = [
     ("Improvement Requirements — the outcomes IR-1 to IR-7 the deployed result is judged against",
      f"{PROJECT}/improvement-requirements"),
-    ("Accounting System Infrastructure Specifications — the baseline you are deploying and improving",
-     f"{ICT}/accounting-server-status-cloud"),
+    ("Enrolline Infrastructure Specifications — the baseline you are deploying and improving",
+     f"{ICT}/enrolline-server-status-cloud"),
     ("Change Management Procedure — the governance a production-affecting change sits under, and "
      "the Restricted Period", f"{POLICY}/change-management"),
     ("Records Management Policy — where completed engagement documentation is filed",
@@ -82,7 +84,7 @@ INSTRUCTIONS = [
     "that, and troubleshooting is part of what is assessed.",
 ]
 
-REGION_NOTE = ("The scenario places Ledgerline in Sydney — [scenario: ap-southeast-2 | deploy: "
+REGION_NOTE = ("The scenario places Enrolline in Sydney — [scenario: ap-southeast-2 | deploy: "
                "us-east-1]. Build in us-east-1 in the AWS Academy Learner Lab. Where a task refers "
                "to availability zones, read the first two zones of whichever region you are in.")
 
@@ -91,7 +93,7 @@ REGION_NOTE = ("The scenario places Ledgerline in Sydney — [scenario: ap-south
 TASKS = [
     dict(n=1, title="Deploy the baseline environment",
          prompt="Deploy the assessor-provided baseline template. This builds the current single-AZ "
-                "Ledgerline environment — the state your AT1 analysis was written against. Confirm "
+                "Enrolline environment — the state your AT1 analysis was written against. Confirm "
                 "it came up before you change anything, because everything after this is measured "
                 "against it.",
          uoc=["ICTCLD504 PE 4"],
@@ -210,9 +212,9 @@ TASKS = [
                    "the security improvement you deployed, in effect"]),
 
     dict(n=7, title="Test and demonstrate scalability",
-         prompt="Demonstrate that the environment scales. Ledgerline's real scaling event is "
-                "month-end close, so make the tier scale — generate load, or change the desired "
-                "capacity — and record what happened and how long it took.",
+         prompt="Demonstrate that the environment scales. Enrolline's real scaling event is the "
+                "intake enrolment window, so make the tier scale — generate load, or change the "
+                "desired capacity — and record what happened and how long it took.",
          uoc=["ICTCLD504 PC 3.3"],
          standard="the student causes a scaling event and observes it, recording the trigger, the "
                   "response and the time taken. Either route is acceptable — generated load is the "
@@ -223,14 +225,14 @@ TASKS = [
                 [["Scale out", "", "", ""],
                  ["Service during scale-out", "requested the application throughout", "", ""],
                  ["Scale in", "", "", ""],
-                 ["Behaviour against the month-end profile",
-                  "what this means for the close period", "", ""]]),
+                 ["Behaviour against the intake profile",
+                  "what this means for an intake enrolment window", "", ""]]),
          evidence=["the scaling event, showing the group before and after"]),
 
     dict(n=8, title="Test and demonstrate cost optimisation",
          resources=[
-             ("Accounting System Operational Costing — the cost basis you compared against in AT1",
-              f"{ICT}/accounting-operational-costing-cloud"),
+             ("Enrolline Operational Costing — the cost basis you compared against in AT1",
+              f"{ICT}/enrolline-operational-costing-cloud"),
          ],
          prompt="Demonstrate the cost position of what you deployed. Show what the improvement "
                 "actually costs to run against what you estimated in AT1, and show any cost measure "
@@ -294,7 +296,7 @@ TASKS = [
                 "possible — it is what you would advise a client you have just spent a project "
                 "with, in the order you would advise it.",
          uoc=["ICTCLD504 PC 4.2"],
-         standard="the strategies are specific to Ledgerline's actual position after this "
+         standard="the strategies are specific to Enrolline's actual position after this "
                   "deployment, prioritised, and each carries a benefit. Sensible content: whatever "
                   "was proposed but not approved, recovery testing on a schedule, extending "
                   "infrastructure as code coverage, and the point at which the application itself "
@@ -371,16 +373,18 @@ QUESTIONS = [
          uoc=["ICTCLD504 KE 10", "ICTCLD504 FS Self-management"],
          standard="the student distinguishes categories of measurement — availability, "
                   "performance/latency, utilisation, error rate, cost — names real platform metrics "
-                  "for each, and selects a proportionate set for an internal business-hours system. "
-                  "Proposing exhaustive monitoring for Ledgerline repeats the gold-plating IR-2 "
-                  "warns against.",
+                  "for each, and selects a proportionate set for a staff-facing system whose load "
+                  "concentrates in known windows. Proposing exhaustive monitoring for Enrolline "
+                  "repeats the gold-plating IR-2 warns against; so does monitoring that would not "
+                  "tell anyone the system was struggling on the second day of an intake window.",
          points=[
              "availability: healthy target count, per zone",
              "performance: response time and request rate at the load balancer",
              "utilisation: CPU and database connections, as the scaling signals",
              "errors: application and database error rates",
              "cost: a budget alert on the tagged resources",
-             "what to leave out for a business-hours internal system, and why",
+             "what to leave out for a staff-facing system, and why",
+             "what deserves closer attention during an intake enrolment window than outside one",
          ]),
 ]
 

@@ -2,29 +2,37 @@
 """The S1-CL3 AT1 PRACTICE design run sheet — content.
 
 Same shape as the AT1 assessment workbook, different everything else. The system being
-improved is the public website, not Ledgerline.
+improved is the public website, not Enrolline.
 
 WHY THE WEBSITE IS A DIFFERENT IMPROVEMENT PROBLEM — and these are the reasons an answer
 worked out here cannot be transposed onto the assessment, or the reverse:
 
-  who reaches it     Ledgerline is internal: campus VPN only, no public ingress, and that is
+  who reaches it     Enrolline is internal: campus VPN only, no public ingress, and that is
                      the strongest thing about it. The website is open to the internet,
                      anonymous, and exposed to bots, scraping and form spam by design. The
                      security task is a different task.
-  when it runs       Ledgerline is business hours and genuinely idle overnight, which makes
+  when it runs       Enrolline is business hours and genuinely idle overnight, which makes
                      scheduled scale-down the biggest cost lever available. The website is
                      24x7 with an international audience — that lever does not exist here,
                      so the cost task has to find different ones.
-  what is there      Ledgerline already has a load balancer and an Auto Scaling group; its
+  what is there      Enrolline already has a load balancer and an Auto Scaling group; its
                      gap is that they only span one zone. The website has NEITHER — one EC2
                      instance IS the website, with HTTPS terminating on it. So the compute
                      design is not "spread what exists across two zones", it is "there is no
                      tier here yet".
-  where files live   Ledgerline has block storage only. The website serves uploaded media
-                     from the instance's own disk, which stops being viable the moment there
-                     is more than one instance — a problem Ledgerline does not have.
-  the peak           month-end close and end of financial year, versus the intake windows
-                     IR-7 forbids changing during.
+  where files live   Both use object storage, but for opposite jobs, and that is the point.
+                     Enrolline's bucket is PRIVATE — scanned student identity evidence the
+                     application reads on a staff user's behalf, blocked from public access,
+                     under a thirty-year retention obligation. The website serves uploaded
+                     media PUBLICLY to end users, and today serves it from the instance's own
+                     disk, which stops being viable the moment there is more than one
+                     instance. So Enrolline's storage question is access path, logging and
+                     lifecycle tiering; the website's is "get it off the instance at all".
+  the peak           Enrolline's peak is STAFF TRANSACTION load — admissions processing
+                     enrolments inside a three-week window against a fixed census date.
+                     The website's is ANONYMOUS PUBLIC traffic when courses are advertised.
+                     Same time of year, completely different load, and they scale on
+                     different signals.
 
 WHAT PRACTICE ADDS: every task is presented exactly as the assessment presents it, then adds
 a "Things to consider" block — leading questions, pointed enough that a student paying
@@ -393,7 +401,7 @@ DESIGN = [
                    "The enquiry form is a public form on the open internet. What happens to it "
                    "today when someone points a script at it?",
                    "Administrative access is SSH from an allow-list. Compare that with how the "
-                   "LMS and Ledgerline are administered. Is there a better answer available?",
+                   "LMS and Enrolline are administered. Is there a better answer available?",
                    "TLS already exists here — it terminates on the instance. Is that a strength, "
                    "or does it become a problem in your task 9 design?",
                    "Think in layers: network, transport, application, identity, data. A proposal "

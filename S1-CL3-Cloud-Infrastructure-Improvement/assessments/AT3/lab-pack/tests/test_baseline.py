@@ -1,4 +1,4 @@
-"""Structural tests of the AT3 Ledgerline lab-pack templates - run with NO AWS account.
+"""Structural tests of the AT3 Enrolline lab-pack templates - run with NO AWS account.
 
 Asserts the invariants that make this a valid existing-state baseline + a valid improvement
 change-set, honouring the AWS Academy constraints and - critically - that the improvement actually
@@ -162,3 +162,52 @@ def test_templates_are_pure_ascii():
             raw.decode("ascii")
         except UnicodeDecodeError as exc:
             raise AssertionError(f"{path.name} contains a non-ASCII byte at offset {exc.start}") from exc
+
+
+# ---- the improvement's other three components (network, compute scheduling, storage) ----
+
+def test_improved_adds_s3_gateway_endpoint():
+    # Storage traffic must stop leaving the VPC through the NAT Gateway.
+    assert not _of_type(_load(BASELINE), "AWS::EC2::VPCEndpoint"), \
+        "the baseline must have no VPC endpoint - that absence is what the improvement closes"
+    endpoints = _of_type(_load(IMPROVED), "AWS::EC2::VPCEndpoint")
+    assert endpoints, "improved.yaml must add a VPC endpoint for S3"
+    ep = next(iter(endpoints.values()))["Properties"]
+    assert ep["VpcEndpointType"] == "Gateway", "an S3 endpoint is a Gateway endpoint, not Interface"
+    assert ep.get("RouteTableIds"), "a Gateway endpoint is useless without a route table association"
+
+
+def test_improved_adds_vpc_flow_logs():
+    # DPDP security safeguards assume breach detection; the baseline keeps no network record.
+    assert not _of_type(_load(BASELINE), "AWS::EC2::FlowLog"), \
+        "the baseline must have no flow logs - that absence is the compliance gap"
+    flow_logs = _of_type(_load(IMPROVED), "AWS::EC2::FlowLog")
+    assert flow_logs, "improved.yaml must enable VPC flow logs"
+    fl = next(iter(flow_logs.values()))["Properties"]
+    assert fl["LogDestinationType"] == "s3", \
+        "flow logs must go to S3 - a CloudWatch destination needs an IAM role the lab cannot create"
+    assert fl["TrafficType"] == "ALL"
+
+
+def test_improved_adds_scheduled_scaling():
+    # The intake peaks are published on the academic calendar, so capacity is scheduled ahead of
+    # them rather than chased reactively by the CPU policy.
+    assert not _of_type(_load(BASELINE), "AWS::AutoScaling::ScheduledAction"), \
+        "the baseline holds peak capacity year-round - it schedules nothing"
+    actions = _of_type(_load(IMPROVED), "AWS::AutoScaling::ScheduledAction")
+    assert len(actions) >= 2, "scheduling needs both a scale-up and a scale-down action"
+    desired = sorted(a["Properties"]["DesiredCapacity"] for a in actions.values())
+    assert desired[0] < desired[-1], \
+        "the scheduled actions must actually differ in capacity, or they save nothing"
+
+
+def test_improved_tiers_attachment_storage():
+    # 30-year retention means nothing is ever deleted; tiering is the only lever on storage cost.
+    imp_buckets = _of_type(_load(IMPROVED), "AWS::S3::Bucket")
+    attachments = [b for n, b in imp_buckets.items() if "Attachment" in n]
+    assert attachments, "improved.yaml must still carry the student document attachment bucket"
+    rules = attachments[0]["Properties"]["LifecycleConfiguration"]["Rules"]
+    transitions = [t for r in rules for t in r.get("Transitions", [])]
+    assert transitions, "the attachment bucket must tier objects as their access pattern falls away"
+    assert not any("Expiration" in r for r in rules), \
+        "student records are retained 30 years - the lifecycle must never expire an attachment"

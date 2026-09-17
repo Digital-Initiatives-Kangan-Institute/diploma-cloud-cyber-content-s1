@@ -1,7 +1,7 @@
 AWSTemplateFormatVersion: '2010-09-09'
 
 Description: >-
-  YAT Ledgerline (Accounting System) - AT3 existing-state baseline (single-AZ). Deploy this at the
+  YAT Enrolline (Enrolline) - AT3 existing-state baseline (single-AZ). Deploy this at the
   start of AT3 for the known starting environment, then apply the approved improvement as a
   CloudFormation change-set (improved.yaml) to the SAME stack. Design region ap-southeast-2 (Sydney);
   deploys to us-east-1 in the Learner Lab.
@@ -29,14 +29,14 @@ Parameters:
   InstanceType:
     Type: String
     Default: t3.micro
-    Description: Ledgerline application tier EC2 instance type (AWS Academy may restrict types).
+    Description: Enrolline application tier EC2 instance type (AWS Academy may restrict types).
 
   DBEngine:
     Type: String
     Default: postgres
     AllowedValues: [postgres]
     Description: >-
-      RDS engine. Ledgerline runs on Amazon RDS for PostgreSQL (see the Accounting System
+      RDS engine. Enrolline runs on Amazon RDS for PostgreSQL (see the Enrolline
       Infrastructure Specifications). Must match the value used for the other template in this pack -
       Engine is a replacement property, so a mismatch destroys and rebuilds the database instead of
       updating it in place.
@@ -77,19 +77,19 @@ Resources:
   Vpc:
     Type: AWS::EC2::VPC
     Properties:
-      CidrBlock: 10.0.0.0/16
+      CidrBlock: 10.30.0.0/16
       EnableDnsHostnames: true
       EnableDnsSupport: true
       Tags:
-        - { Key: Name, Value: !Sub 'ledgerline-${EnvName}' }
-        - { Key: Project, Value: YAT-Ledgerline }
+        - { Key: Name, Value: !Sub 'enrolline-${EnvName}' }
+        - { Key: Project, Value: YAT-Enrolline }
         - { Key: Environment, Value: !Ref EnvName }
 
   InternetGateway:
     Type: AWS::EC2::InternetGateway
     Properties:
       Tags:
-        - { Key: Name, Value: !Sub 'ledgerline-igw-${EnvName}' }
+        - { Key: Name, Value: !Sub 'enrolline-igw-${EnvName}' }
 
   IgwAttachment:
     Type: AWS::EC2::VPCGatewayAttachment
@@ -101,7 +101,7 @@ Resources:
     Type: AWS::EC2::Subnet
     Properties:
       VpcId: !Ref Vpc
-      CidrBlock: 10.0.1.0/24
+      CidrBlock: 10.30.1.0/24
       AvailabilityZone: !Select [0, !GetAZs '']
       MapPublicIpOnLaunch: true
       Tags:
@@ -111,7 +111,7 @@ Resources:
     Type: AWS::EC2::Subnet
     Properties:
       VpcId: !Ref Vpc
-      CidrBlock: 10.0.2.0/24
+      CidrBlock: 10.30.2.0/24
       AvailabilityZone: !Select [1, !GetAZs '']
       MapPublicIpOnLaunch: true
       Tags:
@@ -121,7 +121,7 @@ Resources:
     Type: AWS::EC2::Subnet
     Properties:
       VpcId: !Ref Vpc
-      CidrBlock: 10.0.11.0/24
+      CidrBlock: 10.30.11.0/24
       AvailabilityZone: !Select [0, !GetAZs '']
       Tags:
         - { Key: Name, Value: !Sub 'private-app-a-${EnvName}' }
@@ -130,7 +130,7 @@ Resources:
     Type: AWS::EC2::Subnet
     Properties:
       VpcId: !Ref Vpc
-      CidrBlock: 10.0.12.0/24
+      CidrBlock: 10.30.12.0/24
       AvailabilityZone: !Select [1, !GetAZs '']
       Tags:
         - { Key: Name, Value: !Sub 'private-app-b-${EnvName}' }
@@ -139,7 +139,7 @@ Resources:
     Type: AWS::EC2::Subnet
     Properties:
       VpcId: !Ref Vpc
-      CidrBlock: 10.0.21.0/24
+      CidrBlock: 10.30.21.0/24
       AvailabilityZone: !Select [0, !GetAZs '']
       Tags:
         - { Key: Name, Value: !Sub 'private-data-a-${EnvName}' }
@@ -148,7 +148,7 @@ Resources:
     Type: AWS::EC2::Subnet
     Properties:
       VpcId: !Ref Vpc
-      CidrBlock: 10.0.22.0/24
+      CidrBlock: 10.30.22.0/24
       AvailabilityZone: !Select [1, !GetAZs '']
       Tags:
         - { Key: Name, Value: !Sub 'private-data-b-${EnvName}' }
@@ -164,7 +164,7 @@ Resources:
       AllocationId: !GetAtt NatEip.AllocationId
       SubnetId: !Ref PublicNatA
       Tags:
-        - { Key: Name, Value: !Sub 'ledgerline-nat-${EnvName}' }
+        - { Key: Name, Value: !Sub 'enrolline-nat-${EnvName}' }
 
   PublicRouteTable:
     Type: AWS::EC2::RouteTable
@@ -220,7 +220,7 @@ Resources:
       GroupDescription: Internal ALB - HTTP from internal (VPN-connected) clients only
       VpcId: !Ref Vpc
       SecurityGroupIngress:
-        - { IpProtocol: tcp, FromPort: 80, ToPort: 80, CidrIp: 10.0.0.0/16, Description: HTTP from internal clients }
+        - { IpProtocol: tcp, FromPort: 80, ToPort: 80, CidrIp: 10.30.0.0/16, Description: HTTP from internal clients }
       Tags:
         - { Key: Name, Value: !Sub 'sg-alb-${EnvName}' }
 
@@ -248,7 +248,7 @@ Resources:
   AppLaunchTemplate:
     Type: AWS::EC2::LaunchTemplate
     Properties:
-      LaunchTemplateName: !Sub 'ledgerline-app-${EnvName}'
+      LaunchTemplateName: !Sub 'enrolline-app-${EnvName}'
       LaunchTemplateData:
         ImageId: !Ref AmiId
         InstanceType: !Ref InstanceType
@@ -263,17 +263,17 @@ Resources:
             #!/bin/bash
             dnf install -y httpd
             systemctl enable --now httpd
-            echo "Ledgerline infrastructure ready - awaiting application deployment" > /var/www/html/index.html
+            echo "Enrolline infrastructure ready - awaiting application deployment" > /var/www/html/index.html
         TagSpecifications:
           - ResourceType: instance
             Tags:
-              - { Key: Name, Value: !Sub 'ledgerline-app-${EnvName}' }
-              - { Key: Project, Value: YAT-Ledgerline }
+              - { Key: Name, Value: !Sub 'enrolline-app-${EnvName}' }
+              - { Key: Project, Value: YAT-Enrolline }
 
   AppAutoScalingGroup:
     Type: AWS::AutoScaling::AutoScalingGroup
     Properties:
-      AutoScalingGroupName: !Sub 'ledgerline-app-${EnvName}'
+      AutoScalingGroupName: !Sub 'enrolline-app-${EnvName}'
       MinSize: '1'
       MaxSize: '2'
       DesiredCapacity: '1'
@@ -287,7 +287,7 @@ Resources:
       HealthCheckType: ELB
       HealthCheckGracePeriod: 300
       Tags:
-        - { Key: Name, Value: !Sub 'ledgerline-app-${EnvName}', PropagateAtLaunch: true }
+        - { Key: Name, Value: !Sub 'enrolline-app-${EnvName}', PropagateAtLaunch: true }
 
   AppScalingPolicy:
     Type: AWS::AutoScaling::ScalingPolicy
@@ -303,7 +303,7 @@ Resources:
   AppLoadBalancer:
     Type: AWS::ElasticLoadBalancingV2::LoadBalancer
     Properties:
-      Name: !Sub 'ledgerline-${EnvName}'
+      Name: !Sub 'enrolline-${EnvName}'
       Scheme: internal
       Type: application
       Subnets:
@@ -315,7 +315,7 @@ Resources:
   AppTargetGroup:
     Type: AWS::ElasticLoadBalancingV2::TargetGroup
     Properties:
-      Name: !Sub 'ledgerline-${EnvName}'
+      Name: !Sub 'enrolline-${EnvName}'
       VpcId: !Ref Vpc
       Port: 80
       Protocol: HTTP
@@ -339,7 +339,7 @@ Resources:
   DbSubnetGroup:
     Type: AWS::RDS::DBSubnetGroup
     Properties:
-      DBSubnetGroupDescription: Ledgerline data subnets (spans 2 AZs - required even for Single-AZ)
+      DBSubnetGroupDescription: Enrolline data subnets (spans 2 AZs - required even for Single-AZ)
       SubnetIds:
         - !Ref PrivateDataA
         - !Ref PrivateDataB
@@ -349,7 +349,7 @@ Resources:
     DeletionPolicy: Delete
     UpdateReplacePolicy: Delete
     Properties:
-      DBInstanceIdentifier: !Sub 'ledgerline-${EnvName}'
+      DBInstanceIdentifier: !Sub 'enrolline-${EnvName}'
       Engine: !Ref DBEngine
       DBInstanceClass: !Ref DBInstanceClass
       AllocatedStorage: '20'
@@ -363,14 +363,14 @@ Resources:
       BackupRetentionPeriod: 7
       PubliclyAccessible: false
       Tags:
-        - { Key: Name, Value: !Sub 'ledgerline-${EnvName}' }
-        - { Key: Project, Value: YAT-Ledgerline }
+        - { Key: Name, Value: !Sub 'enrolline-${EnvName}' }
+        - { Key: Project, Value: YAT-Enrolline }
 
   # ---------- Storage (encrypted, private) ----------
   AttachmentsBucket:
     Type: AWS::S3::Bucket
     Properties:
-      BucketName: !Sub 'ledgerline-attachments-${EnvName}-${AWS::Region}-${AWS::AccountId}'
+      BucketName: !Sub 'enrolline-attachments-${EnvName}-${AWS::Region}-${AWS::AccountId}'
       VersioningConfiguration:
         Status: Enabled
       BucketEncryption:
@@ -386,7 +386,7 @@ Resources:
   BackupsBucket:
     Type: AWS::S3::Bucket
     Properties:
-      BucketName: !Sub 'ledgerline-backups-${EnvName}-${AWS::Region}-${AWS::AccountId}'
+      BucketName: !Sub 'enrolline-backups-${EnvName}-${AWS::Region}-${AWS::AccountId}'
       VersioningConfiguration:
         Status: Enabled
       BucketEncryption:
@@ -403,7 +403,7 @@ Resources:
   AlarmAppCpuHigh:
     Type: AWS::CloudWatch::Alarm
     Properties:
-      AlarmName: !Sub 'ledgerline-app-cpu-high-${EnvName}'
+      AlarmName: !Sub 'enrolline-app-cpu-high-${EnvName}'
       Namespace: AWS/EC2
       MetricName: CPUUtilization
       Dimensions:
@@ -419,7 +419,7 @@ Resources:
   AlarmRdsCpuHigh:
     Type: AWS::CloudWatch::Alarm
     Properties:
-      AlarmName: !Sub 'ledgerline-rds-cpu-high-${EnvName}'
+      AlarmName: !Sub 'enrolline-rds-cpu-high-${EnvName}'
       Namespace: AWS/RDS
       MetricName: CPUUtilization
       Dimensions:

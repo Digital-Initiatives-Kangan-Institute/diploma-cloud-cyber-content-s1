@@ -1,4 +1,4 @@
-# Claude notes — CL3 AT3 lab pack (Ledgerline)
+# Claude notes — CL3 AT3 lab pack (Enrolline)
 
 Pack-specific notes only. The generic pattern, AWS Academy constraints, validation harness and
 hard-won lessons live in the canonical standard — `docs/lab-pack-standard.md` (umbrella). Below is
@@ -17,7 +17,7 @@ only what is specific to THIS pack. See also `assessments/assessment_plan.md` §
 
 ## What this pack is
 
-The AT3 environment for **Ledgerline** (the YAT Accounting System). AT3 follows an **apply-as-update**
+The AT3 environment for **Enrolline** (the YAT Enrolline). AT3 follows an **apply-as-update**
 model:
 
 - **`baseline.yaml`** — the existing single-AZ state the student deploys first.
@@ -37,18 +37,18 @@ model:
    **MultiAZ is the only DB property that differs** — anything else would trigger a replacement and
    destroy the data.
 
-   *History: this pack previously asserted the opposite, on the basis that Ledgerline could not run on a
-   Multi-AZ database. That restriction was lifted across the scenario (Ledgerline is the practice vehicle
+   *History: this pack previously asserted the opposite, on the basis that Enrolline could not run on a
+   Multi-AZ database. That restriction was lifted across the scenario (Enrolline is the practice vehicle
    for HA database work, and the restriction was giving students grounds to decline the practice).*
 
 2. **Internal ALB (faithful) → console-based verification.** Unlike CL1 AT3 (internet-facing ALB you could
-   curl), Ledgerline is internal-only (VPN), so the ALB is `Scheme: internal` and is **not browser-reachable
+   curl), Enrolline is internal-only (VPN), so the ALB is `Scheme: internal` and is **not browser-reachable
    in the lab** (no VPN). Verification is via the console: stack status, Target Group health, RDS status,
    ASG instance AZs. The README says so explicitly. This is a deliberate divergence from the CL1 pattern,
    driven by the scenario.
 
-3. **Engine is PostgreSQL, and both templates must agree.** The scenario's cloud Ledgerline runs on
-   **Amazon RDS for PostgreSQL** (Accounting System Infrastructure Specifications); the templates now match
+3. **Engine is PostgreSQL, and both templates must agree.** The scenario's cloud Enrolline runs on
+   **Amazon RDS for PostgreSQL** (Enrolline Infrastructure Specifications); the templates now match
    it, on `db.t3.micro`. `Engine` is a **replacement** property — if the two templates ever disagree, the
    change-set destroys and rebuilds the database instead of updating it. The pytest asserts both default to
    `postgres`. No `LicenseModel` (that is a SQL Server property; setting it fails the create).

@@ -3,7 +3,7 @@
 
 A practice exercise, not an assessment: a branded YAT/MTS document with no Kangan wrapper, no
 marking criteria and no UoC tags. Same shape as the AT2 assessment workbook, on the public website improvement build rather
-than the Ledgerline one — and with the teaching the assessment withholds.
+than the Enrolline one — and with the teaching the assessment withholds.
 
 It renders through the assessment's own renderer (s1_cl3_at2_run_sheet.render) with its content
 lists passed in, so the practice and the assessment cannot drift structurally even though every

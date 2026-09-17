@@ -43,14 +43,14 @@ from helpers import run_sheet as R  # noqa: E402  (the shared workbook engine, i
 
 SITE = "https://yat.timbaird.com"
 STATE = "s1-cl3-at2"
-PROJECT = f"{SITE}/intranet/{STATE}/projects/ledgerline-improvement"
+PROJECT = f"{SITE}/intranet/{STATE}/projects/enrolline-improvement"
 ICT = f"{SITE}/intranet/{STATE}/ict"
 POLICY = f"{SITE}/intranet/{STATE}/policies"
 
 # ---------------------------------------------------------------- front matter
 
 SCENARIO = [
-    "YAT College has approved the improvement design for the Ledgerline cloud infrastructure. "
+    "YAT College has approved the improvement design for the Enrolline cloud infrastructure. "
     "Your MP Tech Solutions team now implements it. The team is four members, each owning one "
     "cloud component — network, compute, database, or storage — and together you produce one "
     "integrated, deployable template.",
@@ -63,10 +63,12 @@ SCENARIO = [
 ]
 
 RESOURCES = [
+    ("Approved Improvement Design — the agreed design your team implements",
+     f"{PROJECT}/solution-design"),
     ("Improvement Requirements — the outcomes the implementation serves",
      f"{PROJECT}/improvement-requirements"),
-    ("Accounting System Infrastructure Specifications — the baseline you are improving",
-     f"{ICT}/accounting-server-status-cloud"),
+    ("Enrolline Infrastructure Specifications — the baseline you are improving",
+     f"{ICT}/enrolline-server-status-cloud"),
     ("Acceptable Use Policy — the code of conduct your team works under",
      f"{POLICY}/acceptable-use"),
     ("Work Health & Safety Policy — the safety obligations that apply to how the team works",

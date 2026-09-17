@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Build the S1-CL3 AT1 instruments (.docx) — assessor and student — from the Kangan template.
 
-AT1 = Cloud Infrastructure Improvement: Design. ICTCLD504 elements 1–2: analyse the Ledgerline
+AT1 = Cloud Infrastructure Improvement: Design. ICTCLD504 elements 1–2: analyse the Enrolline
 cloud baseline, design a proportionate improvement, present it and obtain sign-off to proceed.
 
 ONE DEFINITION, TWO INSTRUMENTS — content in s1_cl3_at1_run_sheet.py, rendered worked for the assessor
@@ -45,8 +45,8 @@ TIME_ALLOWED = [
 ]
 
 OVERVIEW = [
-    "Students are assessed on analysing the cloud infrastructure of YAT's Ledgerline accounting "
-    "system, designing a proportionate improvement to it, and obtaining sign-off to proceed to "
+    "Students are assessed on analysing the cloud infrastructure of YAT's Enrolline student records "
+    "and enrolment management system, designing a proportionate improvement to it, and obtaining sign-off to proceed to "
     "deployment. AT1 is the first of three assessment tasks in the S1-CL3 Cloud Infrastructure "
     "Improvement cluster.",
     "The assessment is one guided workbook of fifteen design tasks, three approval tasks and "
@@ -99,10 +99,10 @@ STUDENT_OVERVIEW = [
 
 TASKS = [
     "YAT College's offshore partnership in India has put a spotlight on the systems supporting "
-    "it. Ledgerline — the finance and office-administration system — was migrated to AWS in an "
+    "it. Enrolline — the finance and office-administration system — was migrated to AWS in an "
     "earlier engagement and has run there since, but it was migrated as-is: the whole workload "
     "sits in one availability zone and nothing has been revisited since cutover.",
-    "MTS is engaged to confirm Ledgerline is stable, reliable, fit for purpose and compliant with "
+    "MTS is engaged to confirm Enrolline is stable, reliable, fit for purpose and compliant with "
     "the Indian regulatory requirements that now apply, and to improve it where it is not. What "
     "that improvement consists of is the student's analysis to make.",
     "Part A — Analysis and design. Fifteen tasks: review the architecture and the decisions it "
@@ -117,7 +117,7 @@ TASKS = [
     "Manager, answers questions, and obtains sign-off recording exactly which improvements are "
     "approved — that approved list is AT3's scope. The first task of Part B is the student's own "
     "preparation and is not marked.",
-    "MTS scope: cloud infrastructure only. The Ledgerline application and its financial data are "
+    "MTS scope: cloud infrastructure only. The Enrolline application and its financial data are "
     "out of scope (IR-4), as is legal interpretation of the India obligations — the student "
     "designs to the compliance area's determination.",
 ]
@@ -125,7 +125,7 @@ TASKS = [
 RESOURCES = [
     "Teacher/assessor supplied resources",
     "Access to the YAT scenario site / intranet — supplying the Improvement Requirements, the "
-    "Indian Regulatory Requirements, the Accounting System Infrastructure Specifications, "
+    "Indian Regulatory Requirements, the Enrolline Infrastructure Specifications, "
     "Application Specification and Operational Costing, the baseline design, the network diagram, "
     "the reference architectures and the YAT policies. Those documents are linked from the "
     "Instructions to Student below",
@@ -216,7 +216,7 @@ CRITERIA_MAP = [
     dict(code="D12", tasks=["Q1", "Q2", "Q3"],
          text="Knowledge (questions 1–3) — industry standards and standard products in the "
               "student's own design, where object storage is and is not the right answer, and "
-              "what cloud adoption changed for Ledgerline"),
+              "what cloud adoption changed for Enrolline"),
 ]
 
 AC_CONDITIONS = {

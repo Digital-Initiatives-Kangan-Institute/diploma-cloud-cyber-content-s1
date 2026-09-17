@@ -1,10 +1,10 @@
-# AT3 — Deploy the Ledgerline environment and apply the improvement
+# AT3 — Deploy the Enrolline environment and apply the improvement
 
 This guide walks you, step by step, through building the **starting environment** for AT3 and then
 **applying the approved improvement** to it. You do this in your own AWS Academy lab.
 
 **What you are doing:**
-1. Deploy the **existing-state** Ledgerline infrastructure (`baseline.yaml`) — a single-AZ environment.
+1. Deploy the **existing-state** Enrolline infrastructure (`baseline.yaml`) — a single-AZ environment.
 2. Apply the **approved improvement** (`improved.yaml`) to that same environment as a change-set.
 
 **You will need:**
@@ -13,7 +13,7 @@ This guide walks you, step by step, through building the **starting environment*
 - A database password you choose (at least 8 characters) — **write it down**.
 - About **20 minutes** (the database is the slow part to build).
 
-> **Note about reaching the system.** Ledgerline is an **internal** system — in real life staff reach
+> **Note about reaching the system.** Enrolline is an **internal** system — in real life staff reach
 > it over a private VPN, not the public internet. In the lab there is no VPN, so you will **not** open
 > the application in a browser. Instead you confirm everything is working from the **AWS console**
 > (stack status, healthy targets, database status). That is normal and expected for this system.
@@ -33,7 +33,7 @@ This guide walks you, step by step, through building the **starting environment*
 6. At the **top-right** of the console, confirm the region is **US East (N. Virginia)** — `us-east-1`.
    The Learner Lab runs only in this region, so it should already be selected; if not, choose it.
 
-> **Region substitution.** Ledgerline is designed to run in Sydney, but the Learner Lab only offers
+> **Region substitution.** Enrolline is designed to run in Sydney, but the Learner Lab only offers
 > `us-east-1`, so that is where you deploy. Wherever you see this notation, the left side is the real
 > design region and the right side is where you actually deploy:
 >
@@ -47,7 +47,7 @@ This guide walks you, step by step, through building the **starting environment*
 8. Click **Create stack** → **With new resources**.
 9. **Template source** → **Upload a template file** → **Choose file** → select **`baseline.yaml`** → **Next**.
 10. On the next page:
-    - **Stack name:** `ledgerline-baseline`
+    - **Stack name:** `enrolline-baseline`
     - **DBMasterPassword:** type a password (8+ characters) and **write it down**.
     - Leave everything else as it is → **Next**.
 11. **Configure stack options** → leave as is → **Next**.
@@ -56,10 +56,10 @@ This guide walks you, step by step, through building the **starting environment*
 
 ## Part 4 — Check the baseline worked (from the console)
 
-14. **Stack built?** The `ledgerline-baseline` stack shows **CREATE_COMPLETE**.
-15. **App tier healthy?** Search **EC2** → **Target Groups** → click `ledgerline-...` → **Targets** tab.
+14. **Stack built?** The `enrolline-baseline` stack shows **CREATE_COMPLETE**.
+15. **App tier healthy?** Search **EC2** → **Target Groups** → click `enrolline-...` → **Targets** tab.
     You should see the instance with status **healthy** (give it a few minutes after the stack finishes).
-16. **Database up?** Search **RDS** → **Databases** → `ledgerline-prod` shows status **Available**, and
+16. **Database up?** Search **RDS** → **Databases** → `enrolline-prod` shows status **Available**, and
     (importantly) **Multi-AZ = No** — the baseline runs a single instance with no standby. That is the
     starting state you are about to improve.
 
@@ -69,7 +69,7 @@ If those three are good, your baseline is up.
 
 You now apply the approved improvement **to the same stack**, so nothing is rebuilt from scratch.
 
-17. Go back to **CloudFormation** → click the **`ledgerline-baseline`** stack → **Update** (top right).
+17. Go back to **CloudFormation** → click the **`enrolline-baseline`** stack → **Update** (top right).
 18. Choose **Replace existing template** → **Upload a template file** → select **`improved.yaml`** → **Next**.
 19. Keep the **same parameter values** as before (including the **same DBMasterPassword**) → **Next** → **Next**.
 20. On the **Review** page, scroll to the bottom and look at the **Change set preview**. You should see
@@ -78,10 +78,10 @@ You now apply the approved improvement **to the same stack**, so nothing is rebu
 
 ## Part 6 — Check the improvement applied
 
-22. **App tier now Multi-AZ?** EC2 → **Auto Scaling groups** → `ledgerline-app-prod` → **Instance management**.
+22. **App tier now Multi-AZ?** EC2 → **Auto Scaling groups** → `enrolline-app-prod` → **Instance management**.
     You should now see **two** instances, in **two different Availability Zones** (e.g. `us-east-1a`
     and `us-east-1b`). The application tier can now survive an AZ failure.
-23. **Database now Multi-AZ?** RDS → `ledgerline-prod` → **Configuration** tab. **Multi-AZ** now reads
+23. **Database now Multi-AZ?** RDS → `enrolline-prod` → **Configuration** tab. **Multi-AZ** now reads
     **Yes**, with a standby in a second Availability Zone. AWS builds and syncs the standby in the
     background, so the database may sit in **Modifying** for a while before it settles on **Available** —
     that is normal, and the database stays reachable throughout. The database can now fail over
@@ -89,10 +89,23 @@ You now apply the approved improvement **to the same stack**, so nothing is rebu
 
     The instance is **modified in place**, not rebuilt — same endpoint name, same data.
 
+24. **S3 traffic now private?** VPC → **Endpoints**. There is now a **Gateway** endpoint for
+    `com.amazonaws.<region>.s3`, associated with the private route table. Document traffic from the
+    application tier no longer leaves the VPC through the NAT Gateway.
+25. **Network logging on?** VPC → your VPC → **Flow logs** tab. A flow log is now active, writing to
+    the `enrolline-flowlogs-…` bucket. The baseline kept no network record at all.
+26. **Capacity scheduled?** EC2 → **Auto Scaling groups** → `enrolline-app-prod` → **Automatic scaling**
+    → **Scheduled actions**. Two actions now exist — one raising capacity ahead of each intake
+    enrolment window, one dropping it once census processing has closed. The baseline held peak
+    capacity all year.
+27. **Attachments tiering?** S3 → `enrolline-attachments-…` → **Management** tab. A lifecycle rule now
+    moves older scanned documents to cheaper storage classes. Check that it **transitions** and never
+    **expires** — student records are retained for thirty years and must never be deleted by a rule.
+
 ## Part 7 — Clean up (always do this at the end)
 
-24. **CloudFormation** (`us-east-1`) → select **`ledgerline-baseline`** → **Delete** → confirm. Wait for it to disappear.
-25. Back on the lab tab, click **End Lab**.
+28. **CloudFormation** (`us-east-1`) → select **`enrolline-baseline`** → **Delete** → confirm. Wait for it to disappear.
+29. Back on the lab tab, click **End Lab**.
 
 ---
 

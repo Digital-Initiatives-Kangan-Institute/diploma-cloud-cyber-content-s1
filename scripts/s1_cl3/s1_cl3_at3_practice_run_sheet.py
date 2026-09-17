@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """The S1-CL3 AT3 PRACTICE deployment run sheet — content.
 
-Same shape as the AT3 assessment workbook, on the public website rather than Ledgerline. The
+Same shape as the AT3 assessment workbook, on the public website rather than Enrolline. The
 starting point is `delivery/practice-lab-pack/baseline.yaml`, which builds the single-AZ
 website environment the practice design exercise analysed.
 
@@ -13,17 +13,19 @@ your own unfinished template is a lesson rather than an assessment problem.
 
 WHAT ELSE DIFFERS, and why an answer here does not transfer:
 
-  the system        a public, internet-facing site on MySQL — not an internal finance system
-                    on PostgreSQL behind a campus VPN
+  the system        a public, internet-facing site on MySQL — not a staff-facing student
+                    records system on PostgreSQL
   the before state  ONE EC2 instance with no load balancer and no Auto Scaling group. The
-                    Ledgerline baseline already has both. So the first improvement here is
+                    Enrolline baseline already has both. So the first improvement here is
                     building a tier, not widening one.
-  the database      MySQL carries no legacy single-instance constraint, so whether it becomes
-                    Multi-AZ is genuinely the student's call — argued on goals and cost.
-  the test that     reliability is demonstrated against a public 24x7 audience; the scaling
-  matters           event is the intake window, not month-end close.
-  build time        about 15 minutes for the baseline — MySQL builds faster than the
-                    assessment's SQL Server.
+  the database      whether it becomes Multi-AZ is genuinely the student's call on both sides —
+                    argued on goals and cost, not settled by a platform constraint.
+  the test that     reliability is demonstrated against a public 24x7 audience, and the scaling
+  matters           event is ANONYMOUS PUBLIC traffic when courses are advertised — not
+                    Enrolline's staff transaction load inside an enrolment window. Same weeks
+                    of the year, different load, different scaling signal.
+  build time        about 15 minutes for the baseline — the practice stack builds faster than
+                    the assessment's.
 
 WHAT PRACTICE ADDS: click-by-click steps on every task that touches the console, and "Things
 to consider" leading questions on the tasks that ask for judgement.
@@ -109,7 +111,7 @@ TASKS = [
                  "write it down, because you are not shown it again.",
                  "Next, Next, Submit. It takes about 15 minutes; the database is most of that.",
                  "When it reads CREATE_COMPLETE, open the Outputs tab and click SiteUrl. The "
-                 "placeholder page should load — this one is public, unlike Ledgerline.",
+                 "placeholder page should load — this one is public, unlike Enrolline.",
                  "Screenshot the stack at CREATE_COMPLETE and the page loading."],
          consider=["Before you move on: what exactly is the 'before' you will be comparing "
                    "against? Write it down now rather than reconstructing it later.",
