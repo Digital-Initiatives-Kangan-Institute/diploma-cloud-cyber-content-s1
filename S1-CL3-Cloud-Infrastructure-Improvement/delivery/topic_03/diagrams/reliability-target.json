@@ -1,16 +1,23 @@
 {
-  "title": "Reliability target — HA app tier, DB stays single-AZ",
+  "_source_of_truth": "This spec is the source. Render with the umbrella draw-diagram skill; never hand-edit the generated .drawio or .png.",
+  "_render": ".claude/skills/draw-diagram/.venv/bin/python .claude/skills/draw-diagram/draw_diagram.py --spec <this file> --out reliability-target.drawio --png reliability-target.png",
+  "_used_by": ["topic_03/slide_plan.md — 'The reliability target' (image: diagram reliability-target)"],
+  "_intent": "The reliability target for the PRACTICE vehicle (the YAT public website). Delivery teaches on the practice system only and deliberately never names the assessed system, so this deck stays correct if the assessed system is ever swapped.",
+  "_teaching_note": "The database tier carries a QUESTION MARK on purpose. The slide that follows argues it, and the verdict is the student's — a standby and a tested restore are both defensible against the goal and the cost. Do not resolve it in the picture.",
+  "title": "Reliability target — HA app tier, database decision open",
   "nodes": [
-    {"id": "users", "label": "Accounting users",                        "row": 0, "col": 1, "fill": "grey"},
-    {"id": "alb",   "label": "Application Load Balancer",               "row": 1, "col": 1, "fill": "blue"},
-    {"id": "asg",   "label": "App tier\nAuto Scaling · Multi-AZ",       "row": 2, "col": 1, "fill": "green"},
-    {"id": "db",    "label": "RDS SQL Server\nsingle-AZ + automated backup", "row": 3, "col": 1, "fill": "amber"},
-    {"id": "dr",    "label": "Cross-Region DR\nMelbourne (data stays in AU)", "row": 3, "col": 2, "fill": "purple"}
+    {"id": "users", "label": "Public visitors\n24x7", "row": 0, "col": 1, "fill": "grey"},
+    {"id": "alb",   "label": "Application Load Balancer\nacross two zones", "row": 1, "col": 1, "fill": "blue"},
+    {"id": "asg",   "label": "App tier\nAuto Scaling - Multi-AZ", "row": 2, "col": 1, "fill": "green"},
+    {"id": "db",    "label": "Database\nstandby, or backup + tested restore?\nYOUR CALL - argue it", "row": 3, "col": 1, "fill": "amber"},
+    {"id": "dr",    "label": "Cross-Region backup copy\n(data stays in AU)", "row": 3, "col": 2, "fill": "purple"},
+    {"id": "media", "label": "Site media\nmoved off the instance\nshared by every instance", "row": 2, "col": 2, "fill": "purple"}
   ],
   "edges": [
     {"from": "users", "to": "alb", "label": ""},
     {"from": "alb",   "to": "asg", "label": ""},
     {"from": "asg",   "to": "db",  "label": ""},
-    {"from": "db",    "to": "dr",  "label": "backup / DR copy"}
+    {"from": "asg",   "to": "media", "label": ""},
+    {"from": "db",    "to": "dr",  "label": ""}
   ]
 }

@@ -8,8 +8,10 @@ ANALYSIS — the front half of AT1 on the practice workbook: review and evaluate
 architecture, assess compliance, weigh the options, set the goals and confirm the decisions. The
 design of the fix is Topics 2–3; nothing is implemented.
 
-**Answer discipline:** activities run on the practice engagement (the website); AT1 assesses the same
-work on Ledgerline. Teach the method on the practice vehicle; never supply Ledgerline answers.
+**Answer discipline:** everything taught and practised here runs on the practice engagement (the
+website); AT1 assesses the same work on the assessed system. Teach the method on the practice
+vehicle, and never work the assessed system in class — these materials deliberately do not name it,
+so they stay correct if it is ever swapped.
 
 ## Teaching source
 AWS well-architected review (reliability / performance / cost / security pillars) pinned at Step 4
@@ -24,7 +26,8 @@ TBD — AWS ICTCLD504/architecture modules to be pinned.
 - [BESPOKE] From analysis to improvement
   - Topic 1 opens AT1: before you improve a cloud system you first understand the one you have.
   - Today runs the analysis half of the design: review the baseline, check compliance, weigh the options, set the goals.
-  - Vehicle: Ledgerline, YAT's Accounting system, runs single-AZ in the cloud — the system you analyse and improve.
+  - We work the YAT public website engagement — a real single-AZ system with a real improvement to argue for.
+  - Your assessment runs the same method on a different YAT system. Same reasoning, different answers.
   - Stay at analysis: diagnose and justify, don't design the changes yet.
   image: gen flat vector hero illustration of an analyst reviewing a cloud architecture diagram, magnifying glass over a data centre, blue and gold accents, minimal, no text
   notes:
@@ -42,22 +45,24 @@ TBD — AWS ICTCLD504/architecture modules to be pinned.
   notes:
     The four pillars recur all cluster. A review evaluates against them — an inventory with no judgement isn't a review.
     Question to pose: which pillar does a single-AZ design most obviously fail?
-- [BESPOKE] Review the Ledgerline baseline
-  - The current architecture: a VPC, one Availability Zone, an app tier and a single database.
+- [BESPOKE] Review the website baseline
+  - The current architecture: a VPC, one Availability Zone, a single web instance and a single database.
   - Read the topology top-down — network, compute, database, storage — noting how each resource is deployed today.
   - Single-AZ means every tier shares one failure domain; one zone outage takes it all down.
-  image: diagram ledgerline-baseline
+  - There is no load balancer and no Auto Scaling group — one instance is the entire website.
+  image: diagram website-baseline
   notes:
     Walk the diagram; trace the request path and have them find the shared failure domain.
-    The workbook's task 1 runs the same reading on the practice engagement.
+    Note what is ABSENT as well as what is present — a missing tier is a finding, not a blank.
+    The workbook's task 1 runs the same reading, on this same engagement.
 - [BESPOKE] Evaluate the design decisions and their business impact
-  - Evaluate the baseline and state the business impact of its design decisions — downtime, lost billing, risk to close-of-month.
-  - A seeded constraint surfaces here: the accounting product is vendor-certified single-instance only, so the database cannot go Multi-AZ. Record it — it drives the reliability design later.
+  - Evaluate the baseline and state the business impact of its design decisions — downtime, lost enquiries, reputational exposure.
+  - The website is public and 24x7, so an outage is visible to prospective students the moment it happens.
   - Impact is a business statement, not a technical one; the goals you set later answer this language.
   image: none
   notes:
-    Push from event to cost: "the server goes down" is technical; "billing halts at month-end" is impact.
-    Plant the constraint deliberately — it is the cost-benefit centrepiece of Topic 3.
+    Push from event to cost: "the server goes down" is technical; "the course catalogue is offline during an advertising campaign" is impact.
+    Ask what a public audience changes about impact compared with a staff-only system — that contrast is the reasoning their assessment needs.
 - [EX] Review and evaluate the practice baseline
   - Workbook — tasks 1 and 2.
   - Review the practice engagement's current architecture top-down, then evaluate it and state the business impact of its design decisions.
@@ -178,7 +183,7 @@ TBD — AWS ICTCLD504/architecture modules to be pinned.
 
 ## Build notes
 ~22 slides. Four activities, mapping to practice workbook tasks 1–2 · 3 · 4–5 · 6–7. One generated
-diagram (`diagram ledgerline-baseline`, already in `diagrams/`); one decorative `gen` opener hero
+diagram (`diagram website-baseline`, already in `diagrams/`); one decorative `gen` opener hero
 (cached in `images/`). Content carried from the 2026-07-02 plan, regrouped to workbook order; new
 teaching: the compliance assessment (task 3) — previously untaught in this Topic. Performance metrics
 (PC 2.1) move to Topic 2 with task 8.

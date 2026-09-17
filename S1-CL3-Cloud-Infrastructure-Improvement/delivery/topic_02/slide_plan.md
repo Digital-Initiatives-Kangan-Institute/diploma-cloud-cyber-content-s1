@@ -10,8 +10,10 @@ DESIGN — the design work starts: confirm the performance metrics, then select 
 resource tiers to the business needs. Security, reliability and cost improvements are Topic 3; the
 build is AT3. Justify each choice; do not over-provision.
 
-**Answer discipline:** activities run on the practice engagement (the website); AT1 assesses the same
-work on Ledgerline. Teach the method on the practice vehicle; never supply Ledgerline answers.
+**Answer discipline:** everything taught and practised here runs on the practice engagement (the
+website); AT1 assesses the same work on the assessed system. Teach the method on the practice
+vehicle, and never work the assessed system in class — these materials deliberately do not name it,
+so they stay correct if it is ever swapped.
 
 ## Teaching source
 AWS performance/scalability pillar (elastic capacity, auto scaling, resource selection); bespoke for
@@ -78,11 +80,12 @@ TBD — AWS scalability/architecture modules to be pinned.
 - [BESPOKE] Selecting and improving each tier
   - Network: right-size the path and load-spreading so the tier below can scale out behind it.
   - Compute: move from fixed capacity to a pool that grows and shrinks on demand.
-  - Database: select a managed service that scales reads without a rebuild, keeping the accounting data consistent.
-  - Storage: select storage that grows on demand rather than a fixed-size volume.
+  - Database: select a managed service that scales reads without a rebuild, keeping writes consistent.
+  - Storage: get the content off the instance and onto storage that grows on demand.
   image: none
   notes:
-    The how-to per tier. The database consistency constraint matters — it's an accounting system; you scale reads, you don't shard the ledger.
+    The how-to per tier. On the website the storage move is the obvious one — site media on local EBS cannot survive a second instance, so it has to move before compute can scale at all.
+    Order matters: some tiers block others. Ask which tier has to move first and why.
 - [BESPOKE] Justify against the business needs
   - Tie every resource choice to a stated business need — why this tier, why this size.
   - Choose the simplest option that meets the need; note where capacity scales elastically and how a test would demonstrate it.
@@ -108,25 +111,27 @@ TBD — AWS scalability/architecture modules to be pinned.
 - Teaches: [ICTCLD504 KE 6]
 - Kicker: the contrast that sharpens the storage choice
 - [PRIMER] Object storage, and what it is for
-  - Object storage holds whole objects addressed by key — it scales on demand and serves static content directly, no server involved.
-  - The natural home for a static website's content: pages, images, downloads.
-  - A stateful, transactional, database-backed system is the opposite workload — object storage is not its primary store.
+  - Object storage holds whole objects addressed by key — it scales on demand, and every instance sees the same content.
+  - Serving content publicly is one use: pages, images, downloads, read straight from the store or through a content delivery network.
+  - Holding files privately is a different use: documents a system attaches to its records, reached only by the application, never exposed publicly.
+  - Same service, opposite configuration — public read and caching for one; blocked public access, a private path, access logging and lifecycle tiering for the other.
   image: none
   notes:
-    Contextual knowledge for the assessment's Q2 — the contrast is the answer: static content suits object storage; a transactional ledger does not.
-    Be ready to explain provisioning object storage for a static-site workload — that's the examinable half.
+    Contextual knowledge for the assessment's Q2. The examinable distinction is USE versus DEPEND — a system can store objects without serving them.
+    The website is the public case: its media has to leave the instance before compute can scale, and it is served to the world.
+    Warn them explicitly: proposing public access or a CDN for a private document store holding personal information is a serious error, not a style choice.
 - [EX] Answer the object-storage question
   - The assessment's question Q2, rehearsed in writing.
-  - Contrast a stateful accounting workload's storage needs with an object-storage-dependent website workload, and explain how you would provision the latter.
+  - Explain how object storage is provisioned and content served from it, then contrast serving objects publicly with holding them privately behind an application — and what each means for how the storage is configured.
   timer: ~15 min
   image: none
   notes:
     Activity = assessment Q2 rehearsed. The practice workbook carries no questions — use the assessment's.
-    Check both halves are present: the contrast, and the provisioning explanation.
+    Check both halves are present: the provisioning explanation, and the public-versus-private contrast with its configuration consequences.
 - [TAKEAWAYS] Topic 2 · Key takeaways
   - Metrics first: a number with a target for every goal, written to be tested against.
   - Four tiers, each selected and improved to a named need — simplest that fits.
-  - Object storage suits static content; a transactional system is the contrast to know.
+  - Object storage: serving publicly and holding privately are the same service configured oppositely.
   image: none
 
 ### Close

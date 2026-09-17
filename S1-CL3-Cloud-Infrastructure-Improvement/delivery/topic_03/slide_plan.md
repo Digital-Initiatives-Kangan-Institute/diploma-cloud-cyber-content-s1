@@ -9,9 +9,11 @@ DESIGN — the improvement passes of AT1: security, reliability and scalability,
 monitoring, then the cost-benefit justification. On paper, to the goals and metrics from Topics 1–2;
 the build is AT3. The DB tier stays design-level (the lab role denies rds:ModifyDBInstance).
 
-**Answer discipline:** activities run on the practice engagement (the website); AT1 assesses the same
-work on Ledgerline. The practice vehicle's constraints differ by design — same reasoning, possibly
-opposite calls. Never supply Ledgerline answers.
+**Answer discipline:** everything taught and practised here runs on the practice engagement (the
+website); AT1 assesses the same work on the assessed system. The two systems differ by design — the
+same reasoning can reach opposite calls, and that is the learning. Teach the method on the practice
+vehicle, and never work the assessed system in class — these materials deliberately do not name it,
+so they stay correct if it is ever swapped.
 
 ## Teaching source
 AWS reliability pillar (Multi-AZ, backup/restore, cross-Region DR) + security layers + cost
@@ -70,27 +72,29 @@ TBD — AWS reliability/security/cost modules to be pinned.
     The frame before the design. Map each building block to the failure it answers.
 - [BESPOKE] The reliability target
   - Review the single-zone baseline against the reliability goals; name where a single failure takes the system down.
-  - The shape of the target: the application tier redundant across zones behind a load balancer; the database covered by backup and restore; a cross-region DR copy, onshore.
-  - One tier is deliberately not made redundant — the next slide argues why.
+  - The shape of the target: a load balancer and a pool of instances across two zones; the database decision still open; a cross-region backup copy, onshore.
+  - The database tier is left unresolved on this slide on purpose — the next slide argues it.
   image: diagram reliability-target
   notes:
     Walk the diagram tier by tier. Leave the database tension unresolved for one slide on purpose.
     Redundancy is applied tier by tier, to the goal — not painted across everything.
-- [BESPOKE] The centrepiece: rejecting an improvement
-  - The accounting product is vendor-certified single-instance only — a failover database is simply not available for it.
-  - The only route to one is replacing the product: new licence, data migration, change management, migration risk.
-  - That cost is disproportionate to the reliability gained, so the design rejects it — single-instance database, covered by backup, restore and DR.
-  - "Reliable database = failover database" is the reflex to resist; justify against the goal and the cost, not a checklist.
+    The diagram shows the database with a question mark deliberately. Do not resolve it for them.
+- [BESPOKE] The centrepiece: spending the money where it buys the most
+  - Every tier here is a single point of failure. You cannot fix them all — so which one first, and what do you leave?
+  - The compute tier is the cheapest and largest win: one instance with no load balancer means any instance failure is a total outage.
+  - The database is the expensive one: a failover standby roughly doubles the database line, for a site whose content changes rarely and restores cleanly from backup.
+  - "Reliable means Multi-AZ everywhere" is the reflex to resist. Rank by benefit per dollar against the stated goal, and be able to defend what you left out.
   image: none
   notes:
     The single most assessed piece of reasoning in AT1 — slow down here.
-    The assessed skill is arguing the trade-off, not naming the feature. A rejection argued well outscores a feature added by reflex.
+    The assessed skill is arguing the trade-off, not naming the feature. A well-argued rejection outscores a feature added by reflex.
+    Press them on availability class: a public marketing site losing an hour overnight is not the same as a system with an externally fixed deadline. Different systems, different answers, same method.
 - [TABLE] Database reliability — the options weighed
   | Option | Reliability gain | Cost / risk | Verdict |
-  | Single-instance + backup/restore + cross-region DR | recover from loss; DR onshore | low — no product change | CHOSEN |
-  | Failover (Multi-AZ) database | zero-downtime zone failover | not available — vendor single-instance only | infeasible |
-  | Replace the accounting product | enables failover | licence + migration + change management + risk | disproportionate — rejected |
-  note: The chosen row must be argued, not just stated — the reasoning is the mark.
+  | Backup + tested restore | recovers from loss; recovery measured in hours | low — already largely in place | defensible if the recovery target allows it |
+  | Failover (Multi-AZ) database | zero-downtime zone failover | roughly doubles the database line, ongoing | defensible if the recovery target does not |
+  | Fix compute first, revisit the database after | removes the largest exposure for the least money | sequencing risk if the database then fails | commonly the strongest argued position |
+  note: There is no CHOSEN row. The verdict is the student's and the reasoning is the mark — this table is the shape of the argument, not its answer.
   image: none
 - [BESPOKE] The residency slice
   - A scoped constraint: specific regulated data must reside in a named region; the main system stays where it is.
@@ -107,8 +111,8 @@ TBD — AWS reliability/security/cost modules to be pinned.
   image: none
   notes:
     Activity = practice workbook task 11.
-    The practice vehicle runs MySQL with no single-instance constraint — the data-tier call is theirs to make, potentially the opposite of Ledgerline's, by the same reasoning. That's the learning, not a mistake.
-    Watch for the copied verdict; the constraint differs by design.
+    The data-tier call is theirs to make and argue. Two students can reach opposite verdicts and both be right, if both are argued against the goal and the cost. That's the learning, not a mistake.
+    Watch for a verdict copied off the table rather than argued. The table is the shape of the argument, not its answer.
 - [TAKEAWAYS] Section 2 · Reliability
   - Redundancy tier by tier, to the goal.
   - The rejection, argued on cost versus benefit, is the centrepiece.

@@ -1,0 +1,23 @@
+{
+  "_source_of_truth": "This spec is the source. Render with the umbrella draw-diagram skill; never hand-edit the generated .drawio or .png.",
+  "_render": ".claude/skills/draw-diagram/.venv/bin/python .claude/skills/draw-diagram/draw_diagram.py --spec <this file> --out website-baseline.drawio --png website-baseline.png",
+  "_used_by": ["topic_01/slide_plan.md — C1 'Review the website baseline' (image: diagram website-baseline)"],
+  "_intent": "The PRACTICE vehicle's current state — the YAT public website, single-AZ. Delivery teaches on the practice system only and deliberately never names the assessed system, so this deck stays correct if the assessed system is ever swapped.",
+  "_matches": "src/content/ict/website-server-status.md and the Website Cloud Architecture baseline: one EC2 on an Elastic IP, single-AZ RDS for MySQL, S3 for nightly backups. Note what is ABSENT — no load balancer and no Auto Scaling group; that absence is the first finding of the review.",
+  "title": "YAT website baseline — single-AZ (the current state)",
+  "nodes": [
+    {"id": "users", "label": "Public visitors\n(24x7, worldwide)",            "row": 0, "col": 1, "fill": "grey"},
+    {"id": "igw",   "label": "Internet Gateway",                              "row": 1, "col": 1, "fill": "amber"},
+    {"id": "app",   "label": "Single EC2 · Elastic IP\nLAMP + CMS · single-AZ\nno load balancer, no ASG", "row": 2, "col": 1, "fill": "green"},
+    {"id": "db",    "label": "RDS for MySQL\nsingle instance · single-AZ",     "row": 3, "col": 1, "fill": "purple"},
+    {"id": "s3",    "label": "S3\nnightly backups\nno cross-Region copy",      "row": 2, "col": 2, "fill": "amber"},
+    {"id": "media", "label": "Site media\non local EBS",                       "row": 3, "col": 2, "fill": "red"}
+  ],
+  "edges": [
+    {"from": "users", "to": "igw", "label": "HTTPS"},
+    {"from": "igw",   "to": "app", "label": ""},
+    {"from": "app",   "to": "db",  "label": "MySQL:3306"},
+    {"from": "app",   "to": "s3",  "label": ""},
+    {"from": "app",   "to": "media", "label": "reads/writes"}
+  ]
+}
