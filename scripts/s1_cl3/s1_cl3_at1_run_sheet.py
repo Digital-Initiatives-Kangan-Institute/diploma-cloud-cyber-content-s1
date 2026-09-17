@@ -112,8 +112,11 @@ INSTRUCTIONS = [
 
 # ---------------------------------------------------------------- the supplied current state
 
-NETWORK_DIAGRAM = ("Network Diagram — the environment drawn out, including the campus it connects "
-                   "back to", f"{ICT}/network-diagram-cl3")
+NETWORK_DIAGRAM = ("Enrolline Network Diagram — the environment you are improving, drawn out",
+                   f"{ICT}/enrolline-network-diagram-cloud")
+
+WIDER_NETWORK_DIAGRAM = ("Network Diagram — the wider YAT environment Enrolline sits in, including "
+                         "the campus it connects back to", f"{ICT}/network-diagram-cl3")
 
 CURRENT_ARCH_INTRO = [
     "This is the environment you are improving. It is what the migration built and handed over. "
@@ -802,11 +805,14 @@ def render(doc, h1, h2, mode="student", design=None, approval=None, questions=No
     for para in CURRENT_ARCH_INTRO:
         R.p(doc, para, after=6)
     R.settings_table(doc, current_arch or CURRENT_ARCH)
-    label, url = network_diagram or NETWORK_DIAGRAM
-    par = doc.add_paragraph()
-    par.paragraph_format.space_after = R.Pt(4)
-    par.add_run("•  ").font.size = R.Pt(R.BODY_PT)
-    R.add_hyperlink(par, label, url, size_pt=R.BODY_PT)
+    # The practice twin overrides this with its own single diagram; the assessment carries two —
+    # the system being improved, then the wider estate it sits in.
+    diagrams = [network_diagram] if network_diagram else [NETWORK_DIAGRAM, WIDER_NETWORK_DIAGRAM]
+    for label, url in diagrams:
+        par = doc.add_paragraph()
+        par.paragraph_format.space_after = R.Pt(4)
+        par.add_run("•  ").font.size = R.Pt(R.BODY_PT)
+        R.add_hyperlink(par, label, url, size_pt=R.BODY_PT)
     R.p(doc, scope_note or SCOPE_NOTE, italic=True, size=9.5, colour=R.GREY, after=6)
     R.note(doc, sizing_note or SIZING_NOTE)
 

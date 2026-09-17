@@ -1,0 +1,123 @@
+{
+  "_source_of_truth": "This spec is the source. Render with the umbrella draw-diagram skill; never hand-edit the generated .drawio or .png.",
+  "_render": ".claude/skills/draw-diagram/.venv/bin/python .claude/skills/draw-diagram/draw_diagram.py --spec <this file> --out ../diploma-cloud-cyber-website-s1/public/diagrams/network-enrolline-baseline-singleaz.drawio --png ../diploma-cloud-cyber-website-s1/public/diagrams/network-enrolline-baseline-singleaz.png",
+  "_used_by": [
+    "website-s1/src/content/ict/enrolline-network-diagram-cloud.md — the published topology figure",
+    "content-s1/scripts/scenario/build_enrolline_solution_designs.py — figure in the Enrolline Baseline Solution Design (when wired)"
+  ],
+  "_intent": "How the components fit together, not how they are configured. Sizes, engine versions and settings live in the written specifications.",
+  "_layout_notes": [
+    "Deliberately the same shape as the Ledgerline baseline diagram — same grid, same straight centre traffic line — so a student who has seen one reads the other immediately.",
+    "The ONE structural difference is Amazon S3: it is a regional service and is drawn OUTSIDE the VPC, reached from the NAT Gateway. That placement is the teaching point — Enrolline's document store is not in a subnet, and its traffic leaves the VPC because no S3 VPC endpoint exists.",
+    "The S3 path runs in the clear band between the public subnet row (ends y=420) and the app subnet row (starts y=500), so it crosses no container fill.",
+    "Empty second-AZ subnets are drawn narrower than populated ones: the geometry says 'less here' before the label is read.",
+    "Subnet labels carry both the scenario AZ and the Learner Lab AZ, so a student can match what the console shows them."
+  ],
+  "_matches": "assessments/AT3/lab-pack/baseline.yaml and src/content/ict/enrolline-server-status-cloud.md — the as-built single-AZ environment CL3 improves.",
+  "title": "YAT Enrolline - cloud baseline (single-AZ workload)",
+  "nodes": [
+    {
+      "id": "internet",
+      "label": "Internet\nAdmissions, student services and faculty staff",
+      "x": 480.0, "y": 40.0, "w": 220.0, "h": 60.0,
+      "fill": "grey", "shape": "rounded"
+    },
+    {
+      "id": "igw",
+      "label": "Internet Gateway",
+      "x": 490.0, "y": 150.0, "w": 200.0, "h": 56.0,
+      "fill": "amber", "shape": "rounded"
+    },
+    {
+      "id": "vpc",
+      "label": "VPC  enrolline-vpc   10.30.0.0/16",
+      "x": 60.0, "y": 180.0, "w": 920.0, "h": 800.0,
+      "fill": "none", "shape": "container"
+    },
+    {
+      "id": "pwa",
+      "label": "enrolline-public-a   10.30.1.0/24\nscenario: ap-southeast-2a\nlearner lab: us-east-1a",
+      "x": 90.0, "y": 250.0, "w": 430.0, "h": 170.0,
+      "fill": "#EEF5FD", "shape": "container", "parent": "vpc"
+    },
+    {
+      "id": "pwb",
+      "label": "enrolline-public-b\n10.30.2.0/24\nap-southeast-2b\n(load balancer only)",
+      "x": 660.0, "y": 250.0, "w": 280.0, "h": 170.0,
+      "fill": "#EEF5FD", "shape": "container", "parent": "vpc"
+    },
+    {
+      "id": "alb",
+      "label": "Application Load Balancer\nenrolline-alb",
+      "x": 490.0, "y": 335.0, "w": 200.0, "h": 65.0,
+      "fill": "blue", "shape": "rounded", "parent": "vpc"
+    },
+    {
+      "id": "nat",
+      "label": "NAT Gateway\nenrolline-nat\nall outbound traffic",
+      "x": 140.0, "y": 325.0, "w": 190.0, "h": 75.0,
+      "fill": "amber", "shape": "rounded", "parent": "pwa"
+    },
+    {
+      "id": "ppa",
+      "label": "enrolline-app-a   10.30.11.0/24\nscenario: ap-southeast-2a\nlearner lab: us-east-1a",
+      "x": 90.0, "y": 500.0, "w": 850.0, "h": 190.0,
+      "fill": "#F1F8F1", "shape": "container", "parent": "vpc"
+    },
+    {
+      "id": "asg",
+      "label": "Auto Scaling group   min 1 / desired 1 / max 2",
+      "x": 430.0, "y": 560.0, "w": 320.0, "h": 110.0,
+      "fill": "#E4F0E4", "shape": "container", "parent": "ppa"
+    },
+    {
+      "id": "ec2",
+      "label": "EC2\nAmazon Linux 2023 + Enrolline",
+      "x": 470.0, "y": 595.0, "w": 240.0, "h": 62.0,
+      "fill": "green", "shape": "rounded", "parent": "asg"
+    },
+    {
+      "id": "pda",
+      "label": "enrolline-data-a   10.30.21.0/24\nscenario: ap-southeast-2a\nlearner lab: us-east-1a",
+      "x": 90.0, "y": 770.0, "w": 430.0, "h": 180.0,
+      "fill": "#FAF2FC", "shape": "container", "parent": "vpc"
+    },
+    {
+      "id": "pdb",
+      "label": "enrolline-data-b\n10.30.22.0/24\nap-southeast-2b\n(empty)",
+      "x": 660.0, "y": 770.0, "w": 280.0, "h": 180.0,
+      "fill": "#FAF2FC", "shape": "container", "parent": "vpc"
+    },
+    {
+      "id": "dbsg",
+      "label": "DB subnet group",
+      "x": 490.0, "y": 858.0, "w": 200.0, "h": 56.0,
+      "fill": "purple", "shape": "rounded", "parent": "vpc"
+    },
+    {
+      "id": "rds",
+      "label": "RDS for PostgreSQL\nenrolline-db   single-AZ, no standby",
+      "x": 180.0, "y": 852.0, "w": 260.0, "h": 68.0,
+      "fill": "purple", "shape": "rounded", "parent": "pda"
+    },
+    {
+      "id": "s3",
+      "label": "Amazon S3\nyat-enrolline-documents\nregional service - outside the VPC",
+      "x": 1030.0, "y": 420.0, "w": 250.0, "h": 90.0,
+      "fill": "amber", "shape": "rounded"
+    }
+  ],
+  "edges": [
+    {"from": "internet", "to": "igw", "label": "",
+     "exit": [0.5, 1.0, 0.0, 0.0], "entry": [0.5, 0.0, 0.0, 0.0]},
+    {"from": "igw", "to": "alb", "label": "HTTP:80",
+     "exit": [0.5, 1.0, 0.0, 0.0], "entry": [0.5, 0.0, 0.0, 0.0]},
+    {"from": "alb", "to": "ec2", "label": "HTTP:80",
+     "exit": [0.5, 1.0, 0.0, 0.0], "entry": [0.5, 0.0, 0.0, 0.0]},
+    {"from": "ec2", "to": "rds", "label": "PostgreSQL:5432",
+     "exit": [0.5, 1.0, 0.0, 0.0], "entry": [0.5, 0.0, 0.0, 0.0]},
+    {"from": "nat", "to": "s3", "label": "document attachments - no S3 VPC endpoint",
+     "exit": [0.5, 1.0, 0.0, 0.0], "entry": [0.0, 0.5, 0.0, 0.0],
+     "waypoints": [[235.0, 465.0], [1030.0, 465.0]]}
+  ]
+}

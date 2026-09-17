@@ -37,6 +37,35 @@ from docx.shared import Pt, Cm, RGBColor  # noqa: E402
 OUT_DIR = (Path(__file__).resolve().parents[3] / "diploma-cloud-cyber-website-s1"
            / "public" / "documents")
 
+# Published diagrams: this topology is also served as an intranet page, so the .drawio/.png live at
+# the top level and one asset serves both surfaces. The .png is rendered by the draw-diagram skill
+# from scripts/scenario/diagrams/network-enrolline-baseline-singleaz.json — no hand export.
+DIAGRAM_DIR = (Path(__file__).resolve().parents[3] / "diploma-cloud-cyber-website-s1"
+               / "public" / "diagrams")
+
+
+def diagram_figure(doc, caption, image_name, width_cm=16.0):
+    """Place a generated diagram, captioned.
+
+    The generator places the picture, so it survives a rebuild. Fails loudly if the image is
+    absent rather than leaving a silent hole in the document.
+    """
+    from docx.enum.text import WD_ALIGN_PARAGRAPH
+    image = DIAGRAM_DIR / image_name
+    if not image.exists():
+        raise FileNotFoundError(
+            f"Diagram not found: {image}\n"
+            f"Render it from its spec: .claude/skills/draw-diagram/.venv/bin/python "
+            f".claude/skills/draw-diagram/draw_diagram.py --spec "
+            f"scripts/scenario/diagrams/network-enrolline-baseline-singleaz.json "
+            f"--out <…>.drawio --png <…>.png")
+    p = doc.add_paragraph(); p.alignment = WD_ALIGN_PARAGRAPH.CENTER
+    p.add_run().add_picture(str(image), width=Cm(width_cm))
+    cap = doc.add_paragraph(); cap.alignment = WD_ALIGN_PARAGRAPH.CENTER
+    cr = cap.add_run(caption)
+    cr.italic = True; cr.font.size = Pt(9); cr.font.color.rgb = RGBColor.from_string(GREY)
+    return p
+
 
 def na(doc, reason):
     p = doc.add_paragraph()
@@ -232,6 +261,12 @@ def build_baseline(path):
                  "outbound internet for the application tier. There is no application subnet in the second "
                  "Availability Zone. There are no VPC endpoints, so traffic to Amazon S3 and to the USI "
                  "Registry web service leaves the VPC through the NAT Gateway.")
+    diagram_figure(doc,
+                   "Figure 4.4 — Enrolline baseline network topology. The workload runs in "
+                   "ap-southeast-2a; the second-zone subnets carry only the load balancer and the "
+                   "database subnet group. Amazon S3 is a regional service and sits outside the "
+                   "VPC, reached through the NAT Gateway.",
+                   "network-enrolline-baseline-singleaz.png")
 
     h3("4.5 Compute (EC2 + Auto Scaling)")
     add_data_table(doc, ["Attribute", "Value"], [
