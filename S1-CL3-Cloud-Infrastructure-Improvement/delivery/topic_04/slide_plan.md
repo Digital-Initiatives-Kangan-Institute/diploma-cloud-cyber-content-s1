@@ -9,9 +9,10 @@ DESIGN → sign-off — close AT1 on the practice workbook: draw the improved ar
 justify the proposal, prepare and run the review presentation, and obtain the sign-off to proceed to
 deployment. No build; this gates the AT2/AT3 work.
 
-**Answer discipline:** activities run on the practice engagement (the website); AT1 assesses the same
-work on Ledgerline. Teach the method on the practice vehicle; the drawings and documents are the
-student's own.
+**Answer discipline:** everything taught and practised here runs on the practice engagement (the
+website); AT1 assesses the same work on the assessed system. Teach the method on the practice
+vehicle; the drawings and documents are the student's own. These materials deliberately do not name
+the assessed system, so they stay correct if it is ever swapped.
 
 ## Teaching source
 Bespoke — technical documentation of a proposed architecture and the review / sign-off discipline.

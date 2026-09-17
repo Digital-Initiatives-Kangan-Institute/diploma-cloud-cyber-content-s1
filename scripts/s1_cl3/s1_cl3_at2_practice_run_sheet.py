@@ -2,7 +2,7 @@
 """The S1-CL3 AT2 PRACTICE team-implementation run sheet — content.
 
 Same shape as the AT2 assessment workbook, with the team building the website improvement
-rather than the Enrolline one.
+rather than the assessed system's.
 
 BE HONEST ABOUT WHAT THE CONTRAST IS WORTH HERE. In AT1 and AT3 the practice vehicle changes
 the answers: a public 24x7 site is a different design and a different deployment from an

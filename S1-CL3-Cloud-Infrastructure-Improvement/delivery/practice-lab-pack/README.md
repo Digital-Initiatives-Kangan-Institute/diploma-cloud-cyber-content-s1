@@ -1,8 +1,8 @@
 # Practice lab-pack — deploy the Website baseline, then apply your own improvement
 
 This is the **practice** counterpart to the AT3 assessment lab-pack. You use it to rehearse the
-deploy-and-improve exercise on the **YAT public website** before you do the assessed version on
-Ledgerline. It is **not assessed** — if a deploy hiccups, working it out is good practice.
+deploy-and-improve exercise on the **YAT public website** before you do the assessed version on the
+assessed system. It is **not assessed** — if a deploy hiccups, working it out is good practice.
 
 **What you are doing:**
 1. Deploy the **existing-state** website infrastructure (`baseline.yaml`) — a single-AZ environment.
@@ -15,15 +15,16 @@ There is **no provided "improved" template here** (unlike the assessment): the i
 - Your AWS Academy login.
 - `baseline.yaml` (in this folder).
 - A database password you choose (8+ characters) — **write it down**.
-- ~20 minutes (MySQL builds faster than the assessment's SQL Server).
+- ~20 minutes.
 
 > **Region substitution.** The website is designed for Sydney, but the Learner Lab only offers
 > `us-east-1`, so that is where you deploy. Wherever you see the notation, the left side is the real
 > design region and the right side is where you actually deploy:
 > `[scenario: ap-southeast-2 (Sydney) | deploy: us-east-1]`.
 
-> **This one IS public.** Unlike the internal Ledgerline system, the website is internet-facing, so the
-> baseline's `SiteUrl` output opens in a browser and shows the placeholder page.
+> **This one IS public.** The website is internet-facing, so the baseline's `SiteUrl` output opens in
+> a browser and shows the placeholder page. Your assessed system is staff-facing, which changes what
+> the security and availability arguments have to answer for.
 
 ## Steps
 
@@ -39,8 +40,8 @@ There is **no provided "improved" template here** (unlike the assessment): the i
 
 ## Notes
 
-- The improvement is **open**. The website runs **MySQL**, which has no legacy single-instance
-  constraint, so whether you make the database Multi-AZ is **your** design call — justify it on the
-  goals and cost, the same reasoning you saw applied (to the opposite conclusion) on Ledgerline.
-- **Modelled on the proven Ledgerline AT3 baseline** — same structure and substitution patterns,
-  adapted for a public, internet-facing MySQL site. cfn-lint clean; not lab-proven (practice artefact).
+- The improvement is **open**. Whether you make the database Multi-AZ is **your** design call —
+  justify it on the goals and the cost. Two students can reach opposite verdicts and both be right,
+  if both argued.
+- **Modelled on the assessment's AT3 baseline** — same structure and substitution patterns, adapted
+  for a public, internet-facing site. cfn-lint clean; not lab-proven (practice artefact).

@@ -3,7 +3,7 @@
 
 A practice exercise, not an assessment: a branded YAT/MTS document with no Kangan wrapper, no
 marking criteria and no UoC tags. Same shape as the AT3 assessment workbook, on the public website rather
-than Enrolline — and with the teaching the assessment withholds.
+than the assessed system — and with the teaching the assessment withholds.
 
 It renders through the assessment's own renderer (s1_cl3_at3_run_sheet.render) with its content
 lists passed in, so the practice and the assessment cannot drift structurally even though every

@@ -10,7 +10,8 @@ describe the long-term strategy, hand over and obtain final sign-off, then remov
 No new build; the material is what was captured live in Topic 7.
 
 **Answer discipline:** activities run on the practice engagement; AT3 assesses the same closeout on
-Ledgerline. The documentation and answers are the student's own.
+the assessed system. The documentation and answers are the student's own. These materials
+deliberately do not name the assessed system, so they stay correct if it is ever swapped.
 
 ## Teaching source
 Bespoke — technical documentation, handover and sign-off discipline, teardown, and the contextual

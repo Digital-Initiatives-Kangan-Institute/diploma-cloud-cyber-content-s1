@@ -10,8 +10,9 @@ concerns, and refine. Documentation, strategy and sign-off are Topic 8. Every im
 in-place/additive over the deployed baseline — the lab DB tier is create-only.
 
 **Answer discipline:** activities run on the practice engagement (the website) with the student's own
-approved design; AT3 assesses the same work on Ledgerline. Teach the method; the improvements applied
-are the student's own.
+approved design; AT3 assesses the same work on the assessed system. Teach the method; the
+improvements applied are the student's own. These materials deliberately do not name the assessed
+system, so they stay correct if it is ever swapped.
 
 ## Teaching source
 AWS ACA CloudFormation deploy / change-sets + CloudWatch monitoring decks pinned at Step 4 (TBD);

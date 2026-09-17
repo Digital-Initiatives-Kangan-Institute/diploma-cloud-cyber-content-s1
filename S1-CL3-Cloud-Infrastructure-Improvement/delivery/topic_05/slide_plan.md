@@ -10,8 +10,9 @@ beyond the team. Not technical build — the CloudFormation write is the vehicle
 content.
 
 **Answer discipline:** activities run as the practice team on the practice engagement; AT2 assesses
-the same leadership on the Ledgerline build team. Teach the method; the plans and agreements are the
-team's own.
+the same leadership on the assessed build team. Teach the method; the plans and agreements are the
+team's own. These materials deliberately do not name the assessed system, so they stay correct if it
+is ever swapped.
 
 ## Teaching source
 Bespoke throughout, drawn from BSBXTW401 leadership content applied to the four-component IaC

@@ -4,7 +4,7 @@ Description: >-
   YAT public Website - CL3 PRACTICE existing-state baseline (single-AZ). Deploy as the known starting
   point for the practice improvement exercise, then apply YOUR OWN improvement to the SAME stack as a
   change-set. Design region ap-southeast-2 (Sydney); deploys to us-east-1 in the Learner Lab. Modelled
-  on the proven Ledgerline AT3 baseline.
+  on the assessment's AT3 baseline.
 
   Public internet-facing site: EC2 + Auto Scaling in ONE AZ behind an INTERNET-FACING ALB; RDS for
   MySQL, SINGLE-AZ, empty + encrypted; S3 for media. 2nd app/data subnets exist only because an ALB and
